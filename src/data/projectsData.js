@@ -82,7 +82,8 @@ export const projectsData = [
       imagePath: "/projects/shadowsneak.png",
       videoUrl: null,
       customSvgKey: "shadowsneak"
-    }
+    },
+    customImage: "https://i.postimg.cc/9XkJznM3/Group-20-(1).png"
   },
   {
     id: "arrow-escape",

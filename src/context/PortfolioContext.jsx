@@ -5,7 +5,7 @@ import { skillsData as initialSkills } from '../data/skillsData';
 import { caseStudiesData as initialCaseStudies } from '../data/caseStudiesData';
 import { achievementsData as initialAchievements } from '../data/achievementsData';
 
-const STORAGE_KEY = 'badri_raju_portfolio_state_v3';
+const STORAGE_KEY = 'badri_raju_portfolio_state_v4';
 
 export const availablePalettes = [
   {
