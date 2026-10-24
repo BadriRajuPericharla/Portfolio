@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 /**
  * GameArtwork component:
- * Displays actual game screenshot if present in /projects/<id>.png,
+ * Displays actual game screenshot if present in /projects/<id>.png or from a direct customImage URL,
  * with an automatic fallback to an authentic, beautifully styled vector game scene.
  * Also provides a clear tooltip indicating how to replace with personal screenshots.
  */
 export default function GameArtwork({ projectId, title, accentColor = '#6366F1', customSvgKey, customImage, className = '' }) {
   const [imageError, setImageError] = useState(false);
   const imageSrc = customImage || `/projects/${projectId}.png`;
+
+  useEffect(() => {
+    setImageError(false);
+  }, [imageSrc]);
 
   // Render stylized game-specific scene artwork
   const renderFallbackScene = () => {

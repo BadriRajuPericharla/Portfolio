@@ -190,7 +190,7 @@ export default function AdminPanel({ onReturnHome, onLogout }) {
       technologies: proj.technologies ? proj.technologies.join(', ') : '',
       technicalChallenges: proj.technicalChallenges ? proj.technicalChallenges.join('\n') : '',
       solutionsImplemented: proj.solutionsImplemented ? proj.solutionsImplemented.join('\n') : '',
-      customImage: proj.customImage || ''
+      customImage: proj.customImage || (proj.mediaPlaceholders?.imagePath && !proj.mediaPlaceholders.imagePath.startsWith('/projects/') ? proj.mediaPlaceholders.imagePath : '')
     });
     setIsProjectModalOpen(true);
   };
@@ -211,6 +211,7 @@ export default function AdminPanel({ onReturnHome, onLogout }) {
   // Save project
   const handleSaveProject = (e) => {
     e.preventDefault();
+    const existingProject = editingProjectId ? projects.find((p) => p.id === editingProjectId) : null;
     const newProjData = {
       title: projectForm.title,
       genre: projectForm.genre,
@@ -232,8 +233,8 @@ export default function AdminPanel({ onReturnHome, onLogout }) {
       solutionsImplemented: projectForm.solutionsImplemented.split('\n').map((s) => s.trim()).filter(Boolean),
       customImage: projectForm.customImage || null,
       mediaPlaceholders: {
-        customSvgKey: 'bossfight',
-        imagePath: `/projects/${editingProjectId || 'custom'}.png`
+        customSvgKey: existingProject?.mediaPlaceholders?.customSvgKey || 'bossfight',
+        imagePath: projectForm.customImage || `/projects/${editingProjectId || 'custom'}.png`
       }
     };
 
@@ -1657,37 +1658,72 @@ export default function AdminPanel({ onReturnHome, onLogout }) {
                 </div>
               </div>
 
-              {/* In-game Image Upload */}
-              <div className="p-4 rounded-xl bg-[#080B12] border border-white/10 space-y-3">
+              {/* In-game Image: Online URL & File Upload */}
+              <div className="p-4 rounded-xl bg-[#080B12] border border-white/10 space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono text-zinc-300 font-semibold flex items-center gap-1.5">
-                    <ImageIcon className="w-4 h-4 text-indigo-400" />
-                    <span>In-Game Screenshot / Artwork</span>
+                    <ImageIcon className="w-4 h-4 text-[#FF7A18]" />
+                    <span>Game Cover / Artwork Screenshot</span>
                   </span>
                   {projectForm.customImage && (
                     <button
                       type="button"
                       onClick={() => setProjectForm({ ...projectForm, customImage: '' })}
-                      className="text-xs text-red-400 hover:underline"
+                      className="text-xs text-red-400 hover:underline flex items-center gap-1"
                     >
-                      Remove Image
+                      Remove Cover
                     </button>
                   )}
                 </div>
 
+                {/* Direct Image URL input */}
+                <div>
+                  <label className="block text-xs font-mono text-zinc-300 mb-1.5">
+                    Online Image URL <span className="text-[#FF7A18] font-bold">(Works on all PCs & Mobiles)</span>
+                  </label>
+                  <input
+                    type="url"
+                    value={projectForm.customImage}
+                    onChange={(e) => setProjectForm({ ...projectForm, customImage: e.target.value })}
+                    placeholder="https://img.itch.zone/... or https://i.imgur.com/... or /projects/bossfight2d.png"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#121622] border border-white/15 text-white text-xs sm:text-sm font-mono placeholder:text-zinc-600 focus:border-[#FF7A18] focus:ring-1 focus:ring-[#FF7A18] outline-none"
+                  />
+                  <p className="text-[11px] text-zinc-400 mt-1">
+                    ✨ Paste an online image link (from itch.io, Imgur, GitHub, or Discord) so your cover appears for all visitors across every device.
+                  </p>
+                </div>
+
+                {/* Image Preview if available */}
                 {projectForm.customImage && (
-                  <div className="relative aspect-[16/9] rounded-lg overflow-hidden border border-white/15">
-                    <img src={projectForm.customImage} alt="Preview" className="w-full h-full object-cover" />
+                  <div className="space-y-1.5">
+                    <div className="text-[11px] font-mono text-emerald-400 flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span>Live Cover Preview:</span>
+                    </div>
+                    <div className="relative aspect-[16/9] rounded-lg overflow-hidden border border-white/15 bg-black">
+                      <img 
+                        src={projectForm.customImage} 
+                        alt="Project Cover Preview" 
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    </div>
                   </div>
                 )}
 
-                <div className="flex items-center gap-3">
-                  <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500">
-                    <Upload className="w-3.5 h-3.5" />
-                    <span>Upload Image File</span>
-                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-                  </label>
-                  <span className="text-xs text-zinc-500">PNG, JPG, or GIF</span>
+                {/* Alternative: Local File Upload */}
+                <div className="pt-2 border-t border-white/5 flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <label className="cursor-pointer inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-white bg-[#242424] hover:bg-[#2C2C2C] border border-white/10 hover:border-[#FF7A18]/50 transition-all">
+                      <Upload className="w-3.5 h-3.5 text-[#FF7A18]" />
+                      <span>Or Upload Local File</span>
+                      <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                    </label>
+                    <span className="text-[11px] text-zinc-500">PNG, JPG, WebP</span>
+                  </div>
+                  <span className="text-[10px] text-zinc-500 font-mono">16:9 ratio recommended</span>
                 </div>
               </div>
 
