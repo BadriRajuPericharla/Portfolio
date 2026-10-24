@@ -7,12 +7,23 @@ import React, { useState, useEffect } from 'react';
  * Also provides a clear tooltip indicating how to replace with personal screenshots.
  */
 export default function GameArtwork({ projectId, title, accentColor = '#6366F1', customSvgKey, customImage, className = '' }) {
+  const localSrc = `/projects/${projectId}.png`;
+  const [currentSrc, setCurrentSrc] = useState(customImage || localSrc);
   const [imageError, setImageError] = useState(false);
-  const imageSrc = customImage || `/projects/${projectId}.png`;
 
   useEffect(() => {
+    setCurrentSrc(customImage || localSrc);
     setImageError(false);
-  }, [imageSrc]);
+  }, [customImage, projectId]);
+
+  const handleImageError = () => {
+    // If the customImage (external URL) failed, fall back to local project image
+    if (currentSrc !== localSrc) {
+      setCurrentSrc(localSrc);
+    } else {
+      setImageError(true);
+    }
+  };
 
   // Render stylized game-specific scene artwork
   const renderFallbackScene = () => {
@@ -301,10 +312,10 @@ export default function GameArtwork({ projectId, title, accentColor = '#6366F1',
       {/* If an image exists and hasn't errored, display the image */}
       {!imageError ? (
         <img
-          src={imageSrc}
+          src={currentSrc}
           alt={`${title} gameplay preview`}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          onError={() => setImageError(true)}
+          onError={handleImageError}
           loading="lazy"
         />
       ) : null}
