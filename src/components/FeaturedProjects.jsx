@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Gamepad2, Filter, Sparkles, ExternalLink, ShieldCheck } from 'lucide-react';
+import { Gamepad2, Filter } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import ProjectCard from './ProjectCard';
 
@@ -85,28 +85,6 @@ export default function FeaturedProjects({ onOpenDetails }) {
               onOpenDetails={onOpenDetails}
             />
           ))}
-        </div>
-
-        {/* Recruiter Evaluation Banner */}
-        <div className="mt-16 p-6 rounded-2xl bg-[#1C1C1C] border border-[#FF7A18]/30 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl shadow-black/40">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#FF7A18]/20 border border-[#FF7A18]/30 flex items-center justify-center text-[#FF7A18] shrink-0">
-              <Sparkles className="w-6 h-6" />
-            </div>
-            <div>
-              <h4 className="text-base font-bold text-[#FAFAFA]">Looking for Code Architecture &amp; System Reviews?</h4>
-              <p className="text-[#A3A3A3] text-xs sm:text-sm mt-0.5">
-                Every project includes detailed technical breakdowns of the challenges, C# architecture patterns, and solutions implemented.
-              </p>
-            </div>
-          </div>
-
-          <a
-            href="#process"
-            className="shrink-0 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-[#FF7A18] hover:bg-[#E86A0E] shadow-md shadow-[#FF7A18]/25 transition-all hover:-translate-y-0.5"
-          >
-            Explore Technical Process
-          </a>
         </div>
 
       </div>
