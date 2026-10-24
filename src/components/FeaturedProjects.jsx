@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Gamepad2, Filter } from 'lucide-react';
+import { Gamepad2, Filter, ShieldCheck, ExternalLink } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import ProjectCard from './ProjectCard';
 
