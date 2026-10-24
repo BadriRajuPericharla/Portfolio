@@ -1,0 +1,281 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Gamepad2, 
+  ArrowRight, 
+  Mail, 
+  ExternalLink,
+  ChevronDown,
+  Sparkles,
+  Trophy,
+  Cpu,
+  Layers,
+  Code,
+  FileDown
+} from 'lucide-react';
+import { GithubIcon, LinkedinIcon, YoutubeIcon, ItchIcon } from './SocialIcons';
+import InteractiveCanvas from './InteractiveCanvas';
+import { usePortfolio } from '../context/PortfolioContext';
+
+/**
+ * Hero Section
+ *
+ * Premium, clean, dark gaming portfolio hero:
+ * - Direct, bold typography emphasizing "Badri Raju" in Radiant Orange (#FF7A18)
+ * - Professional title: "Unity Developer • Gameplay Programmer" with dynamic focus typewriter
+ * - Tagline quote: "I build interactive gameplay experiences using Unity and C#."
+ * - Three prominent action buttons: Explore My Games, View GitHub, Contact Me
+ * - Recruiter-attracting highlight metric cards
+ * - Charcoal & Radiant Orange palette (#111111, #1C1C1C, #FF7A18, #FFC857)
+ */
+
+export default function Hero() {
+  const context = usePortfolio();
+  const profile = (context && context.profile) || {};
+  const { 
+    name = "Pericharla Badri Raju", 
+    headlineQuote = "I build interactive gameplay experiences using Unity and C#.", 
+    subHeadline = "Exploring gameplay systems, solving technical challenges, and building responsive interactive worlds through game development.", 
+    links = {}, 
+    availabilityText = "Available for Unity & Gameplay Programming Roles",
+    roles: profileRoles,
+    stats = []
+  } = profile;
+  const resumeData = (context && context.resumeData) || { url: '/resume.pdf', name: 'Badri_Raju_Resume.pdf' };
+
+  // Recruiter-attracting rotating typewriter role texts
+  const defaultRoles = [
+    "Unity Developer",
+    "Gameplay Programmer",
+    "C# Systems Engineer",
+    "Combat & AI Mechanics",
+    "Physics & Controller Specialist"
+  ];
+
+  const roles = (profileRoles && Array.isArray(profileRoles) && profileRoles.length > 0)
+    ? profileRoles
+    : defaultRoles;
+
+  const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+  const [currentText, setCurrentText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [typingSpeed, setTypingSpeed] = useState(100);
+
+  useEffect(() => {
+    const fullRole = roles[currentRoleIndex];
+
+    const timer = setTimeout(() => {
+      if (!isDeleting) {
+        setCurrentText(fullRole.substring(0, currentText.length + 1));
+        if (currentText === fullRole) {
+          setTypingSpeed(1800);
+          setIsDeleting(true);
+        } else {
+          setTypingSpeed(80);
+        }
+      } else {
+        setCurrentText(fullRole.substring(0, currentText.length - 1));
+        if (currentText === "") {
+          setIsDeleting(false);
+          setCurrentRoleIndex((prev) => (prev + 1) % roles.length);
+          setTypingSpeed(350);
+        } else {
+          setTypingSpeed(40);
+        }
+      }
+    }, typingSpeed);
+
+    return () => clearTimeout(timer);
+  }, [currentText, isDeleting, currentRoleIndex, typingSpeed, roles]);
+
+  const handleScrollTo = (e, targetId) => {
+    e.preventDefault();
+    const target = document.querySelector(targetId);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Name Parsing: emphasize "Badri Raju" in radiant orange while keeping "Pericharla" white
+  const fullName = (name || "Pericharla Badri Raju").trim();
+  const nameParts = fullName.split(' ');
+  const firstName = nameParts[0] || "Pericharla";
+  const remainingName = nameParts.slice(1).join(' ') || "Badri Raju";
+
+  return (
+    <section 
+      id="home" 
+      className="relative min-h-[92vh] flex items-center justify-center pt-32 pb-20 overflow-hidden bg-[#111111]"
+      aria-label="Hero section"
+    >
+      {/* Interactive 3D Coordinate Grid & Constellation Canvas */}
+      <InteractiveCanvas />
+
+      {/* Atmospheric Studio Glows (Charcoal & Warm Radiant Orange) */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-tr from-[#FF7A18]/15 via-[#FFC857]/8 to-transparent rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-16 left-1/3 w-[500px] h-[500px] bg-gradient-to-br from-[#FF7A18]/10 via-[#FF9233]/5 to-transparent rounded-full blur-[130px] pointer-events-none" />
+
+      {/* Unified Master Stage Container */}
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center text-center">
+        
+        {/* Play Store Publication Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1C1C1C] border border-[#FF7A18]/40 text-[#FAFAFA] text-xs font-mono font-medium mb-5 backdrop-blur-md shadow-sm shadow-[#FF7A18]/15">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#10B981]" />
+          <span>1 Game Published on Play Store</span>
+        </div>
+
+        {/* PRIMARY FOCUS: Full Name with Selective Orange Highlighting */}
+        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight font-display leading-[1.06] mb-4 select-none">
+          <span className="text-[#FAFAFA]">{firstName} </span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF7A18] via-[#FF9233] to-[#FFC857] drop-shadow-[0_4px_24px_rgba(255,122,24,0.35)]">
+            {remainingName}
+          </span>
+        </h1>
+
+        {/* Professional Title & Recruiter Typewriter Pill */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-lg sm:text-2xl font-bold font-display text-[#FAFAFA] mb-4">
+          <span>Unity Developer</span>
+          <span className="text-[#FF7A18]">•</span>
+          <span className="text-[#FFC857]">Gameplay Programmer</span>
+          <span className="hidden sm:inline text-zinc-600">|</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#1C1C1C] border border-[#303030] text-xs sm:text-sm font-mono">
+            <span className="text-[#FF7A18]">Focus:</span>
+            <span className="text-[#FAFAFA]">{currentText}</span>
+            <span className="w-0.5 h-3.5 bg-[#FF7A18] animate-cursor-blink" />
+          </div>
+        </div>
+
+        {/* Introduction Tagline Quote */}
+        <blockquote className="text-lg sm:text-xl md:text-2xl text-[#FAFAFA] font-medium leading-relaxed max-w-3xl mb-3">
+          &ldquo;{headlineQuote || 'I build interactive gameplay experiences using Unity and C#.'}&rdquo;
+        </blockquote>
+
+        {/* Supporting Narrative */}
+        <p className="text-sm sm:text-base text-[#A3A3A3] leading-relaxed max-w-2xl mb-8">
+          {subHeadline || 'Exploring gameplay systems, solving technical challenges, and building responsive interactive worlds through game development.'}
+        </p>
+
+        {/* Action Buttons: Explore Games, View GitHub, Contact */}
+        <div className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 mb-10">
+          {/* Button 1: Explore My Games */}
+          <a
+            href="#projects"
+            onClick={(e) => handleScrollTo(e, '#projects')}
+            className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#FF7A18] via-[#FF9233] to-[#FF7A18] hover:opacity-95 shadow-xl shadow-[#FF7A18]/25 border border-[#FF7A18]/50 transition-all hover:-translate-y-0.5 active:translate-y-0"
+          >
+            <Gamepad2 className="w-4 h-4" />
+            <span>Explore My Games</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
+
+          {/* Button 2: View GitHub */}
+          <a
+            href={links.github || "https://github.com/BadriRajuPericharla"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-[#FAFAFA] bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] hover:border-[#FF7A18]/50 hover:text-[#FF7A18] transition-all hover:-translate-y-0.5"
+          >
+            <GithubIcon className="w-4 h-4 text-[#A3A3A3]" />
+            <span>View GitHub</span>
+            <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+          </a>
+
+          {/* Button 4: Contact Me */}
+          <a
+            href="#contact"
+            onClick={(e) => handleScrollTo(e, '#contact')}
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-[#FAFAFA] bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] hover:border-[#FF7A18]/50 hover:text-[#FF7A18] transition-all hover:-translate-y-0.5"
+          >
+            <Mail className="w-4 h-4" />
+            <span>Contact Me</span>
+          </a>
+        </div>
+
+        {/* Quick Highlights / Stats Grid: Standardized Same Lane & Identical Height */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 w-full max-w-3xl mb-8 items-stretch">
+          {[
+            { value: "4+ Games", label: "Published on itch.io" },
+            { value: "2x SIH", label: "Hackathon Finalist" },
+            { value: "Unity & C#", label: "Core Focus Stack" },
+            { value: "1 Published", label: "Google Play Store" }
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className="h-full min-h-[96px] sm:min-h-[102px] p-4 rounded-2xl bg-[#1C1C1C]/90 border border-[#303030] hover:border-[#FF7A18]/40 flex flex-col justify-center items-center text-center transition-all hover:-translate-y-0.5 shadow-md shadow-black/30"
+            >
+              <div className="text-lg sm:text-xl font-extrabold text-[#FAFAFA] font-mono whitespace-nowrap leading-tight mb-1">
+                {item.value}
+              </div>
+              <div className="text-[11px] sm:text-xs text-[#A3A3A3] font-medium leading-tight">
+                {item.label}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Social Links Strip */}
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-[#303030]/60 w-full max-w-xl">
+          <a
+            href={links.github || "https://github.com/BadriRajuPericharla"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2.5 rounded-xl bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] text-[#A3A3A3] hover:text-[#FAFAFA] hover:border-[#FF7A18]/40 transition-all"
+            aria-label="GitHub Profile"
+            title="GitHub: BadriRajuPericharla"
+          >
+            <GithubIcon className="w-4 h-4" />
+          </a>
+
+          <a
+            href={links.linkedin || "https://www.linkedin.com/in/pericharla-badri-raju-6924942a5"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2.5 rounded-xl bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] text-[#A3A3A3] hover:text-[#FF7A18] hover:border-[#FF7A18]/40 transition-all"
+            aria-label="LinkedIn Profile"
+            title="LinkedIn: Pericharla Badri Raju"
+          >
+            <LinkedinIcon className="w-4 h-4" />
+          </a>
+
+          {links.itchio && (
+            <a
+              href={links.itchio}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 rounded-xl bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] text-[#A3A3A3] hover:text-[#FF7A18] hover:border-[#FF7A18]/40 transition-all inline-flex items-center gap-1.5 text-xs font-mono font-medium"
+              aria-label="itch.io Page"
+              title="itch.io: badri-raju-pericharla"
+            >
+              <ItchIcon className="w-3.5 h-3.5 text-[#FF7A18]" />
+              <span>itch.io</span>
+            </a>
+          )}
+
+          {links.youtube && (
+            <a
+              href={links.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2.5 rounded-xl bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] text-[#A3A3A3] hover:text-[#FF7A18] hover:border-[#FF7A18]/40 transition-all"
+              aria-label="YouTube Channel"
+              title="YouTube: @PBR_GameDev"
+            >
+              <YoutubeIcon className="w-4 h-4" />
+            </a>
+          )}
+        </div>
+
+        {/* Scroll Prompt */}
+        <a
+          href="#projects"
+          onClick={(e) => handleScrollTo(e, '#projects')}
+          className="mt-6 inline-flex flex-col items-center gap-1 text-[#A3A3A3] hover:text-[#FF7A18] transition-colors"
+          aria-label="Scroll to projects section"
+        >
+          <span className="text-[10px] font-mono tracking-widest uppercase">Explore Games</span>
+          <ChevronDown className="w-4 h-4 animate-bounce text-[#FF7A18]" />
+        </a>
+
+      </div>
+    </section>
+  );
+}
