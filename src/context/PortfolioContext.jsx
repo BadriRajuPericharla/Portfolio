@@ -5,7 +5,7 @@ import { skillsData as initialSkills } from '../data/skillsData';
 import { caseStudiesData as initialCaseStudies } from '../data/caseStudiesData';
 import { achievementsData as initialAchievements } from '../data/achievementsData';
 
-const STORAGE_KEY = 'badri_raju_portfolio_state_v4';
+const STORAGE_KEY = 'badri_raju_portfolio_state_v5';
 
 export const availablePalettes = [
   {
@@ -173,7 +173,29 @@ export function PortfolioProvider({ children }) {
   const [projects, setProjects] = useState(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_projects`);
-      return saved ? JSON.parse(saved) : initialProjects;
+      if (!saved) return initialProjects;
+      const parsed = JSON.parse(saved);
+      // Merge with initialProjects so codebase updates & images are always reflected
+      return initialProjects.map((initProj) => {
+        const savedProj = parsed.find((p) => p.id === initProj.id);
+        if (!savedProj) return initProj;
+        // Prioritize local image if saved image is empty or invalid
+        const effectiveImage =
+          savedProj.customImage && !savedProj.customImage.includes('postimg.cc')
+            ? savedProj.customImage
+            : (initProj.customImage || initProj.mediaPlaceholders?.imagePath);
+
+        return {
+          ...initProj,
+          ...savedProj,
+          customImage: effectiveImage,
+          mediaPlaceholders: {
+            ...initProj.mediaPlaceholders,
+            ...savedProj.mediaPlaceholders,
+            imagePath: initProj.mediaPlaceholders?.imagePath || savedProj.mediaPlaceholders?.imagePath
+          }
+        };
+      });
     } catch {
       return initialProjects;
     }
