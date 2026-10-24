@@ -4,6 +4,7 @@ import { projectsData as initialProjects } from '../data/projectsData';
 import { skillsData as initialSkills } from '../data/skillsData';
 import { caseStudiesData as initialCaseStudies } from '../data/caseStudiesData';
 import { achievementsData as initialAchievements } from '../data/achievementsData';
+import { getSupabaseClient } from '../lib/supabase';
 
 const STORAGE_KEY = 'badri_raju_portfolio_state_v5';
 
@@ -382,51 +383,172 @@ export function PortfolioProvider({ children }) {
     }
   }, [cvData]);
 
+  // Cloud synchronization helper
+  const syncToCloud = async (id, data) => {
+    const supabase = getSupabaseClient();
+    if (!supabase) return;
+    try {
+      await supabase.from('portfolio_data').upsert({
+        id,
+        data,
+        updated_at: new Date().toISOString()
+      });
+    } catch (err) {
+      console.warn('Cloud sync error for ' + id, err);
+    }
+  };
+
+  // Sync all data to Supabase
+  const syncAllToCloud = async () => {
+    const supabase = getSupabaseClient();
+    if (!supabase) throw new Error('Supabase cloud database is not connected yet.');
+    const now = new Date().toISOString();
+    const { error } = await supabase.from('portfolio_data').upsert([
+      { id: 'projects', data: projects, updated_at: now },
+      { id: 'profile', data: profile, updated_at: now },
+      { id: 'skills', data: skills, updated_at: now },
+      { id: 'achievements', data: achievements, updated_at: now },
+      { id: 'cases', data: caseStudies, updated_at: now },
+      { id: 'sections', data: sections, updated_at: now },
+      { id: 'theme', data: themeSettings, updated_at: now },
+      { id: 'resume', data: resumeData, updated_at: now },
+      { id: 'cv', data: cvData, updated_at: now }
+    ]);
+    if (error) throw error;
+    return true;
+  };
+
+  // Live cloud sync: Fetch from Supabase on mount & listen to real-time changes
+  useEffect(() => {
+    const supabase = getSupabaseClient();
+    if (!supabase) return;
+
+    let isMounted = true;
+    const fetchCloudData = async () => {
+      try {
+        const { data, error } = await supabase.from('portfolio_data').select('*');
+        if (data && !error && isMounted) {
+          data.forEach((row) => {
+            if (row.id === 'projects' && Array.isArray(row.data)) setProjects(row.data);
+            if (row.id === 'profile' && row.data) setProfile(row.data);
+            if (row.id === 'skills' && Array.isArray(row.data)) setSkills(row.data);
+            if (row.id === 'achievements' && Array.isArray(row.data)) setAchievements(row.data);
+            if (row.id === 'cases' && Array.isArray(row.data)) setCaseStudies(row.data);
+            if (row.id === 'sections' && Array.isArray(row.data)) setSections(row.data);
+            if (row.id === 'theme' && row.data) setThemeSettings(row.data);
+            if (row.id === 'resume' && row.data) setResumeData(row.data);
+            if (row.id === 'cv' && row.data) setCvData(row.data);
+          });
+        }
+      } catch (err) {
+        console.warn('Supabase fetch error:', err);
+      }
+    };
+
+    fetchCloudData();
+
+    // Subscribe to live postgres changes from Supabase
+    const channel = supabase
+      .channel('portfolio_data_live')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'portfolio_data' },
+        (payload) => {
+          const row = payload.new;
+          if (!row || !isMounted) return;
+          if (row.id === 'projects' && Array.isArray(row.data)) setProjects(row.data);
+          if (row.id === 'profile' && row.data) setProfile(row.data);
+          if (row.id === 'skills' && Array.isArray(row.data)) setSkills(row.data);
+          if (row.id === 'achievements' && Array.isArray(row.data)) setAchievements(row.data);
+          if (row.id === 'sections' && Array.isArray(row.data)) setSections(row.data);
+          if (row.id === 'theme' && row.data) setThemeSettings(row.data);
+          if (row.id === 'resume' && row.data) setResumeData(row.data);
+          if (row.id === 'cv' && row.data) setCvData(row.data);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      isMounted = false;
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
   // Theme update
   const updateTheme = (newSettings) => {
-    setThemeSettings((prev) => ({ ...prev, ...newSettings }));
+    setThemeSettings((prev) => {
+      const next = { ...prev, ...newSettings };
+      syncToCloud('theme', next);
+      return next;
+    });
   };
 
   // Section visibility toggle
   const toggleSection = (id) => {
-    setSections((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, enabled: !s.enabled } : s))
-    );
+    setSections((prev) => {
+      const next = prev.map((s) => (s.id === id ? { ...s, enabled: !s.enabled } : s));
+      syncToCloud('sections', next);
+      return next;
+    });
   };
 
   // Profile operations
   const updateProfile = (fields) => {
-    setProfile((prev) => ({ ...prev, ...fields }));
+    setProfile((prev) => {
+      const next = { ...prev, ...fields };
+      syncToCloud('profile', next);
+      return next;
+    });
   };
 
   // Projects operations
   const addProject = (newProject) => {
-    setProjects((prev) => [newProject, ...prev]);
+    setProjects((prev) => {
+      const next = [newProject, ...prev];
+      syncToCloud('projects', next);
+      return next;
+    });
   };
 
   const updateProject = (id, updatedFields) => {
-    setProjects((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, ...updatedFields } : p))
-    );
+    setProjects((prev) => {
+      const next = prev.map((p) => (p.id === id ? { ...p, ...updatedFields } : p));
+      syncToCloud('projects', next);
+      return next;
+    });
   };
 
   const deleteProject = (id) => {
-    setProjects((prev) => prev.filter((p) => p.id !== id));
+    setProjects((prev) => {
+      const next = prev.filter((p) => p.id !== id);
+      syncToCloud('projects', next);
+      return next;
+    });
   };
 
   // Custom sections operations
   const addCustomSection = (section) => {
-    setCustomSections((prev) => [...prev, { ...section, id: `custom-${Date.now()}` }]);
+    setCustomSections((prev) => {
+      const next = [...prev, { ...section, id: `custom-${Date.now()}` }];
+      syncToCloud('custom_sections', next);
+      return next;
+    });
   };
 
   const updateCustomSection = (id, updatedSection) => {
-    setCustomSections((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, ...updatedSection } : s))
-    );
+    setCustomSections((prev) => {
+      const next = prev.map((s) => (s.id === id ? { ...s, ...updatedSection } : s));
+      syncToCloud('custom_sections', next);
+      return next;
+    });
   };
 
   const deleteCustomSection = (id) => {
-    setCustomSections((prev) => prev.filter((s) => s.id !== id));
+    setCustomSections((prev) => {
+      const next = prev.filter((s) => s.id !== id);
+      syncToCloud('custom_sections', next);
+      return next;
+    });
   };
 
   // Reset to original data
@@ -487,7 +609,8 @@ export function PortfolioProvider({ children }) {
         setResumeData,
         cvData,
         setCvData,
-        resetToDefaults
+        resetToDefaults,
+        syncAllToCloud
       }}
     >
       {children}
