@@ -210,12 +210,12 @@ export default function About() {
                 <span>Formal Education</span>
               </div>
 
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-2">
                 <h5 className="text-base sm:text-lg font-bold text-[#FAFAFA] font-display">
                   {education.degree}
                 </h5>
-                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#141414] border border-white/10 text-[#FFC857] w-fit">
-                  2023 – 2027
+                <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-[#141414] border border-white/10 text-[#FFC857] whitespace-nowrap shrink-0 self-start sm:self-auto shadow-sm">
+                  2023&nbsp;–&nbsp;2027
                 </span>
               </div>
 

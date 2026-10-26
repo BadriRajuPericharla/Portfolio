@@ -160,7 +160,7 @@ export default function Timeline() {
                       {/* Top Meta Header */}
                       <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
                         <span 
-                          className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#141414] border border-white/10"
+                          className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#141414] border border-white/10 whitespace-nowrap shrink-0"
                           style={{ color: 'var(--color-primary, #FF7A18)' }}
                         >
                           {step.period}
