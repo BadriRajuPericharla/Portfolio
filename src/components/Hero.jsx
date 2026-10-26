@@ -124,14 +124,72 @@ export default function Hero() {
         }}
       />
 
+      {/* Floating Decorative Game Dev Badges (Desktop/Large Screens) */}
+      <div 
+        className="hidden xl:flex absolute left-6 lg:left-12 top-1/3 -translate-y-1/2 items-center gap-3 p-3.5 pr-5 rounded-2xl bg-[#1C1C1C]/85 border border-white/10 backdrop-blur-md shadow-2xl animate-float-slow z-20 pointer-events-none select-none"
+        style={{
+          boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 20px -5px var(--color-glow-ambient, rgba(255, 122, 24, 0.2))'
+        }}
+      >
+        <div 
+          className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border"
+          style={{
+            background: 'rgba(255, 255, 255, 0.04)',
+            borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.4))',
+            color: 'var(--color-primary, #FF7A18)'
+          }}
+        >
+          <Gamepad2 className="w-5 h-5" />
+        </div>
+        <div className="text-left">
+          <div className="text-xs font-bold text-white font-display">Unity 2D &amp; 3D</div>
+          <div className="text-[10px] font-mono text-emerald-400 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Gameplay Systems</span>
+          </div>
+        </div>
+      </div>
+
+      <div 
+        className="hidden xl:flex absolute right-6 lg:right-12 top-1/3 -translate-y-1/2 items-center gap-3 p-3.5 pr-5 rounded-2xl bg-[#1C1C1C]/85 border border-white/10 backdrop-blur-md shadow-2xl animate-float-delayed z-20 pointer-events-none select-none"
+        style={{
+          boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 20px -5px var(--color-glow-ambient, rgba(255, 122, 24, 0.2))'
+        }}
+      >
+        <div 
+          className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border"
+          style={{
+            background: 'rgba(255, 255, 255, 0.04)',
+            borderColor: 'var(--color-border-accent, rgba(255, 200, 87, 0.4))',
+            color: 'var(--color-secondary, #FFC857)'
+          }}
+        >
+          <Code className="w-5 h-5" />
+        </div>
+        <div className="text-left">
+          <div className="text-xs font-bold text-white font-display">C# Architecture</div>
+          <div className="text-[10px] font-mono text-zinc-400">Combat &amp; Mechanics</div>
+        </div>
+      </div>
+
       {/* Unified Master Stage Container */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center text-center">
         
         {/* Top Status & Availability Pill Badge (Clean, Modern Hero) */}
-        <div data-reveal="fade" className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#1C1C1C] border border-[#2D2D2D] hover:border-[var(--color-primary)] transition-all mb-6 sm:mb-8 shadow-lg shadow-black/40">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#10B981]" />
-          <span className="text-xs font-mono font-medium text-zinc-300">
+        <div 
+          data-reveal="fade" 
+          className="card-shine inline-flex items-center gap-2.5 px-4 sm:px-5 py-2 rounded-full bg-[#1C1C1C] border border-[#303030] hover:border-[var(--color-primary)] transition-all duration-300 mb-6 sm:mb-8 shadow-xl shadow-black/50 hover:scale-105 cursor-default group"
+        >
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-[0_0_8px_#10B981]"></span>
+          </span>
+          <span className="text-xs font-mono font-semibold text-zinc-200 group-hover:text-white transition-colors">
             Available for Unity &amp; Gameplay Roles
+          </span>
+          <span className="text-zinc-600 hidden sm:inline">|</span>
+          <span className="text-[11px] font-mono font-bold hidden sm:inline" style={{ color: 'var(--color-primary, #FF7A18)' }}>
+            2026 Ready
           </span>
         </div>
 

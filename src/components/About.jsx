@@ -7,7 +7,6 @@ import {
   Gamepad2, 
   Sparkles,
   ArrowRight,
-  ExternalLink,
   CheckCircle2
 } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
@@ -16,10 +15,10 @@ import { usePortfolio } from '../context/PortfolioContext';
  * About Section
  * 
  * Featuring:
- * - Badri Raju's portrait with rotating gradient halo & floating live status badge
- * - Ultra-concise narrative focused on gameplay engineering & C# systems
+ * - Natural, unstretched profile card with rotating glowing halo
+ * - Warm, simple English summary that anyone can easily read
  * - Formal education credentials & quick Resume/CV downloads
- * - Cool interactive motion, card shine, and blur scroll reveals
+ * - Cool interactive motion and card shine
  */
 
 export default function About() {
@@ -72,69 +71,68 @@ export default function About() {
             }}
           />
           <p className="text-[#A3A3A3] text-xs sm:text-sm max-w-md mx-auto mt-3">
-            Gameplay programmer combining engineering fundamentals with hands-on Unity development.
+            Game developer building responsive gameplay in Unity and C#.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
+        {/* 2-Column Balanced Grid with items-start to prevent vertical stretching */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           
-          {/* Left Column: Portrait Card with Rotating Halo & Badges (5 cols) */}
-          <div data-reveal="slide-left" className="lg:col-span-5 flex flex-col">
-            <div className="cool-card card-shine h-full p-6 sm:p-8 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] shadow-xl shadow-black/40 flex flex-col justify-between items-center text-center group">
+          {/* Left Column: Natural, Unstretched Profile Card (5 cols) */}
+          <div data-reveal="slide-left" className="lg:col-span-5 w-full">
+            <div className="cool-card card-shine p-6 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] shadow-xl shadow-black/40 flex flex-col items-center text-center group">
               
-              <div className="w-full flex flex-col items-center">
-                {/* Profile Portrait with Rotating Glowing Gradient Halo */}
-                <div className="w-40 h-40 sm:w-48 sm:h-48 relative mb-6">
+              {/* Perfectly Proportioned Circular Portrait with Rotating Conic Halo */}
+              <div className="w-36 h-36 sm:w-44 sm:h-44 relative mb-5 shrink-0">
+                <div 
+                  className="w-full h-full rounded-full p-1.5 transition-all duration-500 group-hover:scale-105 relative"
+                  style={{
+                    background: 'linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FFC857) 100%)',
+                    boxShadow: '0 0 35px -5px var(--color-glow, rgba(255, 122, 24, 0.45))'
+                  }}
+                >
+                  {/* Outer Rotating Conic Halo */}
                   <div 
-                    className="w-full h-full rounded-full p-1.5 transition-all duration-500 group-hover:scale-105 relative"
+                    className="absolute -inset-1 rounded-full opacity-40 blur-sm pointer-events-none animate-spin-slow"
                     style={{
-                      background: 'linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FFC857) 100%)',
-                      boxShadow: '0 0 35px -5px var(--color-glow, rgba(255, 122, 24, 0.45))'
+                      background: 'conic-gradient(from 0deg, var(--color-primary, #FF7A18), var(--color-secondary, #FFC857), transparent 70%, var(--color-primary, #FF7A18))'
                     }}
-                  >
-                    {/* Outer Rotating Conic Halo */}
-                    <div 
-                      className="absolute -inset-1 rounded-full opacity-40 blur-sm pointer-events-none animate-spin-slow"
-                      style={{
-                        background: 'conic-gradient(from 0deg, var(--color-primary, #FF7A18), var(--color-secondary, #FFC857), transparent 70%, var(--color-primary, #FF7A18))'
-                      }}
-                    />
-                    <img
-                      src={profile.avatarUrl || '/profile.jpg'}
-                      alt={name || "Pericharla Badri Raju"}
-                      className="w-full h-full object-cover object-[center_18%] rounded-full select-none relative z-10"
-                      onError={(e) => { e.currentTarget.src = '/profile.jpg'; }}
-                    />
-                  </div>
-
-                  {/* Floating Live Badge */}
-                  <div 
-                    className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-[#111111] border shadow-lg flex items-center gap-2 whitespace-nowrap z-20 animate-float-slow"
-                    style={{ borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.5))' }}
-                  >
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#10B981]" />
-                    <span className="text-[11px] font-mono font-bold text-[#FAFAFA]">1 Game on Play Store</span>
-                  </div>
+                  />
+                  <img
+                    src={profile.avatarUrl || '/profile.jpg'}
+                    alt={name || "Pericharla Badri Raju"}
+                    className="w-full h-full object-cover object-[center_18%] rounded-full select-none relative z-10 aspect-square"
+                    onError={(e) => { e.currentTarget.src = '/profile.jpg'; }}
+                  />
                 </div>
 
-                {/* Identity Summary */}
-                <h3 className="text-xl sm:text-2xl font-extrabold text-[#FAFAFA] font-display mb-1">
-                  {name || "Pericharla Badri Raju"}
-                </h3>
-                <div className="text-xs sm:text-sm font-mono text-[#FF7A18] font-semibold mb-4">
-                  {title || "Unity Developer • Gameplay Programmer"}
+                {/* Floating Live Badge */}
+                <div 
+                  className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-[#111111] border shadow-lg flex items-center gap-2 whitespace-nowrap z-20 animate-float-slow"
+                  style={{ borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.5))' }}
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#10B981]" />
+                  <span className="text-[11px] font-mono font-bold text-[#FAFAFA]">1 Game on Play Store</span>
                 </div>
+              </div>
 
-                {/* Quick Info Badges */}
-                <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
-                  <div className="flex items-center gap-1.5 text-xs text-zinc-300 bg-[#141414] px-3 py-1.5 rounded-xl border border-white/5">
-                    <MapPin className="w-3.5 h-3.5 text-[#FF7A18]" />
-                    <span>{displayLocation}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-xs text-zinc-300 bg-[#141414] px-3 py-1.5 rounded-xl border border-white/5">
-                    <Gamepad2 className="w-3.5 h-3.5 text-[#FFC857]" />
-                    <span>4+ itch.io Titles</span>
-                  </div>
+              {/* Name & Title */}
+              <h3 className="text-xl sm:text-2xl font-extrabold text-[#FAFAFA] font-display mb-1">
+                {name || "Pericharla Badri Raju"}
+              </h3>
+              <div className="text-xs sm:text-sm font-mono text-[#FF7A18] font-semibold mb-3">
+                {title || "Unity Developer • Gameplay Programmer"}
+              </div>
+
+              {/* Badges Strip */}
+              <div className="flex flex-wrap items-center justify-center gap-2 mb-5">
+                <div className="flex items-center gap-1.5 text-xs text-zinc-300 bg-[#141414] px-3 py-1.5 rounded-xl border border-white/5">
+                  <MapPin className="w-3.5 h-3.5 text-[#FF7A18]" />
+                  <span>{displayLocation}</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-zinc-300 bg-[#141414] px-3 py-1.5 rounded-xl border border-white/5">
+                  <Gamepad2 className="w-3.5 h-3.5 text-[#FFC857]" />
+                  <span>4+ itch.io Titles</span>
                 </div>
               </div>
 
@@ -161,58 +159,58 @@ export default function About() {
             </div>
           </div>
 
-          {/* Right Column: Narrative & Formal Education (7 cols) */}
-          <div data-reveal="slide-right" className="lg:col-span-7 flex flex-col justify-between space-y-6">
+          {/* Right Column: Narrative in Simple English & Education (7 cols) */}
+          <div data-reveal="slide-right" className="lg:col-span-7 space-y-5 w-full">
             
-            {/* Story Card */}
-            <div className="cool-card card-shine p-6 sm:p-8 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] shadow-xl shadow-black/40 space-y-4">
+            {/* Story Card in Simple English */}
+            <div className="cool-card card-shine p-6 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] shadow-xl shadow-black/40 space-y-3.5">
               <div className="flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-wider text-[#FF7A18]">
                 <Sparkles className="w-4 h-4" />
-                <span>Gameplay Engineer &amp; Systems Developer</span>
+                <span>About My Work</span>
               </div>
 
               <h4 className="text-xl sm:text-2xl font-bold text-[#FAFAFA] font-display">
-                Building Tactile Games from Concept to Published Builds
+                Making Fun &amp; Responsive Games with Unity
               </h4>
 
               <div className="space-y-3 text-sm text-zinc-300 leading-relaxed">
                 <p>
-                  I specialize in developing responsive gameplay systems in <strong className="text-white font-semibold">Unity &amp; C#</strong>. My work centers on player locomotion, tactile combat loops, camera dampening, and decoupled state-machine architectures.
+                  Hi! I'm <strong className="text-white font-semibold">Badri Raju</strong>, a game developer who loves creating fun, interactive games using <strong className="text-white font-semibold">Unity and C#</strong>.
                 </p>
-                <p className="text-xs sm:text-sm text-zinc-400">
-                  Every mechanic is engineered with performance and maintainability in mind—taking games through full production cycles from early prototyping to release on itch.io and Google Play.
+                <p>
+                  I focus on what makes games feel great to play—smooth player movement, responsive combat controls, smart enemy AI, and clean camera systems. I take game ideas from a quick prototype all the way to finished, playable games on itch.io and the Google Play Store.
                 </p>
               </div>
 
-              {/* Verified Capabilities */}
-              <div className="grid grid-cols-2 gap-2.5 pt-3 border-t border-white/5 text-xs font-mono text-zinc-300">
+              {/* Simple, Recognizable Highlights */}
+              <div className="grid grid-cols-2 gap-2.5 pt-3.5 border-t border-white/5 text-xs font-mono text-zinc-300">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Unity 2D &amp; 3D Engine</span>
+                  <span>Unity 2D &amp; 3D Games</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Modular C# Architecture</span>
+                  <span>Clean C# Code</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>NavMesh &amp; Enemy AI</span>
+                  <span>Enemy AI &amp; Pathfinding</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Mobile &amp; Gamepad Input</span>
+                  <span>Mobile &amp; Gamepad Controls</span>
                 </div>
               </div>
             </div>
 
             {/* Formal Education Card */}
-            <div className="cool-card card-shine p-6 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] shadow-xl shadow-black/40">
-              <div className="flex items-center gap-2.5 text-[#FF7A18] font-mono text-xs font-bold uppercase tracking-wider mb-3">
-                <GraduationCap className="w-5 h-5" />
+            <div className="cool-card card-shine p-5 sm:p-6 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] shadow-xl shadow-black/40">
+              <div className="flex items-center gap-2 text-[#FF7A18] font-mono text-xs font-bold uppercase tracking-wider mb-2.5">
+                <GraduationCap className="w-4 h-4" />
                 <span>Formal Education</span>
               </div>
 
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5">
                 <h5 className="text-base sm:text-lg font-bold text-[#FAFAFA] font-display">
                   {education.degree}
                 </h5>
@@ -232,10 +230,10 @@ export default function About() {
             </div>
 
             {/* Direct Opportunity Teaser */}
-            <div className="cool-card card-shine p-4 sm:p-5 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl shadow-black/40">
+            <div className="cool-card card-shine p-4 sm:p-5 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xl shadow-black/40">
               <div>
                 <h6 className="text-xs sm:text-sm font-bold text-[#FAFAFA] mb-0.5">Open to Opportunities</h6>
-                <p className="text-[11px] text-[#A3A3A3]">Unity Developer &amp; Gameplay Programming roles</p>
+                <p className="text-[11px] text-[#A3A3A3]">Available for Unity developer &amp; gameplay programming roles</p>
               </div>
               <a
                 href="#contact"
