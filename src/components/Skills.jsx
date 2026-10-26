@@ -13,19 +13,13 @@ import {
   Wrench,
   Search,
   CheckCircle2,
-  GitBranch,
-  Layers,
   ArrowRight,
   ArrowDown,
   Workflow,
   Sparkle,
   Radio,
-  Sliders,
-  Check,
-  ChevronDown,
-  ChevronUp,
-  Maximize2,
-  Minimize2
+  Layers,
+  Network
 } from 'lucide-react';
 import { skillsData } from '../data/skillsData';
 import { usePortfolio } from '../context/PortfolioContext';
@@ -35,9 +29,8 @@ export default function Skills() {
   const rawSkills = (context && context.skills && context.skills.length > 0) ? context.skills : skillsData;
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState('tree'); // 'tree' (Flow Chart) or 'grid'
-  const [activeBranchFilter, setActiveBranchFilter] = useState('all');
-  const [collapsedBranches, setCollapsedBranches] = useState({});
+  const [flowStyle, setFlowStyle] = useState('pipeline'); // 'pipeline' (Vertical lines & arrows) or 'sequence' (Horizontal flow arrows)
+  const [activeCategoryFilter, setActiveCategoryFilter] = useState('all');
 
   // Icon mapping for all 11 categories
   const getCategoryIcon = (iconName, className = "w-4 h-4") => {
@@ -68,93 +61,60 @@ export default function Skills() {
     }
   };
 
-  // Human-friendly descriptions and engineering domain badges for each category
+  // Human-friendly domain subtitles for each category
   const categoryMeta = {
     "Gameplay Development": {
       domain: "Locomotion & Combat Loop",
-      description: "From input handling and character movement to physics collisions, damage hitboxes, and game over loops.",
-      stageGroup: "Execution Loop"
+      branchCode: "SYS-01"
     },
     "Animation Integration": {
       domain: "Motion & BlendTrees",
-      description: "Rigging integration, Animator state transitions, motion parameters, and jump animation blending.",
-      stageGroup: "Visual Kinetics"
+      branchCode: "SYS-02"
     },
     "UI Integration": {
       domain: "HUD & Menu Navigation",
-      description: "Responsive canvas anchoring, dynamic menus, sliders, mobile virtual joysticks, and score overlays.",
-      stageGroup: "Player Interface"
+      branchCode: "SYS-03"
     },
     "Camera Systems": {
       domain: "Cinemachine Optics",
-      description: "Virtual cameras, smooth target tracking, framing dampening, and bounding confiner polygons.",
-      stageGroup: "Viewport Systems"
+      branchCode: "SYS-04"
     },
     "AI and Enemy Systems": {
-      domain: "Autonomous Agents",
-      description: "NavMesh spatial geometry baking, agent pathfinding, waypoint patrol, line-of-sight raycasting, and enemy chase.",
-      stageGroup: "Intelligence Pipeline"
+      domain: "Autonomous Agents & NavMesh",
+      branchCode: "SYS-05"
     },
     "Level and Environment Design": {
-      domain: "Spatial Architecture",
-      description: "Terrain sculpting, modular obstacle layouts, collectibles, key spawn triggers, and scene transitions.",
-      stageGroup: "World Topologies"
+      domain: "Spatial World Architecture",
+      branchCode: "SYS-06"
     },
     "Game Systems": {
-      domain: "State & Data Persistence",
-      description: "Level progression state machines, survival wave modes, countdown timers, player/enemy health, and data save systems.",
-      stageGroup: "Core Mechanics"
+      domain: "State, Health & Progression",
+      branchCode: "SYS-07"
     },
     "Visual Effects and Audio": {
-      domain: "Audio & Particle FX",
-      description: "Particle system bursts, impact feedback, audio mixer bus routing, and dynamic spatial sound cues.",
-      stageGroup: "Sensory Feedback"
+      domain: "Particles & Soundscapes",
+      branchCode: "SYS-08"
     },
     "Asset Management and Deployment": {
-      domain: "Packaging & Mobile Cloud",
-      description: "Unity Addressables, Cloud Content Delivery (CCD), asset bundles, Android Gradle builds, and store releases.",
-      stageGroup: "Deployment Pipeline"
+      domain: "Addressables & Cloud CCD",
+      branchCode: "SYS-09"
     },
     "C# and Unity Integration": {
-      domain: "Object-Oriented Architecture",
-      description: "C# scripting, component communication, observer event systems, coroutines, and runtime debugging.",
-      stageGroup: "Software Engineering"
+      domain: "Runtime Core Architecture",
+      branchCode: "SYS-10"
     },
     "Development Tools": {
-      domain: "Toolchain & VCS",
-      description: "Visual Studio IDE, Git branch management, GitHub repository synchronization, and Unity Editor tools.",
-      stageGroup: "Workflow & Tooling"
+      domain: "Toolchain, Git & Profiling",
+      branchCode: "SYS-11"
     }
-  };
-
-  // Total topics counter across all categories
-  const totalTopics = useMemo(() => {
-    return rawSkills.reduce((acc, cat) => acc + (cat.skills ? cat.skills.length : 0), 0);
-  }, [rawSkills]);
-
-  // Toggle single branch collapse
-  const toggleBranchCollapse = (catName) => {
-    setCollapsedBranches((prev) => ({
-      ...prev,
-      [catName]: !prev[catName]
-    }));
-  };
-
-  // Expand all or collapse all branches
-  const setAllBranchesCollapsed = (collapsed) => {
-    const next = {};
-    rawSkills.forEach((cat) => {
-      next[cat.category] = collapsed;
-    });
-    setCollapsedBranches(next);
   };
 
   // Filter categories based on search or category filter pill
   const filteredCategories = useMemo(() => {
     let list = rawSkills;
 
-    if (activeBranchFilter !== 'all') {
-      list = list.filter((c) => c.category === activeBranchFilter);
+    if (activeCategoryFilter !== 'all') {
+      list = list.filter((c) => c.category === activeCategoryFilter);
     }
 
     if (searchQuery.trim()) {
@@ -173,7 +133,12 @@ export default function Skills() {
     }
 
     return list;
-  }, [rawSkills, activeBranchFilter, searchQuery]);
+  }, [rawSkills, activeCategoryFilter, searchQuery]);
+
+  // Total topics counter across filtered set
+  const totalSkillsCount = useMemo(() => {
+    return filteredCategories.reduce((acc, cat) => acc + (cat.skills?.length || 0), 0);
+  }, [filteredCategories]);
 
   return (
     <section 
@@ -194,7 +159,7 @@ export default function Skills() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-14">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12">
           <div className="max-w-2xl">
             <div 
               className="inline-flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-wider mb-3 px-3 py-1 rounded-full border transition-colors duration-300"
@@ -205,52 +170,54 @@ export default function Skills() {
               }}
             >
               <Workflow className="w-3.5 h-3.5" />
-              <span>Complete Technical Tech Tree Flow Chart</span>
+              <span>Technical Flow Chart Grid</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#FAFAFA] tracking-tight font-display">
               Skills &amp; Architecture Flow Chart
             </h2>
             <p className="text-[#A3A3A3] text-sm sm:text-base mt-2.5 leading-relaxed">
-              Every single gameplay concept, architecture pipeline, and toolchain component mapped into connected sequential flow charts.
+              Every gameplay subsystem, C# design pattern, and production toolchain mapped into structured, interconnected flow charts with clean directional pipelines.
             </p>
           </div>
 
-          {/* Control Bar: View Switcher + Search */}
+          {/* Control Bar: Flowchart Style Toggle + Search */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            {/* View Mode Switcher */}
+            {/* Flowchart Connector Style Switcher */}
             <div className="inline-flex items-center p-1 rounded-xl bg-[#1C1C1C] border border-[#303030]">
               <button
                 type="button"
-                onClick={() => setViewMode('tree')}
+                onClick={() => setFlowStyle('pipeline')}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  viewMode === 'tree'
+                  flowStyle === 'pipeline'
                     ? 'text-white shadow-md'
                     : 'text-[#A3A3A3] hover:text-[#FAFAFA]'
                 }`}
-                style={viewMode === 'tree' ? {
+                style={flowStyle === 'pipeline' ? {
                   background: 'linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 100%)',
                   boxShadow: '0 2px 10px -2px var(--color-glow, rgba(255,122,24,0.4))'
                 } : {}}
+                title="Vertical flowchart pipeline with connecting lines and downward arrows"
               >
-                <GitBranch className="w-3.5 h-3.5" />
-                <span>Tree Flow Chart</span>
+                <Network className="w-3.5 h-3.5" />
+                <span>Pipeline Flow</span>
               </button>
 
               <button
                 type="button"
-                onClick={() => setViewMode('grid')}
+                onClick={() => setFlowStyle('sequence')}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  viewMode === 'grid'
+                  flowStyle === 'sequence'
                     ? 'text-white shadow-md'
                     : 'text-[#A3A3A3] hover:text-[#FAFAFA]'
                 }`}
-                style={viewMode === 'grid' ? {
+                style={flowStyle === 'sequence' ? {
                   background: 'linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 100%)',
                   boxShadow: '0 2px 10px -2px var(--color-glow, rgba(255,122,24,0.4))'
                 } : {}}
+                title="Horizontal sequence with directional flow arrows"
               >
                 <Layers className="w-3.5 h-3.5" />
-                <span>Grid View</span>
+                <span>Sequence Flow</span>
               </button>
             </div>
 
@@ -261,372 +228,259 @@ export default function Skills() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search all 67 topics (e.g. NavMesh, Raycasting)..."
-                className="w-full sm:w-72 pl-9 pr-4 py-2 rounded-xl text-xs bg-[#1C1C1C] border border-[#303030] text-[#FAFAFA] placeholder:text-[#666666] focus:outline-none transition-colors"
+                placeholder="Search topics (NavMesh, Movement, Addressables)..."
+                className="w-full sm:w-64 pl-9 pr-4 py-2 rounded-xl text-xs bg-[#1C1C1C] border border-[#303030] text-[#FAFAFA] placeholder:text-[#666666] focus:outline-none transition-colors"
                 style={{
                   borderColor: searchQuery ? 'var(--color-primary, #FF7A18)' : undefined
                 }}
-                aria-label="Search all skills in flow chart"
+                aria-label="Search skills in flow chart"
               />
             </div>
           </div>
         </div>
 
-        {/* VIEW 1: FULL DATA TECH TREE FLOW CHART */}
-        {viewMode === 'tree' && (
-          <div className="space-y-10 animate-in fade-in duration-300">
-            
-            {/* MASTER ROOT ENGINE HUB */}
-            <div className="relative flex flex-col items-center text-center">
-              <div 
-                className="relative z-10 px-6 sm:px-10 py-5 rounded-2xl bg-[#1C1C1C] border shadow-2xl flex flex-col sm:flex-row items-center gap-4 transition-all duration-300"
-                style={{
-                  borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.5))',
-                  boxShadow: '0 10px 30px -5px var(--color-glow, rgba(255, 122, 24, 0.3))'
-                }}
-              >
-                <div 
-                  className="w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-lg shrink-0"
-                  style={{
-                    background: 'linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 100%)',
-                    boxShadow: '0 4px 14px var(--color-glow, rgba(255, 122, 24, 0.4))'
-                  }}
-                >
-                  <Cpu className="w-6 h-6" />
-                </div>
-                <div className="text-left">
-                  <div className="flex items-center gap-2">
-                    <span 
-                      className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold"
-                      style={{
-                        background: 'rgba(255, 255, 255, 0.08)',
-                        color: 'var(--color-primary, #FF7A18)'
-                      }}
-                    >
-                      Master Root Engine Hub
-                    </span>
-                    <span className="text-xs text-zinc-400 font-mono">Unity LTS Engine + C# Architecture</span>
-                  </div>
-                  <h3 className="text-lg sm:text-xl font-extrabold text-[#FAFAFA] font-display">
-                    Interactive Game Engineering Core
-                  </h3>
-                </div>
-                <div className="hidden sm:flex items-center gap-3 pl-5 border-l border-white/10 text-xs font-mono text-zinc-400">
-                  <div>
-                    <span className="text-[#FAFAFA] font-bold text-sm block">{rawSkills.length}</span>
-                    <span>Branches</span>
-                  </div>
-                  <div className="w-px h-6 bg-white/10" />
-                  <div>
-                    <span className="text-[#FAFAFA] font-bold text-sm block">{totalTopics}</span>
-                    <span>Total Nodes</span>
-                  </div>
-                </div>
+        {/* TOP FLOW CHART ARCHITECTURE HUB */}
+        <div className="mb-10 sm:mb-12 text-center flex flex-col items-center">
+          {/* Master Central Node */}
+          <div 
+            className="inline-flex items-center gap-3.5 px-5 sm:px-8 py-3.5 rounded-2xl bg-[#1C1C1C] border shadow-xl transition-all max-w-full"
+            style={{
+              borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.45))',
+              boxShadow: '0 8px 25px -4px var(--color-glow, rgba(255, 122, 24, 0.25))'
+            }}
+          >
+            <div 
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md"
+              style={{
+                background: 'linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 100%)'
+              }}
+            >
+              <Cpu className="w-5 h-5" />
+            </div>
+            <div className="text-left">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-emerald-400 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  <span>Architecture Root</span>
+                </span>
+                <span className="text-[10px] font-mono text-zinc-500">//</span>
+                <span className="text-[10px] font-mono text-zinc-400">Unity 3D / 2D Core</span>
               </div>
-
-              {/* Trunk SVG flow lines from root hub to pipeline tracks */}
-              <div className="w-full max-w-4xl h-10 hidden sm:flex items-center justify-center relative">
-                <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 800 40">
-                  <defs>
-                    <linearGradient id="treeTrunkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="var(--color-primary, #FF7A18)" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="var(--color-secondary, #FF9233)" stopOpacity="0.3" />
-                    </linearGradient>
-                  </defs>
-                  <path 
-                    d="M 400 0 L 400 20 M 400 20 L 80 20 L 80 40 M 400 20 L 720 20 L 720 40 M 400 20 L 400 40" 
-                    fill="none" 
-                    stroke="url(#treeTrunkGrad)" 
-                    strokeWidth="2" 
-                    strokeDasharray="4 4" 
-                    className="animate-pulse"
-                  />
-                </svg>
+              <div className="text-sm sm:text-base font-bold text-white font-display">
+                Gameplay Architecture &amp; C# Execution Pipeline
               </div>
             </div>
-
-            {/* Quick Action Bar: Branch Filter Tabs + Expand/Collapse All */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-b border-white/5 pb-4">
-              <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto no-scrollbar w-full sm:w-auto">
-                <button
-                  type="button"
-                  onClick={() => setActiveBranchFilter('all')}
-                  className="px-3 py-1.5 rounded-xl text-xs font-medium font-mono transition-all cursor-pointer border shrink-0"
-                  style={{
-                    background: activeBranchFilter === 'all' ? 'var(--color-primary, #FF7A18)' : '#1C1C1C',
-                    borderColor: activeBranchFilter === 'all' ? 'var(--color-primary, #FF7A18)' : '#303030',
-                    color: activeBranchFilter === 'all' ? '#FFFFFF' : '#A3A3A3',
-                    boxShadow: activeBranchFilter === 'all' ? '0 2px 10px -2px var(--color-glow, rgba(255,122,24,0.4))' : undefined
-                  }}
-                >
-                  All 11 Branches ({totalTopics})
-                </button>
-                {rawSkills.map((cat) => {
-                  const isActive = activeBranchFilter === cat.category;
-                  return (
-                    <button
-                      key={cat.category}
-                      type="button"
-                      onClick={() => setActiveBranchFilter(cat.category)}
-                      className="px-2.5 py-1.5 rounded-xl text-xs font-medium font-mono transition-all cursor-pointer border shrink-0 flex items-center gap-1.5"
-                      style={{
-                        background: isActive ? 'var(--color-primary, #FF7A18)' : '#1C1C1C',
-                        borderColor: isActive ? 'var(--color-primary, #FF7A18)' : '#303030',
-                        color: isActive ? '#FFFFFF' : '#A3A3A3',
-                        boxShadow: isActive ? '0 2px 10px -2px var(--color-glow, rgba(255,122,24,0.4))' : undefined
-                      }}
-                    >
-                      {getCategoryIcon(cat.iconName, "w-3 h-3")}
-                      <span>{cat.category}</span>
-                      <span className="text-[10px] opacity-70">({cat.skills?.length || 0})</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Expand / Collapse All Toggle */}
-              <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
-                <button
-                  type="button"
-                  onClick={() => setAllBranchesCollapsed(false)}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-mono text-[#A3A3A3] hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-colors cursor-pointer"
-                  title="Expand all flow chart branches"
-                >
-                  <Maximize2 className="w-3 h-3" />
-                  <span>Expand All</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAllBranchesCollapsed(true)}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-mono text-[#A3A3A3] hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-colors cursor-pointer"
-                  title="Collapse all flow chart branches"
-                >
-                  <Minimize2 className="w-3 h-3" />
-                  <span>Collapse All</span>
-                </button>
-              </div>
-            </div>
-
-            {/* FLOW CHART BRANCHES (ALL 11 CATEGORIES WITH ALL 67 SKILLS) */}
-            <div className="space-y-8">
-              {filteredCategories.map((category, catIndex) => {
-                const meta = categoryMeta[category.category] || {
-                  domain: "Unity Engine System",
-                  description: "Practical gameplay and technical architecture.",
-                  stageGroup: "Production Track"
-                };
-                const isCollapsed = collapsedBranches[category.category];
-                const skillsList = category.skills || [];
-
-                return (
-                  <div 
-                    key={category.category}
-                    className="p-5 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#303030] hover:border-white/20 transition-all shadow-xl shadow-black/40 relative overflow-hidden"
-                  >
-                    {/* Branch Header / Origin of Flow */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/10">
-                      <div className="flex items-start sm:items-center gap-3.5">
-                        <div 
-                          className="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md"
-                          style={{
-                            background: 'linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 100%)'
-                          }}
-                        >
-                          {getCategoryIcon(category.iconName, "w-5 h-5")}
-                        </div>
-                        <div>
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500">
-                              Branch 0{catIndex + 1} //
-                            </span>
-                            <h4 className="text-base sm:text-lg font-bold text-[#FAFAFA] font-display">
-                              {category.category}
-                            </h4>
-                            <span 
-                              className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border"
-                              style={{
-                                borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.4))',
-                                color: 'var(--color-primary, #FF7A18)',
-                                background: 'rgba(255, 255, 255, 0.03)'
-                              }}
-                            >
-                              {meta.domain}
-                            </span>
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
-                              {skillsList.length} Connected Nodes
-                            </span>
-                          </div>
-                          <p className="text-xs text-[#A3A3A3] mt-1 leading-relaxed max-w-3xl">
-                            {meta.description}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
-                        <span className="hidden lg:inline text-[11px] font-mono text-zinc-500">
-                          Execution Pipeline Flow ──►
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => toggleBranchCollapse(category.category)}
-                          className="p-1.5 rounded-lg text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-colors cursor-pointer"
-                          aria-label={isCollapsed ? `Expand ${category.category}` : `Collapse ${category.category}`}
-                        >
-                          {isCollapsed ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* SEQUENTIAL FLOW CHART NODES (RENDERED WHEN NOT COLLAPSED) */}
-                    {!isCollapsed && (
-                      <div className="pt-6 relative">
-                        {/* Desktop & Mobile Responsive Flow Chart Grid with Interconnecting Connectors */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 relative items-stretch">
-                          {skillsList.map((skillName, skillIdx) => {
-                            const isLastInTrack = skillIdx === skillsList.length - 1;
-                            const isSearchMatch = searchQuery.trim() && skillName.toLowerCase().includes(searchQuery.toLowerCase().trim());
-
-                            return (
-                              <div key={skillIdx} className="relative flex flex-col justify-between">
-                                {/* Flow Chart Node Card */}
-                                <div 
-                                  className={`h-full p-4 rounded-xl bg-[#141414] border transition-all flex flex-col justify-between relative group hover:-translate-y-1 ${
-                                    isSearchMatch 
-                                      ? 'ring-2 ring-emerald-400 bg-emerald-950/20' 
-                                      : 'border-[#2D2D2D] hover:border-white/40'
-                                  }`}
-                                  style={{
-                                    boxShadow: isSearchMatch 
-                                      ? '0 0 20px rgba(16, 185, 129, 0.3)' 
-                                      : '0 4px 16px -4px rgba(0,0,0,0.5)'
-                                  }}
-                                >
-                                  <div>
-                                    {/* Step Index & Flow Badge */}
-                                    <div className="flex items-center justify-between gap-2 mb-2">
-                                      <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 flex items-center gap-1">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                                        <span>Node {String(skillIdx + 1).padStart(2, '0')}</span>
-                                      </span>
-                                      <span 
-                                        className="text-[9px] font-mono font-bold px-2 py-0.5 rounded text-emerald-400 bg-emerald-500/10 border border-emerald-500/20"
-                                      >
-                                        Active Stack
-                                      </span>
-                                    </div>
-
-                                    {/* Skill Title */}
-                                    <h5 className="text-sm font-bold text-[#FAFAFA] font-display group-hover:text-white transition-colors leading-snug">
-                                      {skillName}
-                                    </h5>
-                                  </div>
-
-                                  {/* Bottom Status / Sub-pipeline note */}
-                                  <div className="pt-2.5 mt-3 border-t border-white/5 flex items-center justify-between text-[10px] font-mono text-zinc-400">
-                                    <span className="truncate">Production Verified</span>
-                                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 ml-1" />
-                                  </div>
-                                </div>
-
-                                {/* Flow Chart Arrow Connector (Desktop between sequential nodes in grid) */}
-                                {!isLastInTrack && (
-                                  <div className="hidden xl:flex absolute -right-3 top-1/2 -translate-y-1/2 z-20 w-6 h-6 rounded-full bg-[#1C1C1C] border border-[#303030] items-center justify-center text-zinc-400 shadow-md">
-                                    <ArrowRight className="w-3 h-3 text-zinc-300" />
-                                  </div>
-                                )}
-
-                                {/* Mobile Flow Connector */}
-                                {!isLastInTrack && (
-                                  <div className="sm:hidden flex justify-center py-1">
-                                    <div className="w-5 h-5 rounded-full bg-[#141414] border border-[#303030] flex items-center justify-center text-zinc-400">
-                                      <ArrowDown className="w-2.5 h-2.5" />
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
           </div>
-        )}
 
-        {/* VIEW 2: CLASSIC GRID MATRIX CARDS */}
-        {viewMode === 'grid' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch animate-in fade-in duration-300">
-            {filteredCategories.map((category, index) => (
+          {/* Master Flowchart Bus Connector Lines */}
+          <div className="flex flex-col items-center mt-2.5">
+            <span 
+              className="w-px h-6 bg-gradient-to-b from-[var(--color-primary,#FF7A18)] to-zinc-700" 
+            />
+            <div className="w-2.5 h-2.5 rounded-full border border-zinc-600 bg-[#141414] flex items-center justify-center">
+              <span className="w-1 h-1 rounded-full bg-[var(--color-primary,#FF7A18)]" />
+            </div>
+            <span className="w-px h-4 bg-zinc-700" />
+            <ArrowDown className="w-3.5 h-3.5 text-zinc-500 -mt-0.5" />
+          </div>
+
+          {/* Subsystem Pipeline Domain Badges */}
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2 max-w-4xl">
+            <button
+              type="button"
+              onClick={() => setActiveCategoryFilter('all')}
+              className={`px-3 py-1 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer ${
+                activeCategoryFilter === 'all'
+                  ? 'text-white border'
+                  : 'text-zinc-400 bg-[#161616] border border-[#2D2D2D] hover:text-white'
+              }`}
+              style={activeCategoryFilter === 'all' ? {
+                background: 'rgba(255, 255, 255, 0.08)',
+                borderColor: 'var(--color-primary, #FF7A18)',
+                color: 'var(--color-primary, #FF7A18)'
+              } : {}}
+            >
+              All Pipelines ({rawSkills.length})
+            </button>
+            {rawSkills.map((cat) => (
+              <button
+                key={cat.category}
+                type="button"
+                onClick={() => setActiveCategoryFilter(cat.category === activeCategoryFilter ? 'all' : cat.category)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+                  activeCategoryFilter === cat.category
+                    ? 'text-white border'
+                    : 'text-zinc-400 bg-[#141414] border border-[#2A2A2A] hover:text-white hover:border-zinc-600'
+                }`}
+                style={activeCategoryFilter === cat.category ? {
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  borderColor: 'var(--color-primary, #FF7A18)',
+                  color: 'var(--color-primary, #FF7A18)'
+                } : {}}
+              >
+                {cat.category}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* FLOW CHART GRID MATRIX */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 items-stretch">
+          {filteredCategories.map((category, index) => {
+            const meta = categoryMeta[category.category] || { domain: "Subsystem Pipeline", branchCode: `SYS-${String(index+1).padStart(2, '0')}` };
+            const skills = category.skills || [];
+
+            return (
               <div
                 key={category.category}
-                className="p-6 rounded-2xl bg-[#1C1C1C] border border-[#303030] hover:border-white/30 transition-colors shadow-lg shadow-black/40 flex flex-col justify-between"
+                className="p-5 sm:p-6 rounded-2xl bg-[#1C1C1C] border border-[#2F2F2F] hover:border-zinc-500/60 transition-all duration-300 shadow-xl shadow-black/50 flex flex-col justify-between group/card relative"
+                style={{
+                  boxShadow: '0 6px 20px -6px rgba(0,0,0,0.6)'
+                }}
               >
                 <div>
-                  {/* Category Header */}
-                  <div className="flex items-center justify-between gap-3 mb-4">
-                    <div className="flex items-center gap-2.5">
+                  {/* Category Card Header */}
+                  <div className="flex items-start justify-between gap-3 mb-3.5">
+                    <div className="flex items-center gap-3">
                       <div 
-                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border"
+                        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-transform duration-300 group-hover/card:scale-105"
                         style={{
-                          background: 'rgba(255, 255, 255, 0.05)',
-                          borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.3))',
+                          background: 'rgba(255, 255, 255, 0.04)',
+                          borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.35))',
                           color: 'var(--color-primary, #FF7A18)'
                         }}
                       >
-                        {getCategoryIcon(category.iconName, "w-4 h-4")}
+                        {getCategoryIcon(category.iconName, "w-5 h-5")}
                       </div>
-                      <h3 className="text-base font-bold text-[#FAFAFA] font-display">
-                        {category.category}
-                      </h3>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-wider">
+                            {meta.branchCode}
+                          </span>
+                          <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#141414] border border-[#303030] text-zinc-400">
+                            Pipeline {index + 1}
+                          </span>
+                        </div>
+                        <h3 className="text-base font-bold text-[#FAFAFA] font-display group-hover/card:text-white transition-colors">
+                          {category.category}
+                        </h3>
+                        <p className="text-[11px] font-mono text-zinc-400 mt-0.5">
+                          {meta.domain}
+                        </p>
+                      </div>
                     </div>
-                    <span className="text-[11px] font-mono text-[#A3A3A3] px-2 py-0.5 rounded-md bg-[#141414] border border-[#303030] shrink-0">
-                      {category.skills?.length || 0}
+
+                    <span 
+                      className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#141414] border border-[#333333] shrink-0"
+                      style={{ color: 'var(--color-primary, #FF7A18)' }}
+                    >
+                      {skills.length} Nodes
                     </span>
                   </div>
 
-                  {/* Skills Pills */}
-                  <div className="flex flex-wrap gap-2 pt-3 border-t border-[#303030]/60">
-                    {(category.skills || []).map((skill, sIdx) => (
-                      <span
-                        key={sIdx}
-                        className="px-2.5 py-1 rounded-lg text-xs font-medium text-[#E5E5E5] bg-[#141414] border border-[#303030] hover:text-white transition-colors"
-                      >
-                        {skill}
-                      </span>
-                    ))}
+                  {/* Flowchart Stem from Card Header into Nodes */}
+                  <div className="flex flex-col items-center my-2.5">
+                    <span className="w-px h-3 bg-zinc-700/80" />
+                    <ArrowDown className="w-3 h-3 text-zinc-500 -mt-0.5" />
                   </div>
+
+                  {/* FLOWCHART NODES WITH CONNECTOR LINES */}
+                  {flowStyle === 'pipeline' ? (
+                    /* STYLE 1: VERTICAL FLOWCHART PIPELINE */
+                    <div className="space-y-1.5 pt-1">
+                      {skills.map((skill, sIdx) => {
+                        const isLast = sIdx === skills.length - 1;
+                        return (
+                          <div key={sIdx} className="flex flex-col items-center group/node">
+                            {/* Flowchart Node Box */}
+                            <div className="w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl bg-[#141414] border border-[#2D2D2D] hover:border-[var(--color-primary)] hover:bg-[#1A1A1A] transition-all duration-200 shadow-sm">
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <span 
+                                  className="w-2 h-2 rounded-full bg-emerald-400 group-hover/node:bg-[var(--color-primary)] group-hover/node:shadow-[0_0_8px_var(--color-glow)] transition-all shrink-0" 
+                                />
+                                <span className="text-xs font-mono font-medium text-zinc-200 group-hover/node:text-white transition-colors truncate">
+                                  {skill}
+                                </span>
+                              </div>
+                              <span className="text-[10px] font-mono text-zinc-500 group-hover/node:text-zinc-400 shrink-0 font-semibold">
+                                {String(sIdx + 1).padStart(2, '0')}
+                              </span>
+                            </div>
+
+                            {/* Downward Connector Line & Arrow */}
+                            {!isLast && (
+                              <div className="flex flex-col items-center py-1 select-none text-zinc-600 group-hover/node:text-[var(--color-primary)] transition-colors">
+                                <span className="w-px h-3 bg-zinc-700/80 group-hover/node:bg-[var(--color-primary)] transition-colors" />
+                                <ArrowDown className="w-3 h-3 -mt-0.5" />
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    /* STYLE 2: HORIZONTAL FLOWCHART SEQUENCE */
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-3 pt-2">
+                      {skills.map((skill, sIdx) => {
+                        const isLast = sIdx === skills.length - 1;
+                        return (
+                          <div key={sIdx} className="inline-flex items-center group/node">
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#141414] border border-[#2D2D2D] hover:border-[var(--color-primary)] hover:bg-[#1A1A1A] transition-all duration-200 shadow-sm">
+                              <span 
+                                className="w-1.5 h-1.5 rounded-full bg-emerald-400 group-hover/node:bg-[var(--color-primary)] group-hover/node:shadow-[0_0_8px_var(--color-glow)] transition-all shrink-0" 
+                              />
+                              <span className="text-xs font-mono font-medium text-zinc-200 group-hover/node:text-white transition-colors">
+                                {skill}
+                              </span>
+                            </div>
+                            {!isLast && (
+                              <div className="inline-flex items-center px-1 text-zinc-600 group-hover/node:text-[var(--color-primary)] transition-colors">
+                                <span className="w-2.5 h-px bg-zinc-700 group-hover/node:bg-[var(--color-primary)] transition-colors" />
+                                <ArrowRight className="w-3 h-3 -ml-0.5" />
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
 
-                {/* Bottom Card Footer */}
-                <div className="mt-5 pt-3 border-t border-white/5 flex items-center justify-between text-[11px] font-mono text-[#666666]">
-                  <span>Branch 0{index + 1}</span>
-                  <span className="text-[#A3A3A3]">Practical Verified</span>
+                {/* Bottom Card Terminal Status */}
+                <div className="mt-6 pt-3.5 border-t border-white/5 flex items-center justify-between text-[11px] font-mono text-zinc-500">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <span>Pipeline Verified</span>
+                  </span>
+                  <div className="flex items-center gap-1 text-zinc-400">
+                    <span>Active In Engine</span>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            );
+          })}
+        </div>
 
         {/* Empty Search State */}
         {filteredCategories.length === 0 && (
           <div className="text-center py-16 p-8 rounded-2xl bg-[#1C1C1C] border border-[#303030]">
             <p className="text-[#FAFAFA] font-semibold text-base mb-1">
-              No matching flow chart topics found for "{searchQuery}"
+              No matching flowchart topics found for "{searchQuery}"
             </p>
             <p className="text-[#A3A3A3] text-xs mb-4">
-              Try searching across all 67 topics like "Movement", "NavMesh", "Camera", "Addressables", or "Coroutines".
+              Try searching across topics like "Movement", "NavMesh", "Camera", "Addressables", or "Coroutines".
             </p>
             <button
               type="button"
               onClick={() => {
                 setSearchQuery('');
-                setActiveBranchFilter('all');
+                setActiveCategoryFilter('all');
               }}
-              className="btn-palette-primary px-4 py-2 rounded-xl text-xs font-bold text-white transition-all cursor-pointer"
+              className="px-4 py-2 rounded-xl text-xs font-bold text-white transition-all cursor-pointer shadow-md"
+              style={{
+                background: 'linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 100%)'
+              }}
             >
               Reset Filters
             </button>
@@ -644,10 +498,10 @@ export default function Skills() {
               style={{ color: 'var(--color-primary, #FF7A18)' }}
             />
             <span>
-              <strong className="text-[#FAFAFA]">Full Spectrum Game Architecture:</strong> All 67 nodes illustrated in this flow chart represent hands-on, practical implementation verified across Unity 2D/3D development and published titles.
+              <strong className="text-[#FAFAFA]">Full Spectrum Technical Flow Chart:</strong> All {totalSkillsCount} nodes illustrated in these pipelines represent hands-on, practical implementation verified across Unity 2D/3D development.
             </span>
           </div>
-          <span className="font-mono text-zinc-500 shrink-0">Updated 2026 // Production Architecture</span>
+          <span className="font-mono text-zinc-500 shrink-0">Updated 2026 // Production Flowchart</span>
         </div>
 
       </div>
