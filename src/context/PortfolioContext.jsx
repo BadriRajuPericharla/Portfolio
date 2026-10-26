@@ -620,6 +620,23 @@ export function PortfolioProvider({ children }) {
     });
   };
 
+  // Resume and CV operations with automatic Cloud/Firestore sync
+  const updateResume = (newResumeData) => {
+    setResumeData((prev) => {
+      const next = typeof newResumeData === 'function' ? newResumeData(prev) : { ...prev, ...newResumeData };
+      syncToCloud('resume', next);
+      return next;
+    });
+  };
+
+  const updateCv = (newCvData) => {
+    setCvData((prev) => {
+      const next = typeof newCvData === 'function' ? newCvData(prev) : { ...prev, ...newCvData };
+      syncToCloud('cv', next);
+      return next;
+    });
+  };
+
   // Reset to original data
   const resetToDefaults = () => {
     if (window.confirm('Reset all portfolio matter, projects, fonts, and colors back to default?')) {
@@ -676,8 +693,10 @@ export function PortfolioProvider({ children }) {
         deleteCustomSection,
         resumeData,
         setResumeData,
+        updateResume,
         cvData,
         setCvData,
+        updateCv,
         resetToDefaults,
         syncAllToCloud
       }}

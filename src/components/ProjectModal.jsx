@@ -10,8 +10,7 @@ import {
   Layers, 
   Sparkles, 
   Info,
-  MonitorPlay,
-  Video
+  MonitorPlay
 } from 'lucide-react';
 import GameArtwork from './GameArtwork';
 
@@ -39,8 +38,6 @@ export default function ProjectModal({ project, onClose }) {
     genre,
     accentColor,
     playUrl,
-    videoUrl,
-    actionType = 'play',
     actionLabel,
     githubUrl,
     tags,
@@ -54,21 +51,6 @@ export default function ProjectModal({ project, onClose }) {
     mediaPlaceholders,
     customImage
   } = project;
-
-  // Helper to convert standard YouTube links into embeddable URLs
-  const getEmbedUrl = (url) => {
-    if (!url) return null;
-    if (url.includes('youtube.com/watch?v=')) {
-      return url.replace('watch?v=', 'embed/').split('&')[0];
-    }
-    if (url.includes('youtu.be/')) {
-      const vidId = url.split('youtu.be/')[1]?.split('?')[0];
-      return `https://www.youtube.com/embed/${vidId}`;
-    }
-    return url;
-  };
-
-  const embedUrl = getEmbedUrl(videoUrl);
 
   return (
     <div 
@@ -112,34 +94,16 @@ export default function ProjectModal({ project, onClose }) {
         <div className="max-h-[80vh] overflow-y-auto p-6 sm:p-8 space-y-8 custom-scrollbar">
           
           {/* If videoUrl is provided, render embedded player */}
-          {embedUrl ? (
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#FFC857] uppercase tracking-wider">
-                <Video className="w-4 h-4" />
-                <span>Gameplay Demo Video</span>
-              </div>
-              <div className="relative aspect-video rounded-xl overflow-hidden border border-[#FFC857]/30 bg-black shadow-2xl">
-                <iframe
-                  src={embedUrl}
-                  title={`${title} Demo Video`}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-            </div>
-          ) : (
-            /* Main Visual Banner (Artwork / Screenshot) */
-            <div className="relative rounded-xl overflow-hidden border border-white/10 bg-zinc-950">
-              <GameArtwork
-                projectId={id}
-                title={title}
-                accentColor={accentColor}
-                customSvgKey={mediaPlaceholders?.customSvgKey}
-                customImage={customImage}
-              />
-            </div>
-          )}
+          {/* Main Visual Banner (Artwork / Screenshot) */}
+          <div className="relative rounded-xl overflow-hidden border border-white/10 bg-zinc-950">
+            <GameArtwork
+              projectId={id}
+              title={title}
+              accentColor={accentColor}
+              customSvgKey={mediaPlaceholders?.customSvgKey}
+              customImage={customImage}
+            />
+          </div>
 
           {/* Quick Action Links Bar */}
           <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl bg-[#141414] border border-white/5">
@@ -166,19 +130,6 @@ export default function ProjectModal({ project, onClose }) {
                   <Play className="w-4 h-4 fill-current" />
                   <span>{actionLabel || 'Play Live Game'}</span>
                   <ExternalLink className="w-3.5 h-3.5 opacity-80" />
-                </a>
-              )}
-
-              {/* Demo Video external link if provided */}
-              {videoUrl && (
-                <a
-                  href={videoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-black bg-gradient-to-r from-[#FFC857] to-[#FF7A18] hover:opacity-95 shadow-md shadow-[#FFC857]/20 transition-all hover:scale-105 font-bold"
-                >
-                  <Video className="w-4 h-4" />
-                  <span>Watch Video</span>
                 </a>
               )}
 

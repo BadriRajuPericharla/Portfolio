@@ -38,7 +38,6 @@ export const projectsData = [
     ],
     mediaPlaceholders: {
       imagePath: "/projects/bossfight2d.png",
-      videoUrl: null,
       customSvgKey: "bossfight"
     }
   },
@@ -80,7 +79,6 @@ export const projectsData = [
     ],
     mediaPlaceholders: {
       imagePath: "/projects/shadowsneak.png",
-      videoUrl: null,
       customSvgKey: "shadowsneak"
     },
     customImage: "/projects/shadowsneak.png"
@@ -123,7 +121,6 @@ export const projectsData = [
     ],
     mediaPlaceholders: {
       imagePath: "/projects/arrow-escape.png",
-      videoUrl: null,
       customSvgKey: "arrowescape"
     }
   },
@@ -165,7 +162,6 @@ export const projectsData = [
     ],
     mediaPlaceholders: {
       imagePath: "/projects/junglejump.png",
-      videoUrl: null,
       customSvgKey: "platformer"
     }
   },
@@ -207,7 +203,6 @@ export const projectsData = [
     ],
     mediaPlaceholders: {
       imagePath: "/projects/obstacle-game.png",
-      videoUrl: null,
       customSvgKey: "obstacle"
     }
   }

@@ -56,8 +56,10 @@ export default function AdminPanel({ onReturnHome, onLogout }) {
     deleteCustomSection,
     resumeData,
     setResumeData,
+    updateResume,
     cvData,
     setCvData,
+    updateCv,
     skills,
     achievements,
     themeSettings,
@@ -279,8 +281,6 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
     genre: '',
     category: '2D Games',
     playUrl: '',
-    videoUrl: '',
-    actionType: 'play',
     actionLabel: 'Play Game',
     githubUrl: '',
     accentColor: '#6366F1',
@@ -319,8 +319,6 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
       genre: '',
       category: '2D Games',
       playUrl: 'https://badri-raju-pericharla.itch.io/',
-      videoUrl: '',
-      actionType: 'play',
       actionLabel: 'Play Game',
       githubUrl: '',
       accentColor: '#6366F1',
@@ -346,9 +344,7 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
       genre: proj.genre,
       category: proj.category || '2D Games',
       playUrl: proj.playUrl || '',
-      videoUrl: proj.videoUrl || '',
-      actionType: proj.actionType || (proj.videoUrl ? 'video' : 'play'),
-      actionLabel: proj.actionLabel || (proj.actionType === 'video' ? 'Watch Demo Video' : 'Play Game'),
+      actionLabel: proj.actionLabel || 'Play Game',
       githubUrl: proj.githubUrl || '',
       accentColor: proj.accentColor || '#6366F1',
       shortDescription: proj.shortDescription,
@@ -389,9 +385,7 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
       genre: projectForm.genre,
       category: projectForm.category,
       playUrl: projectForm.playUrl || null,
-      videoUrl: projectForm.videoUrl || null,
-      actionType: projectForm.actionType || 'play',
-      actionLabel: projectForm.actionLabel || (projectForm.actionType === 'video' ? 'Watch Demo Video' : 'Play Game'),
+      actionLabel: projectForm.actionLabel || 'Play Game',
       githubUrl: projectForm.githubUrl || null,
       accentColor: projectForm.accentColor,
       shortDescription: projectForm.shortDescription,
@@ -463,13 +457,13 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setResumeData({
+        updateResume({
           url: reader.result,
           name: file.name,
           customFile: true,
           title: file.name
         });
-        showNotification(`New resume "${file.name}" uploaded successfully!`);
+        showNotification(`🔥 New resume "${file.name}" uploaded & synced to database!`);
       };
       reader.readAsDataURL(file);
     }
@@ -481,13 +475,13 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setCvData({
+        updateCv({
           url: reader.result,
           name: file.name,
           customFile: true,
           title: file.name
         });
-        showNotification(`New CV "${file.name}" uploaded successfully!`);
+        showNotification(`🔥 New CV "${file.name}" uploaded & synced to database!`);
       };
       reader.readAsDataURL(file);
     }
@@ -1371,7 +1365,10 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
                     className="flex-1 px-4 py-2.5 rounded-xl bg-[#090C12] border border-white/10 text-white text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
                   />
                   <button
-                    onClick={() => showNotification('Resume URL updated!')}
+                    onClick={() => {
+                      updateResume({ url: resumeData.url, customFile: false });
+                      showNotification('🔥 Resume link saved & synced to database!');
+                    }}
                     className="px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
                   >
                     Save URL
@@ -1438,7 +1435,10 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
                     className="flex-1 px-4 py-2.5 rounded-xl bg-[#090C12] border border-white/10 text-white text-sm focus:ring-2 focus:ring-amber-500 outline-none"
                   />
                   <button
-                    onClick={() => showNotification('CV URL updated successfully!')}
+                    onClick={() => {
+                      updateCv({ url: cvData?.url || '', customFile: false });
+                      showNotification('🔥 CV link saved & synced to database!');
+                    }}
                     className="px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-amber-600 hover:bg-amber-500 transition-colors"
                   >
                     Save CV URL
@@ -2292,35 +2292,19 @@ service cloud.firestore {
                 </div>
               </div>
 
-              {/* URLs: Play Link & Demo Video Link */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-mono text-zinc-300 mb-1">
-                    Playable Game Link (itch.io / WebGL)
-                  </label>
-                  <input
-                    type="url"
-                    value={projectForm.playUrl}
-                    onChange={(e) => setProjectForm({ ...projectForm, playUrl: e.target.value })}
-                    placeholder="https://badri-raju-pericharla.itch.io/..."
-                    className="w-full px-4 py-2 rounded-xl bg-[#080B12] border border-white/10 text-white text-sm"
-                  />
-                  <span className="text-[10px] text-zinc-500 font-mono">Leave blank if only video demo is available</span>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-mono text-amber-300 mb-1">
-                    Demo Video URL (YouTube / Vimeo / Drive / MP4)
-                  </label>
-                  <input
-                    type="url"
-                    value={projectForm.videoUrl}
-                    onChange={(e) => setProjectForm({ ...projectForm, videoUrl: e.target.value })}
-                    placeholder="https://www.youtube.com/watch?v=... or youtu.be/..."
-                    className="w-full px-4 py-2 rounded-xl bg-[#080B12] border border-amber-500/30 text-white text-sm focus:border-amber-400"
-                  />
-                  <span className="text-[10px] text-amber-400/80 font-mono">Embeds video directly in modal &amp; powers Demo button</span>
-                </div>
+              {/* Playable Game Link */}
+              <div>
+                <label className="block text-xs font-mono text-zinc-300 mb-1">
+                  Playable Game Link (itch.io / WebGL)
+                </label>
+                <input
+                  type="url"
+                  value={projectForm.playUrl}
+                  onChange={(e) => setProjectForm({ ...projectForm, playUrl: e.target.value })}
+                  placeholder="https://badri-raju-pericharla.itch.io/..."
+                  className="w-full px-4 py-2 rounded-xl bg-[#080B12] border border-white/10 text-white text-sm"
+                />
+                <span className="text-[10px] text-zinc-500 font-mono">Link to your playable game build on itch.io or web host</span>
               </div>
 
               {/* Accent Color */}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Eye, ExternalLink, Video, MonitorPlay } from 'lucide-react';
+import { Play, Eye, ExternalLink, MonitorPlay } from 'lucide-react';
 import GameArtwork from './GameArtwork';
 
 export default function ProjectCard({ project, onOpenDetails }) {
@@ -10,18 +10,13 @@ export default function ProjectCard({ project, onOpenDetails }) {
     shortDescription,
     tags,
     playUrl,
-    videoUrl,
-    actionType = 'play',
     actionLabel,
     accentColor = '#6366F1',
     mediaPlaceholders,
     customImage
   } = project;
 
-  // Determine button label and icon based on action type
-  const isVideoAction = actionType === 'video' || (actionLabel && actionLabel.toLowerCase().includes('video'));
-  const effectiveLabel = actionLabel || (isVideoAction ? 'Watch Demo Video' : 'Play Game');
-  const targetUrl = isVideoAction ? (videoUrl || playUrl) : (playUrl || videoUrl);
+  const effectiveLabel = actionLabel || 'Play Game';
 
   return (
     <div 
@@ -42,14 +37,6 @@ export default function ProjectCard({ project, onOpenDetails }) {
           <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-md text-xs font-medium bg-black/80 border border-white/10 text-[#FAFAFA] backdrop-blur-md">
             {genre}
           </div>
-
-          {/* Video Available Indicator */}
-          {videoUrl && (
-            <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-[#FFC857] text-black shadow-lg">
-              <Video className="w-3 h-3 fill-current" />
-              <span>DEMO VIDEO</span>
-            </div>
-          )}
         </div>
 
         {/* Card Body */}
@@ -94,24 +81,16 @@ export default function ProjectCard({ project, onOpenDetails }) {
           <span>Details</span>
         </button>
 
-        {/* Action Button: Play Game OR Watch Demo Video */}
-        {targetUrl ? (
+        {/* Action Button: Play Game */}
+        {playUrl ? (
           <a
-            href={targetUrl}
+            href={playUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`flex-1 inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all hover:scale-[1.02] shadow-md ${
-              isVideoAction
-                ? 'bg-gradient-to-r from-[#FFC857] to-[#FF7A18] text-black font-bold shadow-[#FFC857]/20 border border-[#FFC857]/40'
-                : 'bg-gradient-to-r from-[#FF7A18] to-[#FF9233] text-white hover:opacity-95 shadow-[#FF7A18]/25 border border-[#FF7A18]/40'
-            }`}
+            className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all hover:scale-[1.02] shadow-md bg-gradient-to-r from-[#FF7A18] to-[#FF9233] text-white hover:opacity-95 shadow-[#FF7A18]/25 border border-[#FF7A18]/40"
             aria-label={`${effectiveLabel} for ${title}`}
           >
-            {isVideoAction ? (
-              <Video className="w-4 h-4" />
-            ) : (
-              <Play className="w-4 h-4 fill-current" />
-            )}
+            <Play className="w-4 h-4 fill-current" />
             <span className="truncate">{effectiveLabel}</span>
           </a>
         ) : (
