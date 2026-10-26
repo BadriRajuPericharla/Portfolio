@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
 import { 
-  Mail, 
   Send, 
   Copy, 
   Check, 
   ExternalLink, 
-  Gamepad2, 
   FileDown, 
   MessageSquare, 
-  Sparkles, 
-  Info,
   Loader2,
   X,
   AlertCircle
 } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, YoutubeIcon, ItchIcon } from './SocialIcons';
 import { usePortfolio } from '../context/PortfolioContext';
+
+/**
+ * Contact Section
+ * 
+ * Minimalist, high-conversion contact section:
+ * - Direct email with instant copy
+ * - Clean developer links with hover shine
+ * - Fast, backendless AJAX form delivery directly to Badri Raju
+ */
 
 export default function Contact() {
   const { profile, resumeData } = usePortfolio();
@@ -45,7 +50,6 @@ export default function Contact() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Direct backendless AJAX delivery to Badri Raju's inbox (NO external Gmail opening)
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsSending(true);
@@ -88,12 +92,12 @@ export default function Contact() {
           message: ''
         });
       } else {
-        throw new Error(result.message || 'Transmission failed. Please check your network and try again.');
+        throw new Error(result.message || 'Delivery failed. Please check your connection.');
       }
     } catch (err) {
-      console.error('Contact form direct transmission error:', err);
+      console.error('Contact error:', err);
       setErrorMessage(
-        'Unable to complete automatic delivery right now. Please verify your connection or click the copy button to email directly.'
+        'Unable to send message right now. Please copy the email directly.'
       );
     } finally {
       setIsSending(false);
@@ -103,12 +107,20 @@ export default function Contact() {
   return (
     <section 
       id="contact" 
-      className="py-24 bg-[#111111] relative border-t border-[#303030]"
-      aria-label="Contact Badri Raju"
+      className="py-20 sm:py-28 bg-[#111111] relative border-t border-white/5 overflow-hidden"
+      aria-label="Contact"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Background Ambient Glow */}
+      <div 
+        className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] rounded-full blur-[140px] pointer-events-none opacity-15"
+        style={{
+          background: 'radial-gradient(circle, var(--color-primary, #FF7A18) 0%, transparent 70%)'
+        }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Centered Section Header Matching Reference Flow */}
+        {/* Centered Section Header */}
         <div data-reveal className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight font-display mb-3 text-[#FAFAFA]">
             Get In <span 
@@ -124,36 +136,33 @@ export default function Contact() {
               background: 'linear-gradient(to right, var(--color-primary, #FF7A18), var(--color-secondary, #FFC857))'
             }}
           />
-          <p className="text-[#A3A3A3] text-sm sm:text-base max-w-xl mx-auto mt-4 leading-relaxed">
-            Open to Unity development roles, gameplay programming opportunities, and technical collaborations.
+          <p className="text-[#A3A3A3] text-xs sm:text-sm max-w-md mx-auto mt-3">
+            Open to Unity developer roles, gameplay programming, and technical collaborations.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           
-          {/* Left Column: Direct Communication Channels & Social Cards (5 cols) */}
-          <div data-reveal="slide-left" className="lg:col-span-5 space-y-6">
+          {/* Left Column: Direct Channels & Gateways (5 cols) */}
+          <div data-reveal="slide-left" className="lg:col-span-5 space-y-5">
             
             {/* Primary Email Card */}
-            <div className="p-5 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#303030] space-y-4 shadow-xl shadow-black/40 hover:border-zinc-500/50 transition-all duration-300">
+            <div className="cool-card card-shine p-5 sm:p-6 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] space-y-3.5 shadow-xl shadow-black/40">
               <span className="text-xs font-mono font-semibold text-[#FF7A18] uppercase tracking-wider block">
-                Primary Contact
+                Direct Contact
               </span>
-              <h3 className="text-xl font-bold text-[#FAFAFA]">
-                Direct Email
+              <h3 className="text-lg sm:text-xl font-bold text-[#FAFAFA]">
+                Email Directly
               </h3>
-              <p className="text-[#A3A3A3] text-xs sm:text-sm">
-                Direct inquiry for job opportunities, code discussions, or game projects.
-              </p>
 
-              <div className="p-3 sm:p-3.5 rounded-xl bg-[#141414] border border-[#303030] flex items-center justify-between gap-2">
+              <div className="p-3 rounded-xl bg-[#141414] border border-white/5 flex items-center justify-between gap-2">
                 <span className="text-xs sm:text-sm font-mono text-[#FAFAFA] truncate select-all">
                   {email || 'bhagavanpericharla@gmail.com'}
                 </span>
                 <button
                   type="button"
                   onClick={handleCopyEmail}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono text-[#FFC857] hover:text-white bg-[#FF7A18]/20 hover:bg-[#FF7A18]/35 border border-[#FF7A18]/30 transition-all duration-200 shrink-0 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono text-[#FFC857] hover:text-white bg-[#FF7A18]/20 hover:bg-[#FF7A18]/30 border border-[#FF7A18]/30 transition-all shrink-0 cursor-pointer"
                   title="Copy email to clipboard"
                   aria-label="Copy email address"
                 >
@@ -172,91 +181,64 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Social & Professional Gateways */}
-            <div className="p-5 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#303030] space-y-3 shadow-xl shadow-black/40">
-              <span className="text-xs font-mono font-semibold text-[#FF7A18] uppercase tracking-wider block mb-2">
-                Developer Gateways
+            {/* Developer Gateways */}
+            <div className="cool-card card-shine p-5 sm:p-6 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] space-y-2.5 shadow-xl shadow-black/40">
+              <span className="text-xs font-mono font-semibold text-[#FF7A18] uppercase tracking-wider block mb-1">
+                Developer Links
               </span>
 
               <a
                 href={links.github || "https://github.com/BadriRajuPericharla"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between p-3 rounded-xl bg-[#242424] hover:bg-[#2A2A2A] border border-white/5 hover:border-[#FF7A18]/40 transition-all duration-200 hover:-translate-y-0.5 group"
+                className="flex items-center justify-between p-3 rounded-xl bg-[#141414] hover:bg-[#202020] border border-white/5 hover:border-[#FF7A18]/40 transition-all hover:scale-[1.01] group"
               >
                 <div className="flex items-center gap-3">
-                  <GithubIcon className="w-5 h-5 text-[#FAFAFA]" />
-                  <div>
-                    <div className="text-sm font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18] transition-colors">GitHub</div>
-                    <div className="text-[11px] text-[#A3A3A3] font-mono">BadriRajuPericharla</div>
-                  </div>
+                  <GithubIcon className="w-4 h-4 text-[#FAFAFA]" />
+                  <div className="text-xs font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18] transition-colors">GitHub</div>
                 </div>
-                <ExternalLink className="w-4 h-4 text-[#A3A3A3] group-hover:text-[#FAFAFA] transition-colors" />
+                <ExternalLink className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white transition-colors" />
               </a>
 
               <a
                 href={links.linkedin || "https://www.linkedin.com/in/pericharla-badri-raju-6924942a5"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between p-3 rounded-xl bg-[#242424] hover:bg-[#2A2A2A] border border-white/5 hover:border-[#FF7A18]/40 transition-all duration-200 hover:-translate-y-0.5 group"
+                className="flex items-center justify-between p-3 rounded-xl bg-[#141414] hover:bg-[#202020] border border-white/5 hover:border-[#FF7A18]/40 transition-all hover:scale-[1.01] group"
               >
                 <div className="flex items-center gap-3">
-                  <LinkedinIcon className="w-5 h-5 text-[#FFC857]" />
-                  <div>
-                    <div className="text-sm font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18] transition-colors">LinkedIn</div>
-                    <div className="text-[11px] text-[#A3A3A3] font-mono">pericharla-badri-raju</div>
-                  </div>
+                  <LinkedinIcon className="w-4 h-4 text-[#FFC857]" />
+                  <div className="text-xs font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18] transition-colors">LinkedIn</div>
                 </div>
-                <ExternalLink className="w-4 h-4 text-[#A3A3A3] group-hover:text-[#FAFAFA] transition-colors" />
+                <ExternalLink className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white transition-colors" />
               </a>
-
-              {links.youtube && (
-                <a
-                  href={links.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3 rounded-xl bg-[#242424] hover:bg-[#2A2A2A] border border-white/5 hover:border-[#FF7A18]/40 transition-all duration-200 hover:-translate-y-0.5 group"
-                >
-                  <div className="flex items-center gap-3">
-                    <YoutubeIcon className="w-5 h-5 text-red-500" />
-                    <div>
-                      <div className="text-sm font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18] transition-colors">YouTube</div>
-                      <div className="text-[11px] text-[#A3A3A3] font-mono">@PBR_GameDev</div>
-                    </div>
-                  </div>
-                  <ExternalLink className="w-4 h-4 text-[#A3A3A3] group-hover:text-[#FAFAFA] transition-colors" />
-                </a>
-              )}
 
               {links.itchio && (
                 <a
                   href={links.itchio}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3 rounded-xl bg-[#242424] hover:bg-[#2A2A2A] border border-white/5 hover:border-[#FF7A18]/40 transition-all duration-200 hover:-translate-y-0.5 group"
+                  className="flex items-center justify-between p-3 rounded-xl bg-[#141414] hover:bg-[#202020] border border-white/5 hover:border-[#FF7A18]/40 transition-all hover:scale-[1.01] group"
                 >
                   <div className="flex items-center gap-3">
-                    <ItchIcon className="w-5 h-5 text-[#FF7A18]" />
-                    <div>
-                      <div className="text-sm font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18] transition-colors">itch.io</div>
-                      <div className="text-[11px] text-[#A3A3A3] font-mono">badri-raju-pericharla.itch.io</div>
-                    </div>
+                    <ItchIcon className="w-4 h-4 text-[#FF7A18]" />
+                    <div className="text-xs font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18] transition-colors">itch.io Profile</div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-[#A3A3A3] group-hover:text-[#FAFAFA] transition-colors" />
+                  <ExternalLink className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white transition-colors" />
                 </a>
               )}
             </div>
 
-            {/* Resume Callout in Contact Section */}
-            <div className="p-5 rounded-2xl bg-[#1C1C1C] border border-[#303030] flex items-center justify-between gap-4 hover:border-zinc-500/50 transition-all duration-300">
+            {/* Resume Callout */}
+            <div className="cool-card card-shine p-4 sm:p-5 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] flex items-center justify-between gap-4">
               <div>
-                <h5 className="text-sm font-bold text-[#FAFAFA]">Need a PDF Resume?</h5>
-                <p className="text-xs text-[#A3A3A3]">Download formatted CV for recruiter records</p>
+                <h5 className="text-xs sm:text-sm font-bold text-[#FAFAFA]">PDF Resume</h5>
+                <p className="text-[11px] text-[#A3A3A3]">Quick download for records</p>
               </div>
               <a
                 href={resumeData.url}
                 download={resumeData.name}
-                className="btn-palette-primary shrink-0 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-white shadow-md transition-all duration-200 hover:-translate-y-0.5 cursor-pointer"
+                className="btn-palette-primary shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white shadow-md transition-all hover:scale-[1.02] cursor-pointer"
               >
                 <FileDown className="w-3.5 h-3.5" />
                 <span>Download</span>
@@ -265,35 +247,31 @@ export default function Contact() {
 
           </div>
 
-          {/* Right Column: Direct Seamless Email Sender (7 cols) */}
+          {/* Right Column: Direct Seamless Message Sender (7 cols) */}
           <div data-reveal="slide-right" className="lg:col-span-7">
-            <div className="p-5 sm:p-9 rounded-2xl bg-[#1C1C1C] border border-[#303030] shadow-xl shadow-black/40 relative">
+            <div className="cool-card card-shine p-6 sm:p-8 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] shadow-xl shadow-black/40">
               <div className="flex items-center gap-2 text-[#FF7A18] font-mono text-xs font-bold uppercase tracking-wider mb-2">
                 <MessageSquare className="w-4 h-4" />
-                <span>Direct Message Delivery</span>
+                <span>Instant Delivery</span>
               </div>
-              <h3 className="text-2xl font-bold text-[#FAFAFA] mb-2 font-display">
-                Send a Message Directly
+              <h3 className="text-xl sm:text-2xl font-bold text-[#FAFAFA] mb-1 font-display">
+                Send a Message
               </h3>
               <p className="text-[#A3A3A3] text-xs sm:text-sm mb-6">
-                Fill out the details below. Messages are delivered directly to my inbox with instant notification.
+                Delivered directly to my inbox with instant notification.
               </p>
 
-              {/* Error Message */}
               {errorMessage && (
-                <div className="mb-6 p-4 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 text-xs flex items-start gap-3">
-                  <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-semibold block mb-0.5">Delivery Notice</span>
-                    <span>{errorMessage}</span>
-                  </div>
+                <div className="mb-5 p-3.5 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 text-xs flex items-center gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                  <span>{errorMessage}</span>
                 </div>
               )}
 
-              <form onSubmit={handleFormSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <form onSubmit={handleFormSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="contact-name" className="block text-xs font-mono font-medium text-[#FAFAFA] mb-1.5">
+                    <label htmlFor="contact-name" className="block text-xs font-mono font-medium text-[#FAFAFA] mb-1">
                       Your Name / Studio
                     </label>
                     <input
@@ -302,14 +280,14 @@ export default function Contact() {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      placeholder="e.g. Alex Mercer (Studio Lead)"
+                      placeholder="e.g. Alex (Studio Lead)"
                       required
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#141414] border border-[#303030] text-[#FAFAFA] placeholder-[#A3A3A3]/50 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7A18] focus:border-transparent transition-all"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-[#141414] border border-[#2D2D2D] text-[#FAFAFA] placeholder-[#A3A3A3]/40 text-xs sm:text-sm focus:outline-none focus:border-[#FF7A18] focus:ring-1 focus:ring-[#FF7A18] transition-all"
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="contact-email" className="block text-xs font-mono font-medium text-[#FAFAFA] mb-1.5">
+                    <label htmlFor="contact-email" className="block text-xs font-mono font-medium text-[#FAFAFA] mb-1">
                       Your Email Address
                     </label>
                     <input
@@ -320,14 +298,14 @@ export default function Contact() {
                       onChange={handleInputChange}
                       placeholder="e.g. alex@game-studio.com"
                       required
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#141414] border border-[#303030] text-[#FAFAFA] placeholder-[#A3A3A3]/50 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7A18] focus:border-transparent transition-all"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-[#141414] border border-[#2D2D2D] text-[#FAFAFA] placeholder-[#A3A3A3]/40 text-xs sm:text-sm focus:outline-none focus:border-[#FF7A18] focus:ring-1 focus:ring-[#FF7A18] transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="contact-subject" className="block text-xs font-mono font-medium text-[#FAFAFA] mb-1.5">
-                    Subject / Role Title
+                  <label htmlFor="contact-subject" className="block text-xs font-mono font-medium text-[#FAFAFA] mb-1">
+                    Subject / Role
                   </label>
                   <input
                     id="contact-subject"
@@ -335,37 +313,37 @@ export default function Contact() {
                     name="subject"
                     value={formData.subject}
                     onChange={handleInputChange}
-                    placeholder="e.g. Unity Developer Role / Gameplay Collaboration"
+                    placeholder="e.g. Unity Gameplay Role"
                     required
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#141414] border border-[#303030] text-[#FAFAFA] placeholder-[#A3A3A3]/50 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7A18] focus:border-transparent transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#141414] border border-[#2D2D2D] text-[#FAFAFA] placeholder-[#A3A3A3]/40 text-xs sm:text-sm focus:outline-none focus:border-[#FF7A18] focus:ring-1 focus:ring-[#FF7A18] transition-all"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="contact-message" className="block text-xs font-mono font-medium text-[#FAFAFA] mb-1.5">
+                  <label htmlFor="contact-message" className="block text-xs font-mono font-medium text-[#FAFAFA] mb-1">
                     Message
                   </label>
                   <textarea
                     id="contact-message"
                     name="message"
-                    rows={5}
+                    rows={4}
                     value={formData.message}
                     onChange={handleInputChange}
-                    placeholder="Briefly describe the project, role responsibilities, or collaboration details..."
+                    placeholder="Briefly describe your project, role, or opportunity..."
                     required
-                    className="w-full px-4 py-3 rounded-xl bg-[#141414] border border-[#303030] text-[#FAFAFA] placeholder-[#A3A3A3]/50 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7A18] focus:border-transparent transition-all custom-scrollbar resize-y"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#141414] border border-[#2D2D2D] text-[#FAFAFA] placeholder-[#A3A3A3]/40 text-xs sm:text-sm focus:outline-none focus:border-[#FF7A18] focus:ring-1 focus:ring-[#FF7A18] transition-all custom-scrollbar resize-y"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSending}
-                  className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#FF7A18] via-[#FF9233] to-[#FF7A18] hover:opacity-95 shadow-xl shadow-[#FF7A18]/25 border border-[#FF7A18]/40 transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs sm:text-sm font-bold text-white btn-hero-primary transition-all hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {isSending ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Sending Message Directly...</span>
+                      <span>Sending Message...</span>
                     </>
                   ) : (
                     <>
@@ -383,9 +361,7 @@ export default function Contact() {
 
       </div>
 
-      {/* ============================================================ */}
-      {/* POPUP MODAL CONFIRMATION: MESSAGE SENT SUCCESSFULLY          */}
-      {/* ============================================================ */}
+      {/* Confirmation Modal */}
       {showSuccessModal && (
         <div 
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
@@ -394,46 +370,34 @@ export default function Contact() {
           aria-modal="true"
         >
           <div 
-            className="relative w-full max-w-md rounded-3xl bg-[#1C1C1C] border border-[#FF7A18]/50 p-7 sm:p-8 shadow-2xl shadow-[#FF7A18]/25 animate-in zoom-in-95 duration-200 text-center"
+            className="relative w-full max-w-sm rounded-3xl bg-[#1C1C1C] border border-[#FF7A18]/50 p-6 sm:p-7 shadow-2xl text-center"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close Button */}
             <button
               onClick={() => setShowSuccessModal(false)}
-              className="absolute top-4 right-4 p-2 rounded-xl text-[#A3A3A3] hover:text-[#FAFAFA] bg-white/5 hover:bg-white/10 transition-colors"
-              aria-label="Close notification"
+              className="absolute top-4 right-4 p-1.5 rounded-xl text-[#A3A3A3] hover:text-[#FAFAFA] bg-white/5 transition-colors cursor-pointer"
+              aria-label="Close"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
 
-            {/* Radiant Success Badge */}
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-[#FF7A18] to-[#FFC857] flex items-center justify-center text-white shadow-xl shadow-[#FF7A18]/40 mb-5 animate-bounce">
-              <Check className="w-8 h-8 stroke-[3]" />
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-tr from-[#FF7A18] to-[#FFC857] flex items-center justify-center text-white shadow-lg mb-4 animate-bounce">
+              <Check className="w-7 h-7 stroke-[3]" />
             </div>
 
-            <h3 className="text-2xl font-black text-[#FAFAFA] font-display mb-2">
+            <h3 className="text-xl font-bold text-[#FAFAFA] font-display mb-1.5">
               Message Sent! 🎉
             </h3>
 
-            <p className="text-sm text-[#A3A3A3] leading-relaxed mb-6">
-              Thank you, <strong className="text-[#FAFAFA]">{sentDetails?.name || 'there'}</strong>! Your message has been sent directly to <strong className="text-[#FF7A18]">{email || 'bhagavanpericharla@gmail.com'}</strong>.
+            <p className="text-xs text-[#A3A3A3] leading-relaxed mb-5">
+              Thank you, <strong className="text-white">{sentDetails?.name}</strong>! Delivered directly to Badri Raju.
             </p>
-
-            {/* Message Receipt Summary */}
-            <div className="p-4 rounded-xl bg-[#111111] border border-[#303030] text-left text-xs font-mono space-y-1.5 mb-6 text-[#A3A3A3]">
-              <div className="truncate"><span className="text-zinc-500 font-semibold">From:</span> <span className="text-[#FAFAFA]">{sentDetails?.email}</span></div>
-              <div className="truncate"><span className="text-zinc-500 font-semibold">Subject:</span> <span className="text-[#FFC857]">{sentDetails?.subject}</span></div>
-              <div className="pt-1 border-t border-white/5 flex items-center gap-1.5 text-emerald-400 font-bold">
-                <Check className="w-3.5 h-3.5" />
-                <span>Delivered to Badri Raju</span>
-              </div>
-            </div>
 
             <button
               onClick={() => setShowSuccessModal(false)}
-              className="w-full py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#FF7A18] via-[#FF9233] to-[#FF7A18] hover:opacity-95 shadow-lg shadow-[#FF7A18]/30 transition-all hover:scale-[1.01] active:scale-100"
+              className="w-full py-2.5 rounded-xl text-xs font-bold text-white btn-hero-primary cursor-pointer"
             >
-              Got It
+              Done
             </button>
           </div>
         </div>

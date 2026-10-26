@@ -130,22 +130,29 @@ export default function Hero() {
         {/* Profile Image with Glowing Outer Gradient Ring (Matching Reference Hero) */}
         <div data-reveal="scale" className="w-40 h-40 sm:w-48 sm:h-48 mx-auto relative mb-6 group">
           <div 
-            className="w-full h-full rounded-full p-1.5 transition-all duration-500 group-hover:scale-105"
+            className="w-full h-full rounded-full p-1.5 transition-all duration-500 group-hover:scale-105 relative"
             style={{
               background: 'linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FFC857) 100%)',
               boxShadow: '0 0 35px -5px var(--color-glow, rgba(255, 122, 24, 0.45))'
             }}
           >
+            {/* Outer Subtle Rotating Halo */}
+            <div 
+              className="absolute -inset-1 rounded-full opacity-40 blur-sm pointer-events-none animate-spin-slow"
+              style={{
+                background: 'conic-gradient(from 0deg, var(--color-primary, #FF7A18), var(--color-secondary, #FFC857), transparent 70%, var(--color-primary, #FF7A18))'
+              }}
+            />
             <img
               src={profile.avatarUrl || '/profile.jpg'}
               alt={name || "Pericharla Badri Raju"}
-              className="w-full h-full object-cover object-[center_18%] rounded-full select-none"
+              className="w-full h-full object-cover object-[center_18%] rounded-full select-none relative z-10"
               onError={(e) => { e.currentTarget.src = '/profile.jpg'; }}
             />
           </div>
           {/* Floating Live Badge */}
           <div 
-            className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-[#111111] border shadow-lg flex items-center gap-2 whitespace-nowrap z-10"
+            className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-[#111111] border shadow-lg flex items-center gap-2 whitespace-nowrap z-20 animate-float-slow"
             style={{ borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.5))' }}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#10B981]" />
@@ -153,16 +160,16 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* PRIMARY FOCUS: Full Name with Selective Dynamic Palette Highlighting */}
+        {/* PRIMARY FOCUS: Full Name with Selective Dynamic Palette Highlighting & Shimmer */}
         <h1 
           data-reveal
           className="delay-100 text-3xl sm:text-5xl md:text-7xl font-black tracking-tight font-display leading-[1.08] mb-3 sm:mb-4 select-none"
         >
           <span className="text-[#FAFAFA]">{firstName} </span>
           <span 
-            className="text-transparent bg-clip-text font-black transition-all duration-300 inline-block"
+            className="text-transparent bg-clip-text font-black transition-all duration-300 inline-block animate-text-shimmer"
             style={{
-              backgroundImage: `linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 50%, var(--color-accent, #FFC857) 100%)`,
+              backgroundImage: `linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FFC857) 50%, var(--color-primary, #FF7A18) 100%)`,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               filter: `drop-shadow(0 4px 24px var(--color-glow, rgba(255,122,24,0.35)))`
@@ -181,7 +188,7 @@ export default function Hero() {
           <span className="text-[#FF7A18]">•</span>
           <span className="text-[#FFC857]">Gameplay Programmer</span>
           <span className="hidden sm:inline text-zinc-600">|</span>
-          <div className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-xl bg-[#1C1C1C] border border-[#303030] text-[11px] sm:text-sm font-mono">
+          <div className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-xl bg-[#1C1C1C] border border-[#303030] text-[11px] sm:text-sm font-mono shadow-sm">
             <span className="text-[#FF7A18]">Focus:</span>
             <span className="text-[#FAFAFA]">{currentText}</span>
             <span className="w-0.5 h-3.5 bg-[#FF7A18] animate-cursor-blink" />
@@ -213,7 +220,7 @@ export default function Hero() {
           <a
             href="#projects"
             onClick={(e) => handleScrollTo(e, '#projects')}
-            className="btn-hero-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg"
+            className="btn-hero-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white cursor-pointer transition-all duration-300 hover:scale-[1.02] shadow-lg"
           >
             <Gamepad2 className="w-4 h-4" />
             <span>Explore Works</span>
@@ -224,7 +231,7 @@ export default function Hero() {
           <a
             href={resumeData.url}
             download={resumeData.name}
-            className="btn-palette-primary flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:-translate-y-1 shadow-md cursor-pointer"
+            className="btn-palette-primary flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] shadow-md cursor-pointer"
           >
             <FileDown className="w-4 h-4" />
             <span>Download Resume</span>
@@ -234,14 +241,14 @@ export default function Hero() {
           <a
             href="#contact"
             onClick={(e) => handleScrollTo(e, '#contact')}
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-[#FAFAFA] bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] hover:border-[#FF7A18]/50 hover:text-[#FF7A18] transition-all duration-300 hover:-translate-y-1 shadow-md shadow-black/30"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-[#FAFAFA] bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] hover:border-[#FF7A18]/50 hover:text-[#FF7A18] transition-all duration-300 hover:scale-[1.02] shadow-md shadow-black/30"
           >
             <Mail className="w-4 h-4" />
             <span>Contact Me</span>
           </a>
         </div>
 
-        {/* Quick Highlights / Stats Grid: Standardized Same Lane & Identical Height on Mobile and Desktop */}
+        {/* Quick Highlights / Stats Grid: Standardized Same Lane & Cool Card Shine */}
         <div 
           data-reveal
           className="delay-350 grid grid-cols-3 gap-2 sm:gap-3.5 w-full max-w-2xl mb-6 sm:mb-8 items-stretch"
@@ -253,9 +260,12 @@ export default function Hero() {
           ].map((item, idx) => (
             <div
               key={idx}
-              className="h-full min-h-[76px] sm:min-h-[102px] p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-[#1C1C1C]/90 border border-[#303030] hover:border-[#FF7A18]/50 flex flex-col justify-center items-center text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg shadow-md shadow-black/30"
+              className="cool-card card-shine h-full min-h-[76px] sm:min-h-[96px] p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] flex flex-col justify-center items-center text-center shadow-md shadow-black/30"
             >
-              <div className="text-xs sm:text-lg md:text-xl font-extrabold text-[#FAFAFA] font-mono whitespace-nowrap leading-tight mb-0.5 sm:mb-1">
+              <div 
+                className="text-xs sm:text-lg md:text-xl font-extrabold font-mono whitespace-nowrap leading-tight mb-0.5 sm:mb-1"
+                style={{ color: 'var(--color-primary, #FF7A18)' }}
+              >
                 {item.value}
               </div>
               <div className="text-[9px] sm:text-[11px] md:text-xs text-[#A3A3A3] font-medium leading-tight">

@@ -4,91 +4,104 @@ import {
   Bot, 
   Code2, 
   Sparkles, 
-  Wrench,
-  CheckCircle2,
   Cpu,
   Layers,
-  ArrowRight
+  CheckCircle2,
+  Terminal,
+  Zap,
+  Boxes
 } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 
+/**
+ * Skills Section
+ * 
+ * Clean, concise, and focused exclusively on recognizable, industry-standard skills:
+ * - Unity (2D/3D), C#, Unreal Engine, C++, Python
+ * - Character Controllers, Physics, Combat, Cinemachine, Input System
+ * - NavMesh, Enemy AI, FSM, Scriptable Objects, Object Pooling
+ * - Shader Graph, Particle VFX, Git/GitHub, Blender, Google Play
+ * 
+ * Featuring interactive category tabs, cool card shine animations, and glowing interactive pills.
+ */
+
 export default function Skills() {
   const context = usePortfolio();
+  const [activeTab, setActiveTab] = useState('All');
 
-  // Curated, high-impact domain modules matching reference visual flow
-  const skillCategories = [
+  const categories = [
     {
-      title: "Gameplay Mechanics & Physics",
-      domain: "Locomotion, Combat & Game Feel",
+      id: "engines",
+      title: "Engines & Languages",
+      icon: Terminal,
+      skills: [
+        { name: "Unity (2D & 3D)", level: "Primary" },
+        { name: "C# Scripting", level: "Advanced" },
+        { name: "Unreal Engine", level: "Familiar" },
+        { name: "C++", level: "Core" },
+        { name: "Python", level: "Scripting" }
+      ]
+    },
+    {
+      id: "gameplay",
+      title: "Gameplay & Mechanics",
       icon: Gamepad2,
-      accent: "#FF7A18",
       skills: [
-        "CharacterController & Rigidbody",
-        "Jump Curves & Coyote Time",
-        "Combat Loops & Hitboxes",
-        "Health & Damage Event Pipeline",
-        "Physics Colliders & Triggers",
-        "Collectibles & Scoring Loops",
-        "Respawn & Checkpoint Logic"
+        { name: "Character Controllers", level: "Core" },
+        { name: "2D / 3D Physics", level: "Core" },
+        { name: "Combat & Hitboxes", level: "Core" },
+        { name: "Cinemachine Cameras", level: "Production" },
+        { name: "Gamepad & Touch Input", level: "Production" }
       ]
     },
     {
-      title: "AI & Autonomous Systems",
-      domain: "Spatial Geometry & Enemy Logic",
+      id: "ai",
+      title: "Game AI & Systems",
       icon: Bot,
-      accent: "#FFC857",
       skills: [
-        "NavMesh Spatial Baking",
-        "NavMesh Agents & Pathfinding",
-        "Waypoint Patrol Routines",
-        "Enemy Chase & Line of Sight",
-        "LayerMask Raycast Sensors",
-        "Finite State Machines (FSM)",
-        "Alert & Detection Systems"
+        { name: "NavMesh Pathfinding", level: "Core" },
+        { name: "Enemy AI & Detection", level: "Core" },
+        { name: "State Machines (FSM)", level: "Architecture" },
+        { name: "Scriptable Objects", level: "Architecture" },
+        { name: "Object Pooling", level: "Optimization" }
       ]
     },
     {
-      title: "C# Architecture & Cameras",
-      domain: "Decoupled Runtime Design",
-      icon: Code2,
-      accent: "#FFA043",
-      skills: [
-        "Modular C# OOP Architecture",
-        "Unity Event-Driven Systems",
-        "Coroutines & Asynchronous Ops",
-        "Cinemachine Virtual Cameras",
-        "Camera Confiner & Dampening",
-        "New Input System & Mobile Controls",
-        "UI Canvas & Dynamic Menus"
-      ]
-    },
-    {
-      title: "Production, Tools & Assets",
-      domain: "Lifecycle, Shaders & Deployment",
+      id: "graphics",
+      title: "Graphics & Production",
       icon: Sparkles,
-      accent: "#FF9233",
       skills: [
-        "Unity Addressables & CCD",
-        "Asset Bundles & Memory Ops",
-        "Shuriken Particle VFX",
-        "Spatial Audio Management",
-        "Android Build & Optimization",
-        "Git & GitHub Version Control",
-        "Unity Profiler & Performance"
+        { name: "Shader Graph", level: "Visuals" },
+        { name: "Particle Systems (VFX)", level: "Visuals" },
+        { name: "Git & GitHub", level: "Workflow" },
+        { name: "Blender (3D Assets)", level: "Pipeline" },
+        { name: "Android & Google Play", level: "Shipped" }
       ]
     }
   ];
 
+  const displayedCategories = activeTab === 'All'
+    ? categories
+    : categories.filter(c => c.title.toLowerCase().includes(activeTab.toLowerCase()));
+
   return (
     <section 
       id="skills" 
-      className="py-20 sm:py-28 bg-[#111111] relative border-t border-white/5"
-      aria-label="My Skills and Technical Competencies"
+      className="py-20 sm:py-28 bg-[#111111] relative border-t border-white/5 overflow-hidden"
+      aria-label="Technical Skills"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Cool Ambient Background Glow */}
+      <div 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] rounded-full blur-[140px] pointer-events-none opacity-15"
+        style={{
+          background: 'radial-gradient(circle, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FFC857) 60%, transparent 80%)'
+        }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Centered Section Header Matching Reference Flow */}
-        <div data-reveal className="text-center mb-14 sm:mb-16">
+        {/* Centered Section Header */}
+        <div data-reveal className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight font-display mb-3 text-[#FAFAFA]">
             My <span 
               className="text-transparent bg-clip-text"
@@ -103,99 +116,99 @@ export default function Skills() {
               background: 'linear-gradient(to right, var(--color-primary, #FF7A18), var(--color-secondary, #FFC857))'
             }}
           />
-          <p className="text-[#A3A3A3] text-sm sm:text-base max-w-xl mx-auto mt-4 leading-relaxed">
-            Core gameplay architectures, AI systems, and C# engineering toolchains built across published titles.
+          <p className="text-[#A3A3A3] text-xs sm:text-sm max-w-md mx-auto mt-3">
+            Core technologies and gameplay systems used across my published titles.
           </p>
         </div>
 
-        {/* 4 Clean Visual Domain Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch">
-          {skillCategories.map((cat, idx) => {
+        {/* Interactive Filter Pills */}
+        <div data-reveal="fade" className="flex items-center justify-start sm:justify-center gap-2 mb-10 overflow-x-auto no-scrollbar pb-2 sm:pb-0">
+          {['All', 'Engines', 'Gameplay', 'AI', 'Graphics'].map((tab) => {
+            const isActive = activeTab === tab;
+            return (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all duration-300 cursor-pointer shrink-0 ${
+                  isActive
+                    ? 'btn-palette-primary text-white shadow-lg'
+                    : 'bg-[#1C1C1C] text-[#A3A3A3] hover:text-[#FAFAFA] hover:bg-[#252525] border border-white/5'
+                }`}
+              >
+                {tab}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* 4 Clean Visual Skill Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7 items-stretch">
+          {displayedCategories.map((cat, idx) => {
             const Icon = cat.icon;
-            const delayMs = idx * 120;
+            const delayMs = idx * 100;
 
             return (
               <div
-                key={cat.title}
+                key={cat.id}
                 data-reveal="scale"
                 style={{ transitionDelay: `${delayMs}ms` }}
-                className="p-6 sm:p-8 rounded-2xl bg-[#1C1C1C] border border-[#2F2F2F] hover:border-zinc-500/60 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl shadow-black/50 flex flex-col justify-between group"
+                className="cool-card card-shine p-6 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] flex flex-col justify-between group shadow-xl shadow-black/40"
               >
                 <div>
                   {/* Card Header */}
-                  <div className="flex items-start justify-between gap-4 mb-5">
-                    <div className="flex items-center gap-3.5">
+                  <div className="flex items-center justify-between gap-3 mb-6 pb-4 border-b border-white/5">
+                    <div className="flex items-center gap-3">
                       <div 
-                        className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 group-hover:scale-110"
+                        className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
                         style={{
                           background: 'rgba(255, 255, 255, 0.04)',
                           borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.4))',
                           color: 'var(--color-primary, #FF7A18)'
                         }}
                       >
-                        <Icon className="w-6 h-6" />
+                        <Icon className="w-5 h-5" />
                       </div>
-                      <div>
-                        <h3 className="text-lg sm:text-xl font-bold text-[#FAFAFA] font-display group-hover:text-white transition-colors">
-                          {cat.title}
-                        </h3>
-                        <p className="text-xs font-mono text-[#A3A3A3] mt-0.5">
-                          {cat.domain}
-                        </p>
-                      </div>
+                      <h3 className="text-base sm:text-lg font-bold text-[#FAFAFA] font-display group-hover:text-white transition-colors">
+                        {cat.title}
+                      </h3>
                     </div>
 
                     <span 
-                      className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-md bg-[#141414] border border-[#333333] shrink-0"
+                      className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#141414] border border-white/10"
                       style={{ color: 'var(--color-primary, #FF7A18)' }}
                     >
-                      {cat.skills.length} Core Nodes
+                      {cat.skills.length} Skills
                     </span>
                   </div>
 
-                  {/* Skills Flow Badges */}
-                  <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
+                  {/* Recognizable Skills Pills */}
+                  <div className="flex flex-wrap gap-2.5">
                     {cat.skills.map((skill, sIdx) => (
                       <div
                         key={sIdx}
-                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-mono font-medium text-zinc-300 bg-[#141414] border border-[#2D2D2D] hover:border-[var(--color-primary)] hover:text-white hover:bg-[#1A1A1A] transition-all duration-200"
+                        className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-mono font-medium text-zinc-300 bg-[#141414] border border-[#2E2E2E] hover:border-[var(--color-primary)] hover:text-white hover:bg-[#1E1E1E] transition-all duration-200 hover:scale-[1.03] shadow-sm cursor-default group/pill"
                       >
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-                        <span>{skill}</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 group-hover/pill:animate-ping" />
+                        <span className="font-semibold">{skill.name}</span>
+                        <span className="text-[10px] text-zinc-500 font-mono pl-1 border-l border-zinc-700/60">
+                          {skill.level}
+                        </span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Bottom Card Indicator */}
+                {/* Bottom Verification Note */}
                 <div className="mt-6 pt-3.5 border-t border-white/5 flex items-center justify-between text-[11px] font-mono text-zinc-500">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                    <span>Production Verified</span>
+                  <span className="flex items-center gap-1.5 text-zinc-400">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Hands-on Architecture</span>
                   </span>
-                  <span className="text-zinc-400">Unity 2D / 3D Engine</span>
+                  <span style={{ color: 'var(--color-primary, #FF7A18)' }}>Verified</span>
                 </div>
               </div>
             );
           })}
-        </div>
-
-        {/* Bottom Technical Callout */}
-        <div 
-          data-reveal
-          className="mt-12 p-5 rounded-2xl bg-[#1C1C1C] border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-[#A3A3A3] shadow-lg shadow-black/40"
-          style={{ borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.3))' }}
-        >
-          <div className="flex items-center gap-3">
-            <CheckCircle2 
-              className="w-4 h-4 shrink-0" 
-              style={{ color: 'var(--color-primary, #FF7A18)' }}
-            />
-            <span>
-              <strong className="text-[#FAFAFA]">Engine Ready:</strong> All competencies backed by hands-on architecture across multiple published games.
-            </span>
-          </div>
-          <span className="font-mono text-zinc-500 shrink-0">Updated 2026 // Production Stack</span>
         </div>
 
       </div>

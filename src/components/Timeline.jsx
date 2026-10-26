@@ -5,11 +5,18 @@ import {
   Award, 
   GraduationCap, 
   CheckCircle2, 
-  Calendar,
-  Sparkles,
-  ExternalLink
+  ExternalLink 
 } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
+
+/**
+ * Timeline Section
+ * 
+ * Clean, punchy journey tracking Badri Raju's evolution:
+ * - Minimal text with max 2 bullet points per milestone
+ * - Animated radar pulse nodes on central spine
+ * - Alternating cards with cool shine and blur-reveal effects
+ */
 
 export default function Timeline() {
   const { achievements = [] } = usePortfolio();
@@ -17,60 +24,52 @@ export default function Timeline() {
   const journeySteps = [
     {
       period: "2024 – Present",
-      title: "Commercial & Independent Game Publishing",
+      title: "Commercial & Indie Game Publishing",
       role: "Solo Unity Developer",
       badge: "Commercial Release",
       icon: Rocket,
-      accent: "#FF7A18",
-      summary: "Published 1 mobile title on the Google Play Store and 4 distinct Unity games on itch.io covering 2D combat, 3D stealth, logic puzzles, and platforming.",
+      summary: "Published 1 mobile game on Google Play Store and 4 custom titles on itch.io.",
       highlights: [
-        "1 Verified mobile release on Google Play Store",
-        "4 Playable games published on itch.io with custom C# mechanics",
-        "End-to-end game lifecycle: prototyping, audio, UI, build packaging, and playtesting"
+        "1 Verified Google Play Store release & 4 playable itch.io titles",
+        "End-to-end game lifecycle: prototyping, C# physics, UI, and audio"
       ],
       link: "https://badri-raju-pericharla.itch.io",
-      linkLabel: "itch.io Profile"
+      linkLabel: "itch.io Catalog"
     },
     {
       period: "2024",
       title: "Smart India Hackathon (SIH)",
-      role: "Technical Lead / Prototyper",
+      role: "Technical Lead",
       badge: "2x National Qualifier",
       icon: Trophy,
-      accent: "#FFC857",
-      summary: "Cleared competitive first-round evaluations across two consecutive editions of India's premier nationwide hackathon.",
+      summary: "Qualified through rigorous national evaluations across two consecutive SIH editions.",
       highlights: [
-        "Selected from thousands of collegiate technical teams across India",
-        "Architected rapid software solutions under strict problem-statement constraints",
-        "Presented system architecture and interactive prototypes to evaluation juries"
+        "Selected among thousands of technical collegiate teams across India",
+        "Architected rapid interactive software prototypes under tight constraints"
       ]
     },
     {
       period: "2024",
-      title: "NextWave State-Level Buildathon",
+      title: "NextWave State Buildathon",
       role: "Selected Participant",
-      badge: "State Level Selection",
+      badge: "State Level",
       icon: Award,
-      accent: "#FFA043",
-      summary: "Selected for the prestigious NextWave State-Level Buildathon based on foundational engineering skills and project execution.",
+      summary: "Selected for state-level hackathon for rapid system prototyping and algorithmic execution.",
       highlights: [
-        "Qualified for intensive real-time software challenge tracks",
-        "Applied algorithmic problem-solving under tight live constraints",
-        "Iterated rapidly from system concept to functional build"
+        "Live software challenge track execution",
+        "Rapid transition from design concept to functional build"
       ]
     },
     {
       period: "2023 – 2027",
-      title: "B.Tech in Electronics & Communication (ECT)",
-      role: "Undergraduate Student",
+      title: "B.Tech in Electronics & Communication",
+      role: "Undergraduate",
       badge: "Formal Engineering",
       icon: GraduationCap,
-      accent: "#FF9233",
-      summary: "Studying foundational real-time systems, algorithmic thinking, and computer architecture at Sasi Institute of Technology and Engineering.",
+      summary: "Studying systems engineering, computational logic, and hardware architecture at Sasi Institute.",
       highlights: [
-        "Core coursework in signals, computational logic, and microprocessors",
-        "Applying low-level systems knowledge to game engine memory and physics optimization",
-        "Active member of student technical societies and game development workshops"
+        "Core training in computational logic, microprocessors, and algorithms",
+        "Applying low-level memory logic to Unity physics & engine optimization"
       ]
     }
   ];
@@ -78,12 +77,20 @@ export default function Timeline() {
   return (
     <section 
       id="timeline" 
-      className="py-20 sm:py-28 bg-[#111111] relative border-t border-white/5"
-      aria-label="My Journey So Far"
+      className="py-20 sm:py-28 bg-[#111111] relative border-t border-white/5 overflow-hidden"
+      aria-label="My Journey"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Background Ambient Glow */}
+      <div 
+        className="absolute top-1/3 right-10 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none opacity-15"
+        style={{
+          background: 'radial-gradient(circle, var(--color-primary, #FF7A18) 0%, transparent 70%)'
+        }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Centered Section Header Matching Reference Flow */}
+        {/* Centered Section Header */}
         <div data-reveal className="text-center mb-16 sm:mb-20">
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight font-display mb-3 text-[#FAFAFA]">
             My <span 
@@ -99,27 +106,27 @@ export default function Timeline() {
               background: 'linear-gradient(to right, var(--color-primary, #FF7A18), var(--color-secondary, #FFC857))'
             }}
           />
-          <p className="text-[#A3A3A3] text-sm sm:text-base max-w-xl mx-auto mt-4 leading-relaxed">
-            Key milestones, hackathon achievements, and game releases tracking my evolution as a gameplay programmer.
+          <p className="text-[#A3A3A3] text-xs sm:text-sm max-w-md mx-auto mt-3">
+            Milestones, national hackathons, and published game releases.
           </p>
         </div>
 
         {/* Timeline Track Container */}
         <div className="relative max-w-4xl mx-auto">
           
-          {/* Vertical Central / Left Spine Rail */}
+          {/* Vertical Central / Left Spine Rail with Gradient */}
           <div 
             className="absolute left-4 sm:left-1/2 top-4 bottom-4 w-0.5 -translate-x-1/2"
             style={{
-              background: 'linear-gradient(to bottom, var(--color-primary, #FF7A18), rgba(255, 122, 24, 0.15))'
+              background: 'linear-gradient(to bottom, var(--color-primary, #FF7A18), var(--color-secondary, #FFC857) 50%, rgba(255, 122, 24, 0.1) 100%)'
             }}
           />
 
-          <div className="space-y-10 sm:space-y-14">
+          <div className="space-y-10 sm:space-y-12">
             {journeySteps.map((step, idx) => {
               const Icon = step.icon;
               const isEven = idx % 2 === 0;
-              const delayMs = idx * 120;
+              const delayMs = idx * 100;
 
               return (
                 <div 
@@ -131,12 +138,11 @@ export default function Timeline() {
                   }`}
                 >
                   
-                  {/* Central Timeline Milestone Node */}
+                  {/* Radar Pulsing Central Milestone Node */}
                   <div 
-                    className="absolute left-4 sm:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#111111] border-2 flex items-center justify-center z-10 shadow-lg"
+                    className="absolute left-4 sm:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#111111] border-2 flex items-center justify-center z-10 animate-radar cursor-pointer"
                     style={{
-                      borderColor: 'var(--color-primary, #FF7A18)',
-                      boxShadow: '0 0 16px -2px var(--color-glow, rgba(255, 122, 24, 0.4))'
+                      borderColor: 'var(--color-primary, #FF7A18)'
                     }}
                   >
                     <span 
@@ -145,14 +151,14 @@ export default function Timeline() {
                     />
                   </div>
 
-                  {/* Card Content - Occupies Left or Right Half */}
+                  {/* Card Content */}
                   <div className={`w-full sm:w-[calc(50%-2.5rem)] pl-12 sm:pl-0 ${
                     isEven ? 'sm:pr-0 sm:text-left' : 'sm:pl-0 sm:text-left'
                   }`}>
-                    <div className="p-6 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#2F2F2F] hover:border-[#FF7A18]/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl shadow-black/50 group">
+                    <div className="cool-card card-shine p-5 sm:p-6 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] shadow-xl shadow-black/40 group">
                       
                       {/* Top Meta Header */}
-                      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
                         <span 
                           className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#141414] border border-white/10"
                           style={{ color: 'var(--color-primary, #FF7A18)' }}
@@ -165,9 +171,9 @@ export default function Timeline() {
                       </div>
 
                       {/* Title & Role */}
-                      <div className="flex items-start gap-3 mb-2.5">
+                      <div className="flex items-start gap-3 mb-2">
                         <div 
-                          className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border mt-0.5 transition-transform duration-300 group-hover:scale-110"
+                          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border mt-0.5 transition-transform duration-300 group-hover:scale-110"
                           style={{
                             background: 'rgba(255, 255, 255, 0.04)',
                             borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.35))',
@@ -177,7 +183,7 @@ export default function Timeline() {
                           <Icon className="w-4 h-4" />
                         </div>
                         <div>
-                          <h3 className="text-base sm:text-lg font-bold text-[#FAFAFA] font-display group-hover:text-white transition-colors">
+                          <h3 className="text-base font-bold text-[#FAFAFA] font-display group-hover:text-white transition-colors">
                             {step.title}
                           </h3>
                           <div className="text-xs font-mono text-[#FFC857]">
@@ -187,12 +193,12 @@ export default function Timeline() {
                       </div>
 
                       {/* Summary */}
-                      <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed mb-4">
+                      <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed mb-3">
                         {step.summary}
                       </p>
 
-                      {/* Bulleted Highlights */}
-                      <div className="space-y-2 pt-3 border-t border-white/5">
+                      {/* Concise Bullet Points */}
+                      <div className="space-y-1.5 pt-2.5 border-t border-white/5">
                         {step.highlights.map((h, hIdx) => (
                           <div key={hIdx} className="flex items-start gap-2 text-xs text-zinc-400">
                             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
@@ -201,9 +207,9 @@ export default function Timeline() {
                         ))}
                       </div>
 
-                      {/* External Profile Link if available */}
+                      {/* External Profile Link */}
                       {step.link && (
-                        <div className="mt-4 pt-3 border-t border-white/5">
+                        <div className="mt-3.5 pt-2.5 border-t border-white/5">
                           <a
                             href={step.link}
                             target="_blank"
