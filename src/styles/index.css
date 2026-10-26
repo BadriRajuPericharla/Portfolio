@@ -199,58 +199,60 @@
   box-shadow: 0 10px 30px -10px rgba(255, 122, 24, 0.35);
 }
 
-/* Hero Primary CTA - Perfect Studio Luminous Glow */
+/* Hero Primary CTA - Clean, High-Contrast & Sharp (Decreased Glow for Maximum Legibility) */
 .btn-hero-primary {
   position: relative;
   isolation: isolate;
-  background: linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 100%) !important;
+  background: linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, #E86A0E 100%) !important;
   color: #FFFFFF !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.015em;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   box-shadow: 
-    0 4px 18px -2px var(--color-glow, transparent),
-    0 0 14px 0 var(--color-glow-ambient, transparent) !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease !important;
+    0 2px 6px -1px rgba(0, 0, 0, 0.45),
+    0 0 4px -1px var(--color-glow-ambient, transparent) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .btn-hero-primary:hover {
-  filter: brightness(1.08) !important;
+  filter: brightness(1.04) !important;
   box-shadow: 
-    0 6px 26px -1px var(--color-glow, transparent),
-    0 0 22px 2px var(--color-glow-ambient, transparent) !important;
-  transform: translateY(-2px) !important;
+    0 4px 10px -2px rgba(0, 0, 0, 0.55),
+    0 0 6px 0 var(--color-glow-ambient, transparent) !important;
+  transform: translateY(-1.5px) !important;
 }
 
 .btn-hero-primary:active {
   transform: translateY(0) !important;
-  filter: brightness(0.98) !important;
 }
 
-/* Palette-reactive Primary Button (Resume & Action CTAs) */
+/* Palette-reactive Primary Button (Resume & Action CTAs - High Contrast & Sharp) */
 .btn-palette-primary {
   position: relative;
   isolation: isolate;
-  background: linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 100%) !important;
+  background: linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, #E86A0E 100%) !important;
   color: #FFFFFF !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.015em;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   box-shadow: 
-    0 4px 14px -2px var(--color-glow, transparent),
-    0 0 8px 0 var(--color-glow-ambient, transparent) !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease !important;
+    0 2px 6px -1px rgba(0, 0, 0, 0.4),
+    0 0 4px -1px var(--color-glow-ambient, transparent) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .btn-palette-primary:hover {
-  filter: brightness(1.08) !important;
+  filter: brightness(1.04) !important;
   box-shadow: 
-    0 6px 20px -1px var(--color-glow, transparent),
-    0 0 12px 1px var(--color-glow-ambient, transparent) !important;
-  transform: translateY(-2px) !important;
+    0 4px 10px -2px rgba(0, 0, 0, 0.5),
+    0 0 6px 0 var(--color-glow-ambient, transparent) !important;
+  transform: translateY(-1.5px) !important;
 }
 
 .btn-palette-primary:active {
   transform: translateY(0) !important;
-  filter: brightness(0.98) !important;
 }
 
 .card-glow-amber {

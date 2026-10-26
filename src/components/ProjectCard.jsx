@@ -102,7 +102,7 @@ export default function ProjectCard({ project, onOpenDetails, index = 0 }) {
             href={playUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all hover:scale-[1.02] shadow-md btn-hero-primary cursor-pointer"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all hover:scale-[1.02] btn-hero-primary cursor-pointer"
             aria-label={`${effectiveLabel} for ${title}`}
           >
             <Play className="w-3.5 h-3.5 fill-current" />

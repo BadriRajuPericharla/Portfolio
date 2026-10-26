@@ -247,7 +247,7 @@ export default function Hero() {
           <a
             href="#projects"
             onClick={(e) => handleScrollTo(e, '#projects')}
-            className="btn-hero-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white cursor-pointer transition-all duration-300 hover:scale-[1.02] shadow-lg"
+            className="btn-hero-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white cursor-pointer transition-all duration-300 hover:scale-[1.02]"
           >
             <Gamepad2 className="w-4 h-4" />
             <span>Explore Works</span>
@@ -258,7 +258,7 @@ export default function Hero() {
           <a
             href={resumeData.url}
             download={resumeData.name}
-            className="btn-palette-primary flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] shadow-md cursor-pointer"
+            className="btn-palette-primary flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] cursor-pointer"
           >
             <FileDown className="w-4 h-4" />
             <span>Download Resume</span>
