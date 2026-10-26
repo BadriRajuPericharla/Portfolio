@@ -127,37 +127,12 @@ export default function Hero() {
       {/* Unified Master Stage Container */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center text-center">
         
-        {/* Profile Image with Glowing Outer Gradient Ring (Matching Reference Hero) */}
-        <div data-reveal="scale" className="w-40 h-40 sm:w-48 sm:h-48 mx-auto relative mb-6 group">
-          <div 
-            className="w-full h-full rounded-full p-1.5 transition-all duration-500 group-hover:scale-105 relative"
-            style={{
-              background: 'linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FFC857) 100%)',
-              boxShadow: '0 0 35px -5px var(--color-glow, rgba(255, 122, 24, 0.45))'
-            }}
-          >
-            {/* Outer Subtle Rotating Halo */}
-            <div 
-              className="absolute -inset-1 rounded-full opacity-40 blur-sm pointer-events-none animate-spin-slow"
-              style={{
-                background: 'conic-gradient(from 0deg, var(--color-primary, #FF7A18), var(--color-secondary, #FFC857), transparent 70%, var(--color-primary, #FF7A18))'
-              }}
-            />
-            <img
-              src={profile.avatarUrl || '/profile.jpg'}
-              alt={name || "Pericharla Badri Raju"}
-              className="w-full h-full object-cover object-[center_18%] rounded-full select-none relative z-10"
-              onError={(e) => { e.currentTarget.src = '/profile.jpg'; }}
-            />
-          </div>
-          {/* Floating Live Badge */}
-          <div 
-            className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-[#111111] border shadow-lg flex items-center gap-2 whitespace-nowrap z-20 animate-float-slow"
-            style={{ borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.5))' }}
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#10B981]" />
-            <span className="text-[11px] font-mono font-bold text-[#FAFAFA]">1 Game on Play Store</span>
-          </div>
+        {/* Top Status & Availability Pill Badge (Clean, Modern Hero) */}
+        <div data-reveal="fade" className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#1C1C1C] border border-[#2D2D2D] hover:border-[var(--color-primary)] transition-all mb-6 sm:mb-8 shadow-lg shadow-black/40">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#10B981]" />
+          <span className="text-xs font-mono font-medium text-zinc-300">
+            Available for Unity &amp; Gameplay Roles
+          </span>
         </div>
 
         {/* PRIMARY FOCUS: Full Name with Selective Dynamic Palette Highlighting & Shimmer */}
