@@ -42,6 +42,25 @@ export default function InteractiveCanvas() {
 
     window.addEventListener('mousemove', handleMouseMove);
 
+    // Helper to extract RGB from CSS hex color
+    const hexToRgb = (hex, fallback) => {
+      if (!hex) return fallback;
+      const clean = hex.trim().replace('#', '');
+      if (clean.length === 3) {
+        const r = parseInt(clean[0] + clean[0], 16);
+        const g = parseInt(clean[1] + clean[1], 16);
+        const b = parseInt(clean[2] + clean[2], 16);
+        return `${r}, ${g}, ${b}`;
+      }
+      if (clean.length >= 6) {
+        const r = parseInt(clean.substring(0, 2), 16);
+        const g = parseInt(clean.substring(2, 4), 16);
+        const b = parseInt(clean.substring(4, 6), 16);
+        return `${r}, ${g}, ${b}`;
+      }
+      return fallback;
+    };
+
     // Node particle system representing 3D vertices
     const nodeCount = 38;
     const nodes = [];
@@ -53,7 +72,7 @@ export default function InteractiveCanvas() {
         vx: (Math.random() - 0.5) * 0.35,
         vy: (Math.random() - 0.5) * 0.35,
         size: Math.random() * 0.8 + 0.8,
-        color: i % 3 === 0 ? 'rgba(255, 122, 24, ' : i % 3 === 1 ? 'rgba(255, 200, 87, ' : 'rgba(250, 250, 250, '
+        type: i % 3
       });
     }
 
@@ -61,6 +80,13 @@ export default function InteractiveCanvas() {
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
+
+      // Dynamically resolve palette colors
+      const computed = getComputedStyle(document.documentElement);
+      const primaryHex = computed.getPropertyValue('--color-primary').trim() || '#FF7A18';
+      const secondaryHex = computed.getPropertyValue('--color-secondary').trim() || '#FFC857';
+      const primaryRgb = hexToRgb(primaryHex, '255, 122, 24');
+      const secondaryRgb = hexToRgb(secondaryHex, '255, 200, 87');
 
       // Smooth mouse lerp
       mouse.x += (mouse.targetX - mouse.x) * 0.05;
@@ -73,7 +99,7 @@ export default function InteractiveCanvas() {
       const fovCenter = mouse.x;
 
       ctx.save();
-      ctx.strokeStyle = 'rgba(99, 102, 241, 0.04)';
+      ctx.strokeStyle = `rgba(${primaryRgb}, 0.04)`;
       ctx.lineWidth = 1;
 
       // Perspective lines converging toward horizon
@@ -116,7 +142,7 @@ export default function InteractiveCanvas() {
 
           if (dist < 130) {
             const alpha = (1 - dist / 130) * 0.12;
-            ctx.strokeStyle = `rgba(255, 122, 24, ${alpha})`;
+            ctx.strokeStyle = `rgba(${primaryRgb}, ${alpha})`;
             ctx.lineWidth = 0.8;
             ctx.beginPath();
             ctx.moveTo(n.x, n.y);
@@ -131,7 +157,7 @@ export default function InteractiveCanvas() {
         const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
         if (mDist < 160 && !prefersReducedMotion) {
           const mAlpha = (1 - mDist / 160) * 0.25;
-          ctx.strokeStyle = `rgba(255, 200, 87, ${mAlpha})`;
+          ctx.strokeStyle = `rgba(${secondaryRgb}, ${mAlpha})`;
           ctx.beginPath();
           ctx.moveTo(n.x, n.y);
           ctx.lineTo(mouse.x, mouse.y);
@@ -139,7 +165,8 @@ export default function InteractiveCanvas() {
         }
 
         // Node dot - subtle ambient star vertex
-        ctx.fillStyle = `${n.color}0.22)`;
+        const nodeRgb = n.type === 0 ? primaryRgb : n.type === 1 ? secondaryRgb : '250, 250, 250';
+        ctx.fillStyle = `rgba(${nodeRgb}, 0.22)`;
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2);
         ctx.fill();

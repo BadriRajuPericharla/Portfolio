@@ -110,15 +110,31 @@ export default function Hero() {
       {/* Interactive 3D Coordinate Grid & Constellation Canvas */}
       <InteractiveCanvas />
 
-      {/* Atmospheric Studio Glows (Charcoal & Warm Radiant Orange) */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-tr from-[#FF7A18]/15 via-[#FFC857]/8 to-transparent rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-16 left-1/3 w-[500px] h-[500px] bg-gradient-to-br from-[#FF7A18]/10 via-[#FF9233]/5 to-transparent rounded-full blur-[130px] pointer-events-none" />
+      {/* Atmospheric Studio Glows (Dynamically reactive to active palette) */}
+      <div 
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-[140px] pointer-events-none transition-all duration-500 opacity-20"
+        style={{
+          background: 'radial-gradient(circle, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FFC857) 40%, transparent 70%)'
+        }}
+      />
+      <div 
+        className="absolute bottom-16 left-1/3 w-[500px] h-[500px] rounded-full blur-[130px] pointer-events-none transition-all duration-500 opacity-15"
+        style={{
+          background: 'radial-gradient(circle, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 50%, transparent 70%)'
+        }}
+      />
 
       {/* Unified Master Stage Container */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center text-center">
         
         {/* Play Store Publication Badge */}
-        <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#1C1C1C] border border-[#FF7A18]/40 text-[#FAFAFA] text-[11px] sm:text-xs font-mono font-medium mb-4 sm:mb-5 backdrop-blur-md shadow-sm shadow-[#FF7A18]/15">
+        <div 
+          className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#1C1C1C] text-[#FAFAFA] text-[11px] sm:text-xs font-mono font-medium mb-4 sm:mb-5 backdrop-blur-md shadow-sm border transition-colors duration-300"
+          style={{
+            borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.4))',
+            boxShadow: '0 2px 10px -2px var(--color-glow, rgba(255, 122, 24, 0.15))'
+          }}
+        >
           <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#10B981]" />
           <span>1 Game Published on Play Store</span>
         </div>

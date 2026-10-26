@@ -112,13 +112,16 @@ export default function App() {
     return 'home';
   });
 
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
+  // Admin is strictly in-memory session only - never auto-logins on ANY device or system
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+
+  // Proactively purge any residual storage tokens across all systems
+  useEffect(() => {
     if (typeof window !== 'undefined') {
-      // ONLY auto-login if the user explicitly chose YES (saved in localStorage)
-      return localStorage.getItem('badri_admin_logged_in') === 'true';
+      localStorage.removeItem('badri_admin_logged_in');
+      sessionStorage.removeItem('badri_admin_logged_in');
     }
-    return false;
-  });
+  }, []);
 
   // Listen for browser navigation changes
   useEffect(() => {
@@ -127,15 +130,9 @@ export default function App() {
       const hash = window.location.hash.toLowerCase();
       const isAdmin = path.includes('/admin') || hash === '#admin';
       if (isAdmin) {
-        // If not saved permanently, reset login state so it asks for credentials
-        if (typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') !== 'true') {
-          setIsAdminLoggedIn(false);
-        }
         setCurrentRoute('admin');
       } else {
-        if (typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') !== 'true') {
-          setIsAdminLoggedIn(false);
-        }
+        setIsAdminLoggedIn(false);
         setCurrentRoute('home');
       }
     };
@@ -146,19 +143,13 @@ export default function App() {
 
   const navigateToAdmin = () => {
     window.history.pushState({}, '', '/admin');
-    // If not saved permanently, navigating to admin must ask for credentials again
-    if (typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') !== 'true') {
-      setIsAdminLoggedIn(false);
-    }
     setCurrentRoute('admin');
   };
 
   const navigateToHome = () => {
     window.history.pushState({}, '', '/');
-    // If not saved permanently, leaving the admin panel terminates the session immediately
-    if (typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') !== 'true') {
-      setIsAdminLoggedIn(false);
-    }
+    // Leaving admin immediately resets session so credentials are required on return
+    setIsAdminLoggedIn(false);
     setCurrentRoute('home');
   };
 
