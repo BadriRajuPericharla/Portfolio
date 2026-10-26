@@ -98,6 +98,8 @@ export default function AdminPanel({ onReturnHome, onLogout }) {
   const [isFirebaseConnected, setIsFirebaseConnected] = useState(() => isFirebaseConfigured());
   const [isSyncingFirebase, setIsSyncingFirebase] = useState(false);
   const [uploadedImageFile, setUploadedImageFile] = useState(null);
+  const [paletteCategory, setPaletteCategory] = useState('All');
+  const [paletteSearch, setPaletteSearch] = useState('');
 
   const handleSaveFirebase = (e) => {
     if (e) e.preventDefault();
@@ -1579,174 +1581,296 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
               </div>
             </div>
 
-            {/* SECTION 2: COLOR PALETTES */}
-            <div className="space-y-4 pt-4 border-t border-white/10">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Palette className="w-5 h-5 text-purple-400" />
-                  <h3 className="text-lg font-bold text-white">Color Palettes &amp; Theme Atmosphere</h3>
+            {/* SECTION 2: REAL DEVELOPER COLOR PALETTES */}
+            <div className="space-y-5 pt-6 border-t border-white/10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Palette className="w-5 h-5 text-amber-400" />
+                    <h3 className="text-lg font-bold text-white">Authentic Developer Color Palettes</h3>
+                  </div>
+                  <p className="text-xs text-zinc-400 mt-0.5">
+                    Bright, normal, high-contrast color schemes used by real game engines and engineers — no generic AI tropes.
+                  </p>
                 </div>
-                <span className="text-xs font-mono text-zinc-400">
-                  Current: <strong className="text-purple-300 font-bold">{themeSettings?.colorPalette || 'indigo-violet'}</strong>
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono text-zinc-400">
+                    Active: <strong className="text-amber-400 font-bold">{availablePalettes.find(p => p.id === themeSettings?.colorPalette)?.name || 'Unity Radiant Orange'}</strong>
+                  </span>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {availablePalettes.map((palette) => {
-                  const isCurrent = themeSettings?.colorPalette === palette.id;
-                  return (
-                    <div
-                      key={palette.id}
-                      onClick={() => {
-                        updateTheme({ colorPalette: palette.id });
-                        showNotification(`Applied palette: "${palette.name}"`);
-                      }}
-                      className={`cursor-pointer p-5 rounded-2xl border transition-all relative overflow-hidden flex flex-col justify-between ${
-                        isCurrent
-                          ? 'bg-[#15192c] border-purple-500 shadow-xl shadow-purple-600/20 ring-1 ring-purple-500'
-                          : 'bg-[#101422] border-white/5 hover:border-white/20 hover:bg-[#131828]'
-                      }`}
+              {/* Category Filter Tabs & Search */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <div className="flex flex-nowrap overflow-x-auto no-scrollbar gap-1.5 pb-1">
+                  {['All', 'Game Engines', 'Code Editors', 'Terminal & Systems', 'Modern Tech'].map((cat) => {
+                    const count = cat === 'All' 
+                      ? availablePalettes.length 
+                      : availablePalettes.filter(p => p.category === cat).length;
+                    const isActive = paletteCategory === cat;
+                    return (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => setPaletteCategory(cat)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0 transition-all ${
+                          isActive
+                            ? 'bg-amber-500 text-black shadow-md shadow-amber-500/20 font-bold'
+                            : 'bg-[#101422] text-zinc-400 hover:text-white hover:bg-[#161B2E] border border-white/5'
+                        }`}
+                      >
+                        {cat} <span className="text-[10px] opacity-75 font-mono">({count})</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="relative shrink-0">
+                  <input
+                    type="text"
+                    value={paletteSearch}
+                    onChange={(e) => setPaletteSearch(e.target.value)}
+                    placeholder="Search by engine or stack..."
+                    className="w-full sm:w-56 px-3.5 py-1.5 rounded-xl text-xs bg-[#101422] border border-white/10 text-white placeholder:text-zinc-500 focus:outline-none focus:border-amber-400 transition-colors"
+                  />
+                  {paletteSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setPaletteSearch('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white text-xs"
                     >
-                      {/* Gradient Header Strip */}
+                      ×
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Palettes Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {availablePalettes
+                  .filter((palette) => {
+                    const matchesCat = paletteCategory === 'All' || palette.category === paletteCategory;
+                    const q = paletteSearch.trim().toLowerCase();
+                    const matchesSearch = !q || 
+                      palette.name.toLowerCase().includes(q) || 
+                      palette.description.toLowerCase().includes(q) || 
+                      (palette.badge && palette.badge.toLowerCase().includes(q)) ||
+                      palette.category.toLowerCase().includes(q);
+                    return matchesCat && matchesSearch;
+                  })
+                  .map((palette) => {
+                    const isCurrent = themeSettings?.colorPalette === palette.id;
+                    return (
                       <div
-                        className="h-3 -mx-5 -mt-5 mb-4 rounded-t-2xl"
-                        style={{
-                          background: `linear-gradient(90deg, ${palette.primary}, ${palette.secondary}, ${palette.accent})`
+                        key={palette.id}
+                        onClick={() => {
+                          updateTheme({ colorPalette: palette.id });
+                          showNotification(`🔥 Applied developer palette: "${palette.name}"`);
                         }}
-                      />
+                        style={{
+                          borderColor: isCurrent ? palette.primary : undefined,
+                          boxShadow: isCurrent ? `0 10px 30px -5px ${palette.primary}40` : undefined
+                        }}
+                        className={`cursor-pointer p-5 rounded-2xl border transition-all relative overflow-hidden flex flex-col justify-between group ${
+                          isCurrent
+                            ? 'bg-[#15192c] ring-1'
+                            : 'bg-[#101422] border-white/5 hover:border-white/20 hover:bg-[#131828]'
+                        }`}
+                      >
+                        {/* Gradient Header Strip */}
+                        <div
+                          className="h-3 -mx-5 -mt-5 mb-4 rounded-t-2xl transition-transform group-hover:scale-y-125 origin-top"
+                          style={{
+                            background: `linear-gradient(90deg, ${palette.primary}, ${palette.secondary}, ${palette.accent})`
+                          }}
+                        />
 
-                      {isCurrent && (
-                        <div className="absolute top-4 right-3 flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-600 text-white shadow-md">
-                          <Check className="w-3 h-3" />
-                          <span>Active Theme</span>
+                        {isCurrent && (
+                          <div 
+                            className="absolute top-4 right-3 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold text-white shadow-md"
+                            style={{ backgroundColor: palette.primary }}
+                          >
+                            <Check className="w-3 h-3" />
+                            <span>Currently Active</span>
+                          </div>
+                        )}
+
+                        <div>
+                          {/* Badges: Brand Tag + Category */}
+                          <div className="flex items-center gap-2 mb-2">
+                            <span 
+                              className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider"
+                              style={{ 
+                                backgroundColor: `${palette.primary}25`, 
+                                color: palette.primary,
+                                border: `1px solid ${palette.primary}40`
+                              }}
+                            >
+                              {palette.badge || 'Developer Standard'}
+                            </span>
+                            <span className="text-[10px] font-mono text-zinc-500">
+                              {palette.category}
+                            </span>
+                          </div>
+
+                          <h4 className="text-base font-bold text-white group-hover:text-amber-400 transition-colors">
+                            {palette.name}
+                          </h4>
+                          <p className="text-xs text-zinc-400 mt-1 mb-4 leading-relaxed">
+                            {palette.description}
+                          </p>
+
+                          {/* 4 Clear High-Contrast Swatches */}
+                          <div className="grid grid-cols-4 gap-2 p-2.5 rounded-xl bg-[#080B12] border border-white/5 mb-4 text-center">
+                            <div className="flex flex-col items-center gap-1">
+                              <div
+                                className="w-full h-7 rounded-lg shadow-inner border border-white/20"
+                                style={{ backgroundColor: palette.primary }}
+                                title={`Primary: ${palette.primary}`}
+                              />
+                              <span className="text-[9px] font-mono text-zinc-400 font-semibold">Primary</span>
+                              <span className="text-[8px] font-mono text-zinc-500">{palette.primary}</span>
+                            </div>
+
+                            <div className="flex flex-col items-center gap-1">
+                              <div
+                                className="w-full h-7 rounded-lg shadow-inner border border-white/20"
+                                style={{ backgroundColor: palette.secondary }}
+                                title={`Secondary: ${palette.secondary}`}
+                              />
+                              <span className="text-[9px] font-mono text-zinc-400 font-semibold">Secondary</span>
+                              <span className="text-[8px] font-mono text-zinc-500">{palette.secondary}</span>
+                            </div>
+
+                            <div className="flex flex-col items-center gap-1">
+                              <div
+                                className="w-full h-7 rounded-lg shadow-inner border border-white/20"
+                                style={{ backgroundColor: palette.accent }}
+                                title={`Accent: ${palette.accent}`}
+                              />
+                              <span className="text-[9px] font-mono text-zinc-400 font-semibold">Accent</span>
+                              <span className="text-[8px] font-mono text-zinc-500">{palette.accent}</span>
+                            </div>
+
+                            <div className="flex flex-col items-center gap-1">
+                              <div
+                                className="w-full h-7 rounded-lg shadow-inner border border-white/20"
+                                style={{ backgroundColor: palette.bg }}
+                                title={`Background: ${palette.bg}`}
+                              />
+                              <span className="text-[9px] font-mono text-zinc-400 font-semibold">BG</span>
+                              <span className="text-[8px] font-mono text-zinc-500">{palette.bg}</span>
+                            </div>
+                          </div>
                         </div>
-                      )}
 
-                      <div>
-                        <h4 className="text-base font-bold text-white">{palette.name}</h4>
-                        <p className="text-xs text-zinc-400 mt-1 mb-4">{palette.description}</p>
-
-                        {/* Color Swatches */}
-                        <div className="flex items-center gap-2.5 p-3 rounded-xl bg-[#080B12] border border-white/5 mb-4">
-                          <div className="flex flex-col items-center gap-1">
-                            <div
-                              className="w-8 h-8 rounded-lg shadow-inner border border-white/20"
-                              style={{ backgroundColor: palette.primary }}
-                              title={`Primary: ${palette.primary}`}
-                            />
-                            <span className="text-[9px] font-mono text-zinc-400">Primary</span>
-                          </div>
-
-                          <div className="flex flex-col items-center gap-1">
-                            <div
-                              className="w-8 h-8 rounded-lg shadow-inner border border-white/20"
-                              style={{ backgroundColor: palette.secondary }}
-                              title={`Secondary: ${palette.secondary}`}
-                            />
-                            <span className="text-[9px] font-mono text-zinc-400">Secondary</span>
-                          </div>
-
-                          <div className="flex flex-col items-center gap-1">
-                            <div
-                              className="w-8 h-8 rounded-lg shadow-inner border border-white/20"
-                              style={{ backgroundColor: palette.accent }}
-                              title={`Accent: ${palette.accent}`}
-                            />
-                            <span className="text-[9px] font-mono text-zinc-400">Accent</span>
-                          </div>
-
-                          <div className="flex flex-col items-center gap-1">
-                            <div
-                              className="w-8 h-8 rounded-lg shadow-inner border border-white/20"
-                              style={{ backgroundColor: palette.bg }}
-                              title={`Background: ${palette.bg}`}
-                            />
-                            <span className="text-[9px] font-mono text-zinc-400">BG</span>
-                          </div>
+                        <div className="flex items-center justify-between pt-3 border-t border-white/5">
+                          <span className="text-[11px] font-mono text-zinc-500">
+                            {palette.primary} • {palette.secondary}
+                          </span>
+                          <button
+                            type="button"
+                            style={isCurrent ? { backgroundColor: palette.primary, color: '#FFFFFF' } : undefined}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                              isCurrent
+                                ? 'shadow-md shadow-black/50 font-bold'
+                                : 'bg-white/5 text-zinc-300 hover:text-white hover:bg-white/15'
+                            }`}
+                          >
+                            {isCurrent ? 'Active Theme' : 'Apply Theme'}
+                          </button>
                         </div>
                       </div>
-
-                      <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                        <span className="text-[11px] font-mono text-zinc-500">{palette.primary}</span>
-                        <button
-                          type="button"
-                          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
-                            isCurrent
-                              ? 'bg-purple-600 text-white'
-                              : 'bg-white/5 text-zinc-400 hover:text-white'
-                          }`}
-                        >
-                          {isCurrent ? 'Selected' : 'Apply'}
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
             </div>
 
             {/* SECTION 3: REAL-TIME COMPONENT PREVIEW */}
             <div className="p-6 rounded-2xl bg-[#0B0E18] border border-white/10 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono uppercase tracking-wider text-indigo-400 font-semibold">
-                  Live Component Preview
+                <span className="text-xs font-mono uppercase tracking-wider text-amber-400 font-semibold flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Real-Time Live Component Preview</span>
                 </span>
                 <span className="text-[11px] text-zinc-400">
-                  Reflects currently chosen Font &amp; Palette
+                  Reflects currently chosen Font &amp; Developer Palette
                 </span>
               </div>
 
-              <div className="p-6 rounded-xl bg-[var(--color-bg,#07090F)] border border-[var(--color-primary,#6366F1)]/30 space-y-4">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span
-                    className="px-3 py-1 rounded-full text-xs font-mono font-bold"
+              {(() => {
+                const currentPal = availablePalettes.find(p => p.id === themeSettings?.colorPalette) || availablePalettes[0];
+                return (
+                  <div 
+                    className="p-6 sm:p-8 rounded-xl border space-y-5 transition-all"
                     style={{
-                      backgroundColor: 'var(--color-primary, #6366F1)20',
-                      color: 'var(--color-primary, #6366F1)',
-                      border: '1px solid var(--color-primary, #6366F1)40'
+                      backgroundColor: currentPal.bg,
+                      borderColor: `${currentPal.primary}40`,
+                      boxShadow: `0 10px 40px -10px ${currentPal.primary}20`
                     }}
                   >
-                    Unity Developer | Gameplay Programmer
-                  </span>
-                  <span
-                    className="px-2.5 py-0.5 rounded text-[11px] font-mono"
-                    style={{
-                      backgroundColor: 'var(--color-accent, #06B6D4)20',
-                      color: 'var(--color-accent, #06B6D4)'
-                    }}
-                  >
-                    C# Physics &amp; AI
-                  </span>
-                </div>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span
+                        className="px-3 py-1 rounded-full text-xs font-mono font-bold"
+                        style={{
+                          backgroundColor: `${currentPal.primary}20`,
+                          color: currentPal.primary,
+                          border: `1px solid ${currentPal.primary}50`
+                        }}
+                      >
+                        1 Game Published on Play Store
+                      </span>
+                      <span
+                        className="px-2.5 py-1 rounded text-xs font-mono"
+                        style={{
+                          backgroundColor: `${currentPal.secondary}20`,
+                          color: currentPal.secondary
+                        }}
+                      >
+                        {currentPal.name}
+                      </span>
+                    </div>
 
-                <h3
-                  className="text-2xl sm:text-3xl font-bold text-white font-display"
-                >
-                  "I build interactive gameplay experiences using Unity and C#."
-                </h3>
+                    <h3 className="text-2xl sm:text-4xl font-extrabold text-white font-display">
+                      <span>Pericharla </span>
+                      <span 
+                        className="text-transparent bg-clip-text"
+                        style={{
+                          backgroundImage: `linear-gradient(90deg, ${currentPal.primary}, ${currentPal.secondary})`
+                        }}
+                      >
+                        Badri Raju
+                      </span>
+                    </h3>
 
-                <p className="text-sm text-zinc-300 max-w-xl">
-                  Exploring gameplay systems, solving technical challenges, and building interactive worlds through game development.
-                </p>
+                    <blockquote className="text-base sm:text-lg text-zinc-200 font-medium">
+                      &ldquo;I build interactive gameplay experiences using Unity and C#.&rdquo;
+                    </blockquote>
 
-                <div className="flex flex-wrap gap-3 pt-2">
-                  <button
-                    type="button"
-                    className="px-5 py-2.5 rounded-xl text-xs font-bold text-white shadow-lg transition-transform hover:scale-105"
-                    style={{
-                      background: `linear-gradient(135deg, var(--color-primary, #6366F1), var(--color-secondary, #A855F7))`
-                    }}
-                  >
-                    Play Game (Sample CTA)
-                  </button>
-                  <button
-                    type="button"
-                    className="px-5 py-2.5 rounded-xl text-xs font-semibold text-zinc-300 bg-white/5 border border-white/10 hover:text-white"
-                  >
-                    View Details Modal
-                  </button>
-                </div>
-              </div>
+                    <p className="text-xs sm:text-sm text-zinc-400 max-w-xl leading-relaxed">
+                      Exploring gameplay systems, solving technical challenges, and building responsive interactive worlds through game development.
+                    </p>
+
+                    <div className="flex flex-wrap gap-3 pt-2">
+                      <button
+                        type="button"
+                        className="px-6 py-3 rounded-xl text-xs sm:text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
+                        style={{
+                          background: `linear-gradient(90deg, ${currentPal.primary}, ${currentPal.secondary})`
+                        }}
+                      >
+                        Explore My Games (CTA Preview)
+                      </button>
+                      <button
+                        type="button"
+                        className="px-5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-zinc-200 bg-white/5 border border-white/10 hover:text-white"
+                      >
+                        View GitHub
+                      </button>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
 
           </div>

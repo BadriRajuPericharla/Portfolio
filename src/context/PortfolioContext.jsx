@@ -16,8 +16,10 @@ const STORAGE_KEY = 'badri_raju_portfolio_state_v5';
 export const availablePalettes = [
   {
     id: 'charcoal-orange',
-    name: 'Charcoal & Radiant Orange',
-    description: 'Gaming Studio — Dark Charcoal with Orange & Gold Accents (Default)',
+    name: 'Unity Engine — Radiant Orange',
+    badge: 'Unity Official',
+    category: 'Game Engines',
+    description: 'Signature Unity Engine orange with radiant amber and deep obsidian charcoal (Default).',
     primary: '#FF7A18',
     secondary: '#FFC857',
     accent: '#FFA043',
@@ -29,62 +31,180 @@ export const availablePalettes = [
     border: 'border-[#FF7A18]/40'
   },
   {
-    id: 'indigo-violet',
-    name: 'Electric Indigo & Violet',
-    description: 'Vibrant Game Studio & Systems',
-    primary: '#6366F1',
-    secondary: '#A855F7',
-    accent: '#06B6D4',
-    bg: '#07090F',
-    surface: '#101320',
-    textMain: '#FFFFFF',
-    textMuted: '#94A3B8',
-    gradient: 'from-indigo-600 via-purple-600 to-pink-500',
-    border: 'border-indigo-500/40'
-  },
-  {
-    id: 'emerald-mint',
-    name: 'Emerald Matrix & Mint',
-    description: 'Modern Xbox Engine & Indie Dev',
-    primary: '#10B981',
-    secondary: '#059669',
-    accent: '#38BDF8',
-    bg: '#040C08',
-    gradient: 'from-emerald-600 via-teal-600 to-cyan-500',
-    border: 'border-emerald-500/40'
-  },
-  {
-    id: 'crimson-amber',
-    name: 'Crimson Core & Sunset Amber',
-    description: 'Action Combat & Kinetic Arcade',
-    primary: '#F43F5E',
-    secondary: '#F59E0B',
-    accent: '#8B5CF6',
-    bg: '#0D0609',
-    gradient: 'from-rose-600 via-amber-600 to-purple-600',
-    border: 'border-rose-500/40'
-  },
-  {
-    id: 'sapphire-cyan',
-    name: 'Cyber Sapphire & Cyan',
-    description: 'AAA Simulation & Clean Tech',
-    primary: '#0284C7',
+    id: 'vscode-blue',
+    name: 'VS Code & TypeScript — Azure Blue',
+    badge: 'VS Code / TS',
+    category: 'Code Editors',
+    description: 'The standard Microsoft developer blue with bright electric sky and dark slate background.',
+    primary: '#007ACC',
     secondary: '#38BDF8',
-    accent: '#6366F1',
-    bg: '#040914',
-    gradient: 'from-blue-600 via-cyan-500 to-indigo-600',
-    border: 'border-cyan-500/40'
+    accent: '#60A5FA',
+    bg: '#0D1117',
+    surface: '#161B22',
+    textMain: '#FAFAFA',
+    textMuted: '#8B949E',
+    gradient: 'from-[#007ACC] via-[#0284C7] to-[#38BDF8]',
+    border: 'border-[#007ACC]/40'
   },
   {
-    id: 'gold-amethyst',
-    name: 'Golden Forge & Amethyst',
-    description: 'Legendary RPG & Mythic World',
-    primary: '#D97706',
-    secondary: '#A855F7',
-    accent: '#F43F5E',
-    bg: '#0D0805',
-    gradient: 'from-amber-600 via-purple-600 to-rose-500',
-    border: 'border-amber-500/40'
+    id: 'terminal-green',
+    name: 'Terminal Matrix — Hacker Emerald',
+    badge: 'Linux / C++',
+    category: 'Terminal & Systems',
+    description: 'Crisp CRT terminal phosphor emerald with neon mint highlights and deep carbon black.',
+    primary: '#10B981',
+    secondary: '#00E676',
+    accent: '#34D399',
+    bg: '#0A0E0C',
+    surface: '#131B17',
+    textMain: '#FAFAFA',
+    textMuted: '#9CA3AF',
+    gradient: 'from-[#10B981] via-[#059669] to-[#00E676]',
+    border: 'border-[#10B981]/40'
+  },
+  {
+    id: 'unreal-cyan',
+    name: 'Unreal Engine — Electric Cyan',
+    badge: 'Unreal / C++',
+    category: 'Game Engines',
+    description: 'AAA game engine high-tech cyan and sapphire blue with deep titanium slate.',
+    primary: '#06B6D4',
+    secondary: '#0284C7',
+    accent: '#38BDF8',
+    bg: '#070E17',
+    surface: '#0F1926',
+    textMain: '#FAFAFA',
+    textMuted: '#94A3B8',
+    gradient: 'from-[#06B6D4] via-[#0284C7] to-[#38BDF8]',
+    border: 'border-[#06B6D4]/40'
+  },
+  {
+    id: 'godot-teal',
+    name: 'Godot Engine — Indie Mint & Teal',
+    badge: 'Godot Engine',
+    category: 'Game Engines',
+    description: 'Community-favorite Godot open-source teal with seafoam mint and dark graphite.',
+    primary: '#0D9488',
+    secondary: '#2DD4BF',
+    accent: '#14B8A6',
+    bg: '#081113',
+    surface: '#111D20',
+    textMain: '#FAFAFA',
+    textMuted: '#94A3B8',
+    gradient: 'from-[#0D9488] via-[#14B8A6] to-[#2DD4BF]',
+    border: 'border-[#0D9488]/40'
+  },
+  {
+    id: 'minimal-white',
+    name: 'Linear & Vercel — Titanium White',
+    badge: 'Vercel / Linear',
+    category: 'Modern Tech',
+    description: 'Ultra-clean modern engineering portfolio: crisp pure white and platinum silver on pitch black.',
+    primary: '#FFFFFF',
+    secondary: '#E2E8F0',
+    accent: '#94A3B8',
+    bg: '#0A0A0A',
+    surface: '#141414',
+    textMain: '#FFFFFF',
+    textMuted: '#A1A1AA',
+    gradient: 'from-[#FFFFFF] via-[#E2E8F0] to-[#94A3B8]',
+    border: 'border-white/40'
+  },
+  {
+    id: 'rust-crimson',
+    name: 'Rust Engine — Solar Crimson',
+    badge: 'Rust / Systems',
+    category: 'Terminal & Systems',
+    description: 'High-performance systems programming crimson flame with sunset orange on charcoal.',
+    primary: '#EF4444',
+    secondary: '#F97316',
+    accent: '#FB923C',
+    bg: '#100B0B',
+    surface: '#1A1212',
+    textMain: '#FAFAFA',
+    textMuted: '#A3A3A3',
+    gradient: 'from-[#EF4444] via-[#F97316] to-[#FB923C]',
+    border: 'border-[#EF4444]/40'
+  },
+  {
+    id: 'blender-gold',
+    name: 'Blender 3D — Cadmium Amber Gold',
+    badge: 'Blender 3D',
+    category: 'Game Engines',
+    description: 'Bright high-visibility 3D artist amber and warm gold on dark studio carbon.',
+    primary: '#F59E0B',
+    secondary: '#FACC15',
+    accent: '#FDE047',
+    bg: '#12100A',
+    surface: '#1C1910',
+    textMain: '#FAFAFA',
+    textMuted: '#A3A3A3',
+    gradient: 'from-[#F59E0B] via-[#EAB308] to-[#FACC15]',
+    border: 'border-[#F59E0B]/40'
+  },
+  {
+    id: 'docker-cobalt',
+    name: 'Docker & Go — Cobalt Blue',
+    badge: 'Docker / Go',
+    category: 'Modern Tech',
+    description: 'Solid engineer cobalt blue with bright ice-sky highlights on dark naval steel.',
+    primary: '#2563EB',
+    secondary: '#60A5FA',
+    accent: '#93C5FD',
+    bg: '#090D1A',
+    surface: '#111728',
+    textMain: '#FAFAFA',
+    textMuted: '#94A3B8',
+    gradient: 'from-[#2563EB] via-[#3B82F6] to-[#60A5FA]',
+    border: 'border-[#2563EB]/40'
+  },
+  {
+    id: 'monokai-yellow',
+    name: 'Monokai Pro — Sunburst Yellow',
+    badge: 'Monokai Pro',
+    category: 'Code Editors',
+    description: 'Iconic Sublime & VS Code syntax highlighter yellow and warm tangerine on jet-black.',
+    primary: '#EAB308',
+    secondary: '#FB923C',
+    accent: '#FACC15',
+    bg: '#121210',
+    surface: '#1C1C18',
+    textMain: '#FAFAFA',
+    textMuted: '#A3A3A3',
+    gradient: 'from-[#EAB308] via-[#F59E0B] to-[#FB923C]',
+    border: 'border-[#EAB308]/40'
+  },
+  {
+    id: 'razer-lime',
+    name: 'Razer & Nvidia — High-FPS Lime',
+    badge: 'Gaming Hardware',
+    category: 'Game Engines',
+    description: 'Punchy high-FPS gaming hardware venom lime with sharp neon emerald accents.',
+    primary: '#84CC16',
+    secondary: '#22C55E',
+    accent: '#A3E635',
+    bg: '#0B1009',
+    surface: '#131B10',
+    textMain: '#FAFAFA',
+    textMuted: '#9CA3AF',
+    gradient: 'from-[#84CC16] via-[#65A30D] to-[#22C55E]',
+    border: 'border-[#84CC16]/40'
+  },
+  {
+    id: 'github-sky',
+    name: 'GitHub — Prime Sky Blue',
+    badge: 'GitHub Official',
+    category: 'Code Editors',
+    description: 'Clean, readable GitHub Dark Dimmed sky blue with bright cyan on deep obsidian.',
+    primary: '#58A6FF',
+    secondary: '#79C0FF',
+    accent: '#38BDF8',
+    bg: '#0D1117',
+    surface: '#161B22',
+    textMain: '#FAFAFA',
+    textMuted: '#8B949E',
+    gradient: 'from-[#58A6FF] via-[#38BDF8] to-[#79C0FF]',
+    border: 'border-[#58A6FF]/40'
   }
 ];
 
@@ -311,7 +431,117 @@ export function PortfolioProvider({ children }) {
       document.documentElement.style.setProperty('--color-surface', activePalette.surface || '#1C1C1C');
       document.documentElement.style.setProperty('--color-text-main', activePalette.textMain || '#FAFAFA');
       document.documentElement.style.setProperty('--color-text-muted', activePalette.textMuted || '#A3A3A3');
-      document.documentElement.style.setProperty('--color-border-accent', 'rgba(255, 122, 24, 0.35)');
+      document.documentElement.style.setProperty('--color-border-accent', `${activePalette.primary}59`);
+
+      // Inject comprehensive dynamic palette CSS overrides to transform site to chosen developer palette
+      let dynamicStyleEl = document.getElementById('portfolio-dynamic-palette');
+      if (!dynamicStyleEl) {
+        dynamicStyleEl = document.createElement('style');
+        dynamicStyleEl.id = 'portfolio-dynamic-palette';
+        document.head.appendChild(dynamicStyleEl);
+      }
+
+      dynamicStyleEl.textContent = `
+        :root {
+          --color-primary: ${activePalette.primary};
+          --color-secondary: ${activePalette.secondary};
+          --color-accent: ${activePalette.accent};
+          --color-bg: ${activePalette.bg};
+          --color-surface: ${activePalette.surface || '#1C1C1C'};
+        }
+        
+        body, html {
+          background-color: ${activePalette.bg} !important;
+        }
+
+        /* Real Developer Theme Overrides */
+        .text-\\[\\#FF7A18\\], [class*="text-[#FF7A18]"] {
+          color: ${activePalette.primary} !important;
+        }
+        .text-\\[\\#FFC857\\], [class*="text-[#FFC857]"] {
+          color: ${activePalette.secondary} !important;
+        }
+        .text-\\[\\#FFA043\\], [class*="text-[#FFA043]"] {
+          color: ${activePalette.accent} !important;
+        }
+        .hover\\:text-\\[\\#FF7A18\\]:hover {
+          color: ${activePalette.primary} !important;
+        }
+        .hover\\:text-\\[\\#FFC857\\]:hover {
+          color: ${activePalette.secondary} !important;
+        }
+        .bg-\\[\\#FF7A18\\] {
+          background-color: ${activePalette.primary} !important;
+        }
+        .hover\\:bg-\\[\\#FF7A18\\]:hover {
+          background-color: ${activePalette.primary} !important;
+        }
+        .hover\\:bg-\\[\\#E86A0E\\]:hover {
+          background-color: ${activePalette.primary}ee !important;
+        }
+        .hover\\:bg-\\[\\#FF9233\\]:hover {
+          background-color: ${activePalette.secondary}ee !important;
+        }
+        .border-\\[\\#FF7A18\\]\\/30 {
+          border-color: ${activePalette.primary}4D !important;
+        }
+        .border-\\[\\#FF7A18\\]\\/40 {
+          border-color: ${activePalette.primary}66 !important;
+        }
+        .border-\\[\\#FF7A18\\]\\/50 {
+          border-color: ${activePalette.primary}80 !important;
+        }
+        .border-\\[\\#FF7A18\\]\\/60 {
+          border-color: ${activePalette.primary}99 !important;
+        }
+        .border-\\[\\#FF7A18\\] {
+          border-color: ${activePalette.primary} !important;
+        }
+        .border-\\[\\#FFC857\\]\\/50 {
+          border-color: ${activePalette.secondary}80 !important;
+        }
+        .hover\\:border-\\[\\#FF7A18\\]\\/40:hover {
+          border-color: ${activePalette.primary}66 !important;
+        }
+        .hover\\:border-\\[\\#FF7A18\\]\\/50:hover {
+          border-color: ${activePalette.primary}80 !important;
+        }
+        .hover\\:border-\\[\\#FF7A18\\]:hover {
+          border-color: ${activePalette.primary} !important;
+        }
+        .bg-\\[\\#FF7A18\\]\\/10 {
+          background-color: ${activePalette.primary}1A !important;
+        }
+        .bg-\\[\\#FF7A18\\]\\/15 {
+          background-color: ${activePalette.primary}26 !important;
+        }
+        .bg-\\[\\#FF7A18\\]\\/20 {
+          background-color: ${activePalette.primary}33 !important;
+        }
+        .bg-\\[\\#FF7A18\\]\\/25 {
+          background-color: ${activePalette.primary}40 !important;
+        }
+        .bg-\\[\\#FF7A18\\]\\/35 {
+          background-color: ${activePalette.primary}59 !important;
+        }
+        .from-\\[\\#FF7A18\\] {
+          --tw-gradient-from: ${activePalette.primary} var(--tw-gradient-from-position, 0%) !important;
+          --tw-gradient-to: ${activePalette.primary}00 var(--tw-gradient-to-position, 100%) !important;
+          --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+        }
+        .via-\\[\\#FF9233\\] {
+          --tw-gradient-stops: var(--tw-gradient-from), ${activePalette.secondary} var(--tw-gradient-via-position, 50%), var(--tw-gradient-to) !important;
+        }
+        .to-\\[\\#FFC857\\] {
+          --tw-gradient-to: ${activePalette.secondary} var(--tw-gradient-to-position, 100%) !important;
+        }
+        .to-\\[\\#FF7A18\\] {
+          --tw-gradient-to: ${activePalette.primary} var(--tw-gradient-to-position, 100%) !important;
+        }
+        .to-\\[\\#FF9233\\] {
+          --tw-gradient-to: ${activePalette.secondary} var(--tw-gradient-to-position, 100%) !important;
+        }
+      `;
     }
   }, [themeSettings]);
 
@@ -649,7 +879,7 @@ export function PortfolioProvider({ children }) {
       setCustomSections([]);
       setThemeSettings({
         fontStyle: 'space-grotesk',
-        colorPalette: 'indigo-violet'
+        colorPalette: 'charcoal-orange'
       });
       setResumeData({
         url: '/resume.pdf',
