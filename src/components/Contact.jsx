@@ -108,16 +108,23 @@ export default function Contact() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header */}
-        <div data-reveal className="max-w-3xl mb-14">
-          <div className="inline-flex items-center gap-2 text-[#FF7A18] text-xs font-mono font-semibold uppercase tracking-wider mb-3">
-            <Mail className="w-4 h-4" />
-            <span>Direct Inquiries</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#FAFAFA] tracking-tight font-display">
-            Let's Build Something Great.
+        {/* Centered Section Header Matching Reference Flow */}
+        <div data-reveal className="text-center mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight font-display mb-3 text-[#FAFAFA]">
+            Get In <span 
+              className="text-transparent bg-clip-text"
+              style={{
+                backgroundImage: 'linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FFC857) 100%)'
+              }}
+            >Touch</span>
           </h2>
-          <p className="text-[#A3A3A3] text-sm sm:text-base mt-2">
+          <div 
+            className="w-20 h-1 mx-auto rounded-full"
+            style={{
+              background: 'linear-gradient(to right, var(--color-primary, #FF7A18), var(--color-secondary, #FFC857))'
+            }}
+          />
+          <p className="text-[#A3A3A3] text-sm sm:text-base max-w-xl mx-auto mt-4 leading-relaxed">
             Open to Unity development roles, gameplay programming opportunities, and technical collaborations.
           </p>
         </div>

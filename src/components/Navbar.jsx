@@ -16,10 +16,10 @@ export default function Navbar({ onNavigateAdmin }) {
 
   const allNavLinks = [
     { id: 'hero', name: 'Home', href: '#home' },
-    { id: 'projects', name: 'Projects', href: '#projects' },
-    { id: 'skills', name: 'Skills', href: '#skills' },
     { id: 'about', name: 'About', href: '#about' },
-    { id: 'achievements', name: 'Achievements', href: '#achievements' },
+    { id: 'skills', name: 'Skills', href: '#skills' },
+    { id: 'timeline', name: 'Timeline', href: '#timeline' },
+    { id: 'projects', name: 'Projects', href: '#projects' },
     { id: 'contact', name: 'Contact', href: '#contact' },
   ];
 

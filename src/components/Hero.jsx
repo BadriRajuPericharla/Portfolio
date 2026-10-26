@@ -127,23 +127,36 @@ export default function Hero() {
       {/* Unified Master Stage Container */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center text-center">
         
-        {/* Play Store Publication Badge */}
-        <div 
-          data-reveal="fade"
-          className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#1C1C1C] text-[#FAFAFA] text-[11px] sm:text-xs font-mono font-medium mb-4 sm:mb-5 backdrop-blur-md shadow-sm border transition-colors duration-300"
-          style={{
-            borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.4))',
-            boxShadow: '0 2px 10px -2px var(--color-glow, rgba(255, 122, 24, 0.15))'
-          }}
-        >
-          <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#10B981]" />
-          <span>1 Game Published on Play Store</span>
+        {/* Profile Image with Glowing Outer Gradient Ring (Matching Reference Hero) */}
+        <div data-reveal="scale" className="w-40 h-40 sm:w-48 sm:h-48 mx-auto relative mb-6 group">
+          <div 
+            className="w-full h-full rounded-full p-1.5 transition-all duration-500 group-hover:scale-105"
+            style={{
+              background: 'linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FFC857) 100%)',
+              boxShadow: '0 0 35px -5px var(--color-glow, rgba(255, 122, 24, 0.45))'
+            }}
+          >
+            <img
+              src={profile.avatarUrl || '/profile.jpg'}
+              alt={name || "Pericharla Badri Raju"}
+              className="w-full h-full object-cover object-[center_18%] rounded-full select-none"
+              onError={(e) => { e.currentTarget.src = '/profile.jpg'; }}
+            />
+          </div>
+          {/* Floating Live Badge */}
+          <div 
+            className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-[#111111] border shadow-lg flex items-center gap-2 whitespace-nowrap z-10"
+            style={{ borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.5))' }}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#10B981]" />
+            <span className="text-[11px] font-mono font-bold text-[#FAFAFA]">1 Game on Play Store</span>
+          </div>
         </div>
 
         {/* PRIMARY FOCUS: Full Name with Selective Dynamic Palette Highlighting */}
         <h1 
           data-reveal
-          className="delay-100 text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight font-display leading-[1.08] mb-3 sm:mb-4 select-none"
+          className="delay-100 text-3xl sm:text-5xl md:text-7xl font-black tracking-tight font-display leading-[1.08] mb-3 sm:mb-4 select-none"
         >
           <span className="text-[#FAFAFA]">{firstName} </span>
           <span 
@@ -191,7 +204,7 @@ export default function Hero() {
           {subHeadline || 'Building responsive gameplay mechanics, modular C# architectures, and interactive 2D/3D games in Unity.'}
         </p>
 
-        {/* Action Buttons: Explore Games, View GitHub, Contact */}
+        {/* Action Buttons: Explore Games, Download Resume, Contact */}
         <div 
           data-reveal
           className="delay-300 flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 mb-7 sm:mb-10 w-full max-w-lg sm:max-w-none"
@@ -203,20 +216,18 @@ export default function Hero() {
             className="btn-hero-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg"
           >
             <Gamepad2 className="w-4 h-4" />
-            <span>Explore My Games</span>
+            <span>Explore Works</span>
             <ArrowRight className="w-4 h-4" />
           </a>
 
-          {/* Button 2: View GitHub */}
+          {/* Button 2: Download Resume */}
           <a
-            href={links.github || "https://github.com/BadriRajuPericharla"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-[#FAFAFA] bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] hover:border-[#FF7A18]/50 hover:text-[#FF7A18] transition-all duration-300 hover:-translate-y-1 shadow-md shadow-black/30"
+            href={resumeData.url}
+            download={resumeData.name}
+            className="btn-palette-primary flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:-translate-y-1 shadow-md cursor-pointer"
           >
-            <GithubIcon className="w-4 h-4 text-[#A3A3A3]" />
-            <span>View GitHub</span>
-            <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+            <FileDown className="w-4 h-4" />
+            <span>Download Resume</span>
           </a>
 
           {/* Button 3: Contact Me */}

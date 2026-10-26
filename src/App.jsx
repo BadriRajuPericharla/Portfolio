@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import FeaturedProjects from './components/FeaturedProjects';
-import Skills from './components/Skills';
 import About from './components/About';
-import Achievements from './components/Achievements';
+import Skills from './components/Skills';
+import Timeline from './components/Timeline';
+import FeaturedProjects from './components/FeaturedProjects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ProjectModal from './components/ProjectModal';
@@ -48,21 +48,11 @@ function PortfolioMainContent({ onNavigateAdmin }) {
       {/* Dynamic Navbar */}
       <Navbar onNavigateAdmin={onNavigateAdmin} />
 
-      {/* Main Content Sections with dynamic toggle visibility */}
+      {/* Main Content Sections sequenced to match reference visual flow */}
       <main className="flex-1">
         {isEnabled('hero') && (
           <SectionErrorBoundary>
             <Hero />
-          </SectionErrorBoundary>
-        )}
-        {isEnabled('projects') && (
-          <SectionErrorBoundary>
-            <FeaturedProjects onOpenDetails={(proj) => setActiveModalProject(proj)} />
-          </SectionErrorBoundary>
-        )}
-        {isEnabled('skills') && (
-          <SectionErrorBoundary>
-            <Skills />
           </SectionErrorBoundary>
         )}
         {isEnabled('about') && (
@@ -70,9 +60,19 @@ function PortfolioMainContent({ onNavigateAdmin }) {
             <About />
           </SectionErrorBoundary>
         )}
-        {isEnabled('achievements') && (
+        {isEnabled('skills') && (
           <SectionErrorBoundary>
-            <Achievements />
+            <Skills />
+          </SectionErrorBoundary>
+        )}
+        {(isEnabled('timeline') || isEnabled('achievements')) && (
+          <SectionErrorBoundary>
+            <Timeline />
+          </SectionErrorBoundary>
+        )}
+        {isEnabled('projects') && (
+          <SectionErrorBoundary>
+            <FeaturedProjects onOpenDetails={(proj) => setActiveModalProject(proj)} />
           </SectionErrorBoundary>
         )}
 

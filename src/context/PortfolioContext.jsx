@@ -247,12 +247,12 @@ export const availableFonts = [
 ];
 
 const defaultSections = [
-  { id: 'hero', name: 'Hero Banner', enabled: true, description: 'Main introduction and quick CTA buttons' },
-  { id: 'projects', name: 'Featured Projects', enabled: true, description: 'Verified 2D/3D games catalog with filter tabs and details modal' },
-  { id: 'skills', name: 'Skills & Tech Stack', enabled: true, description: 'Categorized gameplay programming, physics, and tooling capabilities' },
-  { id: 'about', name: 'About Me & Education', enabled: true, description: 'Degree at Sasi Institute, background narrative, and core focus' },
-  { id: 'achievements', name: 'Key Achievements', enabled: true, description: 'Smart India Hackathon, NextWave Buildathon, itch.io publishing' },
-  { id: 'contact', name: 'Contact Section', enabled: true, description: 'Email copy, working message composer, and social links' },
+  { id: 'hero', name: 'Hero Banner', enabled: true, description: 'Main introduction, glowing portrait, and quick CTA buttons' },
+  { id: 'about', name: 'About Me', enabled: true, description: 'Background narrative, education, and engineering pillars' },
+  { id: 'skills', name: 'My Skills', enabled: true, description: 'Interactive domain modules: Gameplay, AI, Architecture, Tools' },
+  { id: 'timeline', name: 'Journey Timeline', enabled: true, description: 'Chronological milestones: Play Store release, 4 itch.io games, SIH, NextWave' },
+  { id: 'projects', name: 'My Works', enabled: true, description: 'Visual 2D/3D games catalog with filter tabs and play links' },
+  { id: 'contact', name: 'Get In Touch', enabled: true, description: 'Direct email copy, message composer, and developer gateways' },
 ];
 
 const PortfolioContext = createContext();
