@@ -12,19 +12,30 @@ import {
 
 const FIREBASE_CONFIG_KEY = 'badri_firebase_config_v1';
 
-// Default config can read from Vite environment variables or localStorage
+export const DEFAULT_FIREBASE_CONFIG = {
+  apiKey: "AIzaSyB_Dh5v0jmNA5Z3doBqhfXt4TS8QzI4QJ4",
+  authDomain: "portfolio-24460.firebaseapp.com",
+  projectId: "portfolio-24460",
+  storageBucket: "portfolio-24460.firebasestorage.app",
+  messagingSenderId: "894922460628",
+  appId: "1:894922460628:web:cbc95defe78cb6dacd1a41"
+};
+
+// Default config can read from localStorage, env variables, or default credentials
 export const getFirebaseConfig = () => {
-  try {
-    const saved = localStorage.getItem(FIREBASE_CONFIG_KEY);
-    if (saved) {
-      return JSON.parse(saved);
+  if (typeof window !== 'undefined' && window.localStorage) {
+    try {
+      const saved = window.localStorage.getItem(FIREBASE_CONFIG_KEY);
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.warn('Error reading Firebase config from localStorage:', e);
     }
-  } catch (e) {
-    console.warn('Error reading Firebase config from localStorage:', e);
   }
 
   // Fallback to Vite environment variables if defined
-  if (import.meta.env.VITE_FIREBASE_API_KEY) {
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_FIREBASE_API_KEY) {
     return {
       apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
       authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '',
@@ -35,14 +46,16 @@ export const getFirebaseConfig = () => {
     };
   }
 
-  return null;
+  return DEFAULT_FIREBASE_CONFIG;
 };
 
 export const saveFirebaseConfig = (config) => {
-  if (config) {
-    localStorage.setItem(FIREBASE_CONFIG_KEY, JSON.stringify(config));
-  } else {
-    localStorage.removeItem(FIREBASE_CONFIG_KEY);
+  if (typeof window !== 'undefined' && window.localStorage) {
+    if (config) {
+      window.localStorage.setItem(FIREBASE_CONFIG_KEY, JSON.stringify(config));
+    } else {
+      window.localStorage.removeItem(FIREBASE_CONFIG_KEY);
+    }
   }
 };
 
