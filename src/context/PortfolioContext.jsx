@@ -285,8 +285,11 @@ export function PortfolioProvider({ children }) {
         if (!parsed.location || parsed.location === 'West Godavari, India') {
           parsed.location = 'West Godavari, Andhra Pradesh, India';
         }
-        if (parsed.education && (!parsed.education.location || parsed.education.location === 'West Godavari, India')) {
-          parsed.education.location = 'West Godavari, Andhra Pradesh, India';
+        if (parsed.education) {
+          if (!parsed.education.location || parsed.education.location === 'West Godavari, India') {
+            parsed.education.location = 'West Godavari, Andhra Pradesh, India';
+          }
+          parsed.education.period = '2023 - 2027';
         }
         return parsed;
       }

@@ -215,7 +215,7 @@ export default function About() {
                   {education.degree}
                 </h5>
                 <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#141414] border border-white/10 text-[#FFC857] w-fit">
-                  {education.period}
+                  2023 – 2027
                 </span>
               </div>
 

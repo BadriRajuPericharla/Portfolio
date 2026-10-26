@@ -19,7 +19,7 @@ export const profileData = {
   education: {
     degree: "Bachelor of Technology in Electronics and Communication Technology (ECT)",
     institution: "Sasi Institute of Technology and Engineering",
-    period: "2023–2027",
+    period: "2023 - 2027",
     location: "West Godavari, Andhra Pradesh, India",
     focus: "Real-time systems, algorithms, and software architecture applied to game engines."
   },
@@ -31,8 +31,8 @@ export const profileData = {
     resume: "/resume.pdf"
   },
   stats: [
-    { label: "Games Published on itch.io", value: "4+" },
-    { label: "Hackathon Qualifications", value: "2x SIH" },
+    { label: "Games Released on itch.io", value: "4+" },
+    { label: "Smart India Hackathon", value: "Participated" },
     { label: "Core Focus", value: "Unity & C#" },
     { label: "Google Play Store", value: "1 Published" }
   ]

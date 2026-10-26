@@ -2,14 +2,14 @@ export const achievementsData = [
   {
     id: "sih-qualification",
     title: "Smart India Hackathon (SIH)",
-    status: "2-Time First Round Qualifier",
-    summary: "Cleared competitive first-round evaluations across two consecutive editions of India's premier national hackathon.",
+    status: "Participated in SIH",
+    summary: "Participated in Smart India Hackathon (SIH), building and presenting software prototypes with team members.",
     iconName: "Trophy",
     accentColor: "#6366F1",
     keyPoints: [
-      "Collaborated in multidisciplinary problem-solving under strict hackathon criteria.",
-      "Successfully submitted and defended technical proposals across two separate SIH editions.",
-      "Strengthened system design planning, rapid prototyping, and team technical communication."
+      "Participated in national-level collegiate hackathon problem tracks.",
+      "Collaborated on building interactive prototypes and presenting technical solutions.",
+      "Strengthened rapid prototyping, team communication, and architecture design."
     ]
   },
   {

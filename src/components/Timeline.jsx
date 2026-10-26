@@ -24,14 +24,14 @@ export default function Timeline() {
   const journeySteps = [
     {
       period: "2024 – Present",
-      title: "Commercial & Indie Game Publishing",
-      role: "Solo Unity Developer",
-      badge: "Commercial Release",
+      title: "Independent Game Development",
+      role: "Unity Game Developer",
+      badge: "Live Releases",
       icon: Rocket,
-      summary: "Published 1 mobile game on Google Play Store and 4 custom titles on itch.io.",
+      summary: "Built and released 1 mobile game on Google Play Store and 4 custom titles on itch.io.",
       highlights: [
         "1 Verified Google Play Store release & 4 playable itch.io titles",
-        "End-to-end game lifecycle: prototyping, C# physics, UI, and audio"
+        "Hands-on gameplay mechanics, C# code, UI, and custom audio"
       ],
       link: "https://badri-raju-pericharla.itch.io",
       linkLabel: "itch.io Catalog"
@@ -39,13 +39,13 @@ export default function Timeline() {
     {
       period: "2024",
       title: "Smart India Hackathon (SIH)",
-      role: "Technical Lead",
-      badge: "2x National Qualifier",
+      role: "Participant",
+      badge: "Participated in SIH",
       icon: Trophy,
-      summary: "Qualified through rigorous national evaluations across two consecutive SIH editions.",
+      summary: "Participated in Smart India Hackathon (SIH), building and presenting software prototypes with team members.",
       highlights: [
-        "Selected among thousands of technical collegiate teams across India",
-        "Architected rapid interactive software prototypes under tight constraints"
+        "Participated in national-level collegiate hackathon challenge tracks",
+        "Built interactive prototypes and presented technical solutions"
       ]
     },
     {
