@@ -20,13 +20,13 @@ export default function Achievements() {
   return (
     <section 
       id="achievements" 
-      className="py-24 bg-[#111111] relative border-t border-white/5"
+      className="py-16 sm:py-24 bg-[#111111] relative border-t border-white/5"
       aria-label="Achievements and milestones"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-3xl mb-14">
+        <div className="max-w-3xl mb-10 sm:mb-14">
           <div className="inline-flex items-center gap-2 text-[#FF7A18] text-xs font-mono font-semibold uppercase tracking-wider mb-3">
             <Trophy className="w-4 h-4" />
             <span>Milestones &amp; Recognition</span>
@@ -34,17 +34,17 @@ export default function Achievements() {
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#FAFAFA] tracking-tight font-display">
             Key Achievements
           </h2>
-          <p className="text-[#A3A3A3] text-base mt-2">
+          <p className="text-[#A3A3A3] text-sm sm:text-base mt-2">
             Verified competitive milestones, hackathon selections, and game releases reflecting consistency, technical execution, and problem-solving drive.
           </p>
         </div>
 
         {/* Achievements Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {achievementsData.map((item) => (
             <div
               key={item.id}
-              className="rounded-2xl bg-[#1C1C1C] border border-white/10 p-7 flex flex-col justify-between hover:border-[#FF7A18]/40 transition-all hover:-translate-y-1 hover:shadow-xl shadow-black/40 group"
+              className="rounded-2xl bg-[#1C1C1C] border border-white/10 p-5 sm:p-7 flex flex-col justify-between hover:border-[#FF7A18]/40 transition-all hover:-translate-y-1 hover:shadow-xl shadow-black/40 group"
             >
               <div>
                 {/* Icon & Status Badge */}

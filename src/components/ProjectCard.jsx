@@ -40,9 +40,9 @@ export default function ProjectCard({ project, onOpenDetails }) {
         </div>
 
         {/* Card Body */}
-        <div className="p-6">
+        <div className="p-5 sm:p-6">
           <div className="flex items-start justify-between gap-3 mb-2">
-            <h3 className="text-xl font-bold text-[#FAFAFA] group-hover:text-[#FF7A18] transition-colors">
+            <h3 className="text-lg sm:text-xl font-bold text-[#FAFAFA] group-hover:text-[#FF7A18] transition-colors">
               {title}
             </h3>
             <span 
@@ -52,16 +52,16 @@ export default function ProjectCard({ project, onOpenDetails }) {
             />
           </div>
 
-          <p className="text-[#A3A3A3] text-sm leading-relaxed mb-5 line-clamp-3">
+          <p className="text-[#A3A3A3] text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 line-clamp-3">
             {shortDescription}
           </p>
 
           {/* Technology Tags */}
-          <div className="flex flex-wrap gap-1.5 mb-6">
+          <div className="flex flex-wrap gap-1.5 mb-5 sm:mb-6">
             {tags && tags.map((tag, idx) => (
               <span
                 key={idx}
-                className="px-2.5 py-1 rounded-md bg-[#242424] text-[#A3A3A3] border border-white/5 text-xs font-mono font-medium"
+                className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-[#242424] text-[#A3A3A3] border border-white/5 text-[11px] sm:text-xs font-mono font-medium"
               >
                 {tag}
               </span>
@@ -71,7 +71,7 @@ export default function ProjectCard({ project, onOpenDetails }) {
       </div>
 
       {/* Card Actions Footer */}
-      <div className="px-6 pb-6 pt-3 border-t border-white/5 flex items-center justify-between gap-3 bg-[#161616]">
+      <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-3 border-t border-white/5 flex items-center justify-between gap-2.5 sm:gap-3 bg-[#161616]">
         <button
           onClick={() => onOpenDetails(project)}
           className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-[#FAFAFA] bg-[#242424] hover:bg-[#2C2C2C] border border-white/10 hover:border-[#FF7A18]/40 hover:text-[#FF7A18] transition-all"

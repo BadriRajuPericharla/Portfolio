@@ -50,11 +50,11 @@ export default function About() {
           
           {/* Left Column: Core Narrative & Philosophy (7 cols) */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="p-7 sm:p-8 rounded-2xl bg-[#1C1C1C] border border-[#303030] space-y-6 shadow-xl shadow-black/40">
-              <div className="flex flex-col md:flex-row items-center md:items-start gap-7">
+            <div className="p-5 sm:p-8 rounded-2xl bg-[#1C1C1C] border border-[#303030] space-y-6 shadow-xl shadow-black/40">
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-7">
                 {/* Large Circular Profile Picture with Full Clarity */}
                 <div className="relative shrink-0 group">
-                  <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-full p-1.5 bg-gradient-to-tr from-[#FF7A18] via-[#FF9233] to-[#FFC857] shadow-2xl shadow-[#FF7A18]/30 ring-4 ring-[#111111]">
+                  <div className="relative w-40 h-40 sm:w-56 sm:h-56 rounded-full p-1.5 bg-gradient-to-tr from-[#FF7A18] via-[#FF9233] to-[#FFC857] shadow-2xl shadow-[#FF7A18]/30 ring-4 ring-[#111111]">
                     <img
                       src={profile.avatarUrl || '/profile.jpg'}
                       alt={name || "Pericharla Badri Raju"}
@@ -149,7 +149,7 @@ export default function About() {
           <div className="lg:col-span-5 space-y-6">
             
             {/* Education Card */}
-            <div className="p-7 rounded-2xl bg-[#1C1C1C] border border-[#303030] relative overflow-hidden shadow-xl shadow-black/40">
+            <div className="p-5 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#303030] relative overflow-hidden shadow-xl shadow-black/40">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF7A18]/10 rounded-full blur-2xl pointer-events-none" />
 
               <div className="flex items-center gap-3 text-[#FF7A18] font-mono text-xs font-bold uppercase tracking-wider mb-4">
@@ -176,7 +176,7 @@ export default function About() {
                 </div>
               </div>
 
-              <p className="text-[#FAFAFA] text-xs sm:text-sm leading-relaxed p-4 rounded-xl bg-white/[0.03] border border-white/5 mb-6">
+              <p className="text-[#FAFAFA] text-xs sm:text-sm leading-relaxed p-3.5 sm:p-4 rounded-xl bg-white/[0.03] border border-white/5 mb-6">
                 {education.focus}
               </p>
 
@@ -207,14 +207,14 @@ export default function About() {
             </div>
 
             {/* Direct Contact Teaser */}
-            <div className="p-6 rounded-2xl bg-[#1C1C1C] border border-[#303030] flex items-center justify-between shadow-xl shadow-black/40">
+            <div className="p-4 sm:p-6 rounded-2xl bg-[#1C1C1C] border border-[#303030] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5 shadow-xl shadow-black/40">
               <div>
-                <h5 className="text-sm font-bold text-[#FAFAFA] mb-1">Open to Opportunities</h5>
+                <h5 className="text-sm font-bold text-[#FAFAFA] mb-0.5 sm:mb-1">Open to Opportunities</h5>
                 <p className="text-xs text-[#A3A3A3]">Unity Developer &amp; Gameplay Programming roles</p>
               </div>
               <a
                 href="#contact"
-                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#FF7A18] hover:bg-[#FF9233] shadow-md shadow-[#FF7A18]/25 transition-all"
+                className="w-full sm:w-auto text-center px-4 py-2.5 sm:py-2 rounded-xl text-xs font-bold text-white bg-[#FF7A18] hover:bg-[#FF9233] shadow-md shadow-[#FF7A18]/25 transition-all"
               >
                 Get In Touch
               </a>

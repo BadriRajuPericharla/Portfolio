@@ -128,7 +128,7 @@ export default function Contact() {
           <div className="lg:col-span-5 space-y-6">
             
             {/* Primary Email Card */}
-            <div className="p-7 rounded-2xl bg-[#1C1C1C] border border-[#303030] space-y-4 shadow-xl shadow-black/40">
+            <div className="p-5 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#303030] space-y-4 shadow-xl shadow-black/40">
               <span className="text-xs font-mono font-semibold text-[#FF7A18] uppercase tracking-wider block">
                 Primary Contact
               </span>
@@ -139,7 +139,7 @@ export default function Contact() {
                 Feel free to message me regarding open positions, code reviews, or gameplay programming discussions.
               </p>
 
-              <div className="p-3.5 rounded-xl bg-[#141414] border border-[#303030] flex items-center justify-between gap-2">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-[#141414] border border-[#303030] flex items-center justify-between gap-2">
                 <span className="text-xs sm:text-sm font-mono text-[#FAFAFA] truncate select-all">
                   {email || 'bhagavanpericharla@gmail.com'}
                 </span>
@@ -166,7 +166,7 @@ export default function Contact() {
             </div>
 
             {/* Social & Professional Gateways */}
-            <div className="p-7 rounded-2xl bg-[#1C1C1C] border border-[#303030] space-y-3 shadow-xl shadow-black/40">
+            <div className="p-5 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#303030] space-y-3 shadow-xl shadow-black/40">
               <span className="text-xs font-mono font-semibold text-[#FF7A18] uppercase tracking-wider block mb-2">
                 Developer Gateways
               </span>
@@ -260,7 +260,7 @@ export default function Contact() {
 
           {/* Right Column: Direct Seamless Email Sender (7 cols) */}
           <div className="lg:col-span-7">
-            <div className="p-7 sm:p-9 rounded-2xl bg-[#1C1C1C] border border-[#303030] shadow-xl shadow-black/40 relative">
+            <div className="p-5 sm:p-9 rounded-2xl bg-[#1C1C1C] border border-[#303030] shadow-xl shadow-black/40 relative">
               <div className="flex items-center gap-2 text-[#FF7A18] font-mono text-xs font-bold uppercase tracking-wider mb-2">
                 <MessageSquare className="w-4 h-4" />
                 <span>Direct Message Delivery</span>

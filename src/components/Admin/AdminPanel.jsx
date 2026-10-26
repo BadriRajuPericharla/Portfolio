@@ -517,23 +517,50 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
         </div>
 
         {/* Top Actions */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3">
+          {/* Device Session Status Pill */}
+          <div 
+            className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono border"
+            style={{
+              backgroundColor: typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') === 'true'
+                ? 'rgba(16, 185, 129, 0.1)'
+                : 'rgba(245, 158, 11, 0.1)',
+              borderColor: typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') === 'true'
+                ? 'rgba(16, 185, 129, 0.3)'
+                : 'rgba(245, 158, 11, 0.3)',
+              color: typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') === 'true'
+                ? '#34D399'
+                : '#FBBF24'
+            }}
+            title={typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') === 'true'
+              ? 'Credentials saved on this browser (Will not ask on return)'
+              : 'One-time session only (Will ask credentials on next visit)'}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+            <span>
+              {typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') === 'true'
+                ? 'Device: Saved'
+                : 'Device: One-Time'}
+            </span>
+          </div>
+
           {/* Firebase Live Cloud Sync Button */}
           <button
             onClick={handleSyncAllToFirebase}
             disabled={isSyncingFirebase}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-amber-600 via-orange-600 to-amber-600 hover:from-amber-500 hover:to-orange-500 shadow-md shadow-orange-600/30 transition-all hover:scale-105 disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-amber-600 via-orange-600 to-amber-600 hover:from-amber-500 hover:to-orange-500 shadow-md shadow-orange-600/30 transition-all hover:scale-105 disabled:opacity-50"
             title="Sync all portfolio text, games, and media to Firebase real-time database"
           >
-            <Database className={`w-4 h-4 ${isSyncingFirebase ? 'animate-spin' : ''}`} />
-            <span>{isSyncingFirebase ? 'Syncing...' : 'Sync to Firebase'}</span>
+            <Database className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isSyncingFirebase ? 'animate-spin' : ''}`} />
+            <span className="hidden sm:inline">{isSyncingFirebase ? 'Syncing...' : 'Sync to Firebase'}</span>
+            <span className="sm:hidden">{isSyncingFirebase ? '...' : 'Sync'}</span>
           </button>
 
           <button
             onClick={onReturnHome}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/25 transition-all"
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/25 transition-all"
           >
-            <Eye className="w-4 h-4" />
+            <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">View Live Website</span>
           </button>
 
@@ -542,7 +569,7 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
             className="p-2 sm:px-3 sm:py-2 rounded-xl text-xs text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
             title="Reset All Content to Initial Defaults"
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline ml-1.5 font-mono">Reset</span>
           </button>
 
@@ -551,7 +578,7 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
             className="p-2 sm:px-3 sm:py-2 rounded-xl text-xs text-red-400 hover:text-red-300 bg-red-950/30 hover:bg-red-950/50 border border-red-500/20 transition-colors"
             title="Sign Out"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline ml-1.5 font-mono">Logout</span>
           </button>
         </div>
@@ -568,8 +595,8 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
       {/* Main Container */}
       <div className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
         
-        {/* Navigation Tabs */}
-        <div className="flex flex-wrap gap-2 border-b border-white/10 pb-4">
+        {/* Navigation Tabs (Horizontally scrollable with smooth touch on mobile) */}
+        <div className="flex flex-nowrap sm:flex-wrap gap-2 overflow-x-auto no-scrollbar border-b border-white/10 pb-3">
           {[
             { id: 'hero', label: 'Hero & Profile', icon: User },
             { id: 'games', label: 'Games & Projects', icon: Gamepad2, count: projects.length },
@@ -586,16 +613,16 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+                className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold shrink-0 transition-all ${
                   isActive
                     ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
                     : 'bg-[#111422] text-zinc-400 hover:text-white hover:bg-[#161B2E] border border-white/5'
                 }`}
               >
                 <Icon className="w-4 h-4" />
-                <span>{tab.label}</span>
+                <span className="whitespace-nowrap">{tab.label}</span>
                 {tab.count !== undefined && (
-                  <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-black/40 text-zinc-300">
+                  <span className="px-1.5 py-0.5 rounded-md text-[10px] font-mono bg-black/40 text-zinc-300">
                     {tab.count}
                   </span>
                 )}

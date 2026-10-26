@@ -114,7 +114,9 @@ export default function App() {
 
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('badri_admin_logged_in') === 'true';
+      const isLocal = localStorage.getItem('badri_admin_logged_in') === 'true';
+      const isSession = sessionStorage.getItem('badri_admin_logged_in') === 'true';
+      return isLocal || isSession;
     }
     return false;
   });
@@ -150,7 +152,10 @@ export default function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('badri_admin_logged_in');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('badri_admin_logged_in');
+      sessionStorage.removeItem('badri_admin_logged_in');
+    }
     setIsAdminLoggedIn(false);
   };
 

@@ -52,8 +52,8 @@ export default function FeaturedProjects({ onOpenDetails }) {
           </div>
         </div>
 
-        {/* Category Filter Tabs */}
-        <div className="flex flex-wrap items-center gap-2 mb-10 pb-2 border-b border-white/5">
+        {/* Category Filter Tabs (Swipeable on mobile) */}
+        <div className="flex flex-nowrap sm:flex-wrap items-center gap-2 mb-8 sm:mb-10 pb-3 border-b border-white/5 overflow-x-auto no-scrollbar">
           {uniqueCategories.map((cat) => {
             const count = cat === 'All' 
               ? projects.length 
@@ -64,7 +64,7 @@ export default function FeaturedProjects({ onOpenDetails }) {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all ${
+                className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium shrink-0 transition-all ${
                   isActive
                     ? 'bg-[#FF7A18] text-white shadow-md shadow-[#FF7A18]/25'
                     : 'bg-[#1C1C1C] text-[#A3A3A3] hover:text-[#FAFAFA] hover:bg-[#262626] border border-white/5'

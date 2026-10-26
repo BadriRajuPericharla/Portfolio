@@ -1,5 +1,5 @@
 import React from 'react';
-import { Gamepad2, ArrowUp, Mail, Heart } from 'lucide-react';
+import { Gamepad2, ArrowUp, Mail, Heart, Lock } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, YoutubeIcon, ItchIcon } from './SocialIcons';
 import { usePortfolio } from '../context/PortfolioContext';
 
@@ -109,8 +109,21 @@ export default function Footer() {
 
         {/* Bottom Legal & Meta */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#A3A3A3] font-mono">
-          <div>
-            &copy; {new Date().getFullYear()} Pericharla Badri Raju. All rights reserved.
+          <div className="flex items-center gap-2">
+            <span>&copy; {new Date().getFullYear()} Pericharla Badri Raju. All rights reserved.</span>
+            <a
+              href="/admin"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/admin');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }}
+              className="inline-flex items-center gap-1 text-[#555555] hover:text-[#FF7A18] transition-colors p-1 rounded hover:bg-white/5"
+              title="Admin Portal Gate"
+              aria-label="Admin Portal Gate"
+            >
+              <Lock className="w-3 h-3" />
+            </a>
           </div>
 
           <div className="flex items-center gap-2">

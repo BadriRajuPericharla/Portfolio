@@ -175,6 +175,15 @@
   background: rgba(99, 102, 241, 0.55);
 }
 
+/* Hide scrollbar for clean horizontal mobile swipes */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* Respect user's reduced motion settings */
 @media (prefers-reduced-motion: reduce) {
   *,
