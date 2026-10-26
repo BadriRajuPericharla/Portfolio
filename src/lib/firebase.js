@@ -9,13 +9,6 @@ import {
   getDoc, 
   onSnapshot 
 } from 'firebase/firestore';
-import { 
-  getStorage, 
-  ref, 
-  uploadBytes, 
-  uploadString, 
-  getDownloadURL 
-} from 'firebase/storage';
 
 const FIREBASE_CONFIG_KEY = 'badri_firebase_config_v1';
 
@@ -89,52 +82,6 @@ export const getFirestoreDb = () => {
   }
 };
 
-// Get Firebase Storage instance
-export const getFirebaseStorage = () => {
-  const app = getFirebaseApp();
-  if (!app) return null;
-  try {
-    return getStorage(app);
-  } catch (err) {
-    console.error('Failed to get Firebase Storage:', err);
-    return null;
-  }
-};
-
-/**
- * Uploads an image (File, Blob, DataURL, or remote HTTP URL) to Firebase Storage
- * and returns the public download URL.
- */
-export const uploadImageToFirebase = async (storagePath, fileOrUrl) => {
-  const storage = getFirebaseStorage();
-  if (!storage) {
-    throw new Error('Firebase Storage is not initialized. Please configure Firebase first.');
-  }
-
-  const storageRef = ref(storage, storagePath);
-
-  if (typeof fileOrUrl === 'string') {
-    if (fileOrUrl.startsWith('data:image/')) {
-      // Data URL
-      await uploadString(storageRef, fileOrUrl, 'data_url');
-    } else if (fileOrUrl.startsWith('http://') || fileOrUrl.startsWith('https://')) {
-      // External image URL -> fetch as Blob and upload
-      const response = await fetch(fileOrUrl);
-      if (!response.ok) throw new Error(`Failed to fetch image from URL: ${response.statusText}`);
-      const blob = await response.blob();
-      await uploadBytes(storageRef, blob);
-    } else {
-      throw new Error('Unsupported image URL string format.');
-    }
-  } else if (fileOrUrl instanceof File || fileOrUrl instanceof Blob) {
-    await uploadBytes(storageRef, fileOrUrl);
-  } else {
-    throw new Error('Invalid file or image input provided.');
-  }
-
-  // Get and return the permanent public download URL
-  return await getDownloadURL(storageRef);
-};
 
 /**
  * Saves a document to Firestore under a specified collection and document ID.

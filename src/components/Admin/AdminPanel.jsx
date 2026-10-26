@@ -38,8 +38,7 @@ import { getSupabaseConfig, saveSupabaseConfig, getSupabaseClient } from '../../
 import {
   getFirebaseConfig,
   saveFirebaseConfig,
-  isFirebaseConfigured,
-  uploadImageToFirebase
+  isFirebaseConfigured
 } from '../../lib/firebase';
 
 export default function AdminPanel({ onReturnHome, onLogout }) {
@@ -420,38 +419,22 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
     }
     setIsProjectModalOpen(false);
 
-    // If Firebase is connected, upload image to Firebase Cloud Storage and sync!
+    // If Firebase is connected, sync to Firestore
     if (isFirebaseConfigured()) {
       (async () => {
         try {
           setIsSyncingFirebase(true);
-          let finalImg = newProjData.customImage;
-
-          if (uploadedImageFile) {
-            showNotification('Uploading game cover image to Firebase Cloud Storage...');
-            const downloadUrl = await uploadImageToFirebase(`projects/${targetId}.png`, uploadedImageFile);
-            finalImg = downloadUrl;
-            newProjData.customImage = finalImg;
+          const finalImg = projectForm.customImage || null;
+          newProjData.customImage = finalImg;
+          if (finalImg) {
             newProjData.mediaPlaceholders.imagePath = finalImg;
-          } else if (newProjData.customImage && (newProjData.customImage.startsWith('data:image/') || newProjData.customImage.startsWith('http://') || newProjData.customImage.startsWith('https://'))) {
-            if (!newProjData.customImage.includes('firebasestorage.googleapis.com')) {
-              showNotification('Syncing cover image to Firebase Cloud Storage...');
-              try {
-                const downloadUrl = await uploadImageToFirebase(`projects/${targetId}.png`, newProjData.customImage);
-                finalImg = downloadUrl;
-                newProjData.customImage = finalImg;
-                newProjData.mediaPlaceholders.imagePath = finalImg;
-              } catch (imgErr) {
-                console.warn('Could not upload image to Firebase Storage, keeping URL:', imgErr);
-              }
-            }
           }
 
-          updateProject(targetId, { customImage: finalImg, mediaPlaceholders: newProjData.mediaPlaceholders });
+          updateProject(targetId, newProjData);
           setUploadedImageFile(null);
-          showNotification('🔥 Saved & Synced to Firebase! Visible across all devices immediately.');
+          showNotification('🔥 Project saved & synced to Firestore!');
         } catch (err) {
-          alert('Saved locally, but Firebase sync failed: ' + err.message + '\n\nCheck your Firebase settings in the Firebase tab.');
+          alert('Saved locally, but Firestore sync failed: ' + err.message);
         } finally {
           setIsSyncingFirebase(false);
         }
@@ -1939,15 +1922,58 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
               </form>
             </div>
 
+            {/* Firestore Production Mode Security Rules Box */}
+            <div className="p-6 sm:p-8 rounded-2xl bg-[#101422] border border-amber-500/20 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                <div>
+                  <h4 className="text-base font-bold text-white flex items-center gap-2">
+                    <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                    <span>Firestore Production Mode Rules (Required for Read/Write)</span>
+                  </h4>
+                  <p className="text-xs text-zinc-400 mt-0.5">
+                    Because your Firestore database is in <strong>Production Mode</strong>, copy these rules into your Firebase Console:
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const rules = `rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /portfolio_data/{document=**} {\n      allow read: if true;\n      allow write: if true;\n    }\n  }\n}`;
+                    navigator.clipboard.writeText(rules);
+                    showNotification('Copied Firestore production rules to clipboard!');
+                  }}
+                  className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 transition-colors"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copy Rules</span>
+                </button>
+              </div>
+
+              <pre className="p-4 rounded-xl bg-[#080B12] border border-white/10 text-amber-300 font-mono text-xs overflow-x-auto leading-relaxed">
+{`rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /portfolio_data/{document=**} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}`}
+              </pre>
+
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                📍 Where to paste: In <a href="https://console.firebase.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-400 underline font-semibold">Firebase Console</a> &gt; <strong>Firestore Database</strong> &gt; click the <strong>Rules</strong> tab &gt; paste the above code &gt; click <strong>Publish</strong>.
+              </p>
+            </div>
+
             {/* Quick 2-Minute Firebase Setup Guide */}
             <div className="p-6 sm:p-8 rounded-2xl bg-[#0B0E18] border border-white/10 space-y-6">
               <div>
                 <h4 className="text-lg font-bold text-white flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-amber-400" />
-                  <span>How to Set Up Free Firebase in 2 Minutes:</span>
+                  <span>How to Connect Your Existing Firestore Database:</span>
                 </h4>
                 <p className="text-xs text-zinc-400 mt-1">
-                  Google Firebase is completely free and takes 2 minutes to create:
+                  No storage needed — all game covers and media use direct online links:
                 </p>
               </div>
 
@@ -1956,9 +1982,9 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
                   <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold text-xs flex items-center justify-center">
                     1
                   </div>
-                  <h5 className="text-sm font-bold text-white">Create Firebase Project</h5>
+                  <h5 className="text-sm font-bold text-white">Publish Production Rules</h5>
                   <p className="text-xs text-zinc-400 leading-relaxed">
-                    Go to <a href="https://console.firebase.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-400 underline inline-flex items-center gap-1 font-semibold">console.firebase.google.com <ExternalLink className="w-3 h-3" /></a>, sign in with your Google account, and click <strong>Add project</strong>.
+                    In your Firebase Console, open <strong>Firestore Database</strong> &gt; <strong>Rules</strong> tab, paste the rules from the green box above, and click <strong>Publish</strong>.
                   </p>
                 </div>
 
@@ -1966,9 +1992,9 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
                   <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold text-xs flex items-center justify-center">
                     2
                   </div>
-                  <h5 className="text-sm font-bold text-white">Enable Firestore &amp; Storage</h5>
+                  <h5 className="text-sm font-bold text-white">Copy Web App Config</h5>
                   <p className="text-xs text-zinc-400 leading-relaxed">
-                    Under <strong>Build</strong>, click <strong>Firestore Database</strong> &gt; Create Database (choose Test Mode). Then click <strong>Storage</strong> &gt; Get started (choose Test Mode).
+                    Click <strong>Project Settings</strong> (gear icon ⚙️) &gt; <strong>General</strong> &gt; scroll to <strong>Your apps</strong> &gt; copy your <code className="text-white bg-black/40 px-1 py-0.5 rounded">firebaseConfig</code> code snippet.
                   </p>
                 </div>
 
@@ -1976,9 +2002,9 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
                   <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold text-xs flex items-center justify-center">
                     3
                   </div>
-                  <h5 className="text-sm font-bold text-white">Register Web App &amp; Paste</h5>
+                  <h5 className="text-sm font-bold text-white">Paste &amp; Real-Time Live</h5>
                   <p className="text-xs text-zinc-400 leading-relaxed">
-                    Go to <strong>Project Settings</strong> (gear icon) &gt; <strong>General</strong> &gt; click the Web icon <code className="text-white bg-black/40 px-1 py-0.5 rounded">&lt;/&gt;</code>, copy the config snippet, and paste it into the box above!
+                    Paste the snippet in the box above and click <strong>Save &amp; Connect</strong>. Any text or game cover links you edit will now sync in real time worldwide!
                   </p>
                 </div>
               </div>
