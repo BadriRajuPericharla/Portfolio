@@ -160,7 +160,7 @@ export default function Hero() {
           <a
             href="#projects"
             onClick={(e) => handleScrollTo(e, '#projects')}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-[#FF7A18] via-[#FF9233] to-[#FF7A18] hover:opacity-95 shadow-xl shadow-[#FF7A18]/25 border border-[#FF7A18]/50 transition-all hover:-translate-y-0.5 active:translate-y-0"
+            className="btn-hero-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white cursor-pointer"
           >
             <Gamepad2 className="w-4 h-4" />
             <span>Explore My Games</span>

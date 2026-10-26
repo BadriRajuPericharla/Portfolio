@@ -36,20 +36,18 @@ export default function AdminLogin({ onLoginSuccess, onReturnHome }) {
   };
 
   const handleConfirmSave = (saveOnDevice) => {
-    if (saveOnDevice) {
-      // User chose YES: Persist in localStorage so future visits DO NOT ask for credentials
-      if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {
+      if (saveOnDevice) {
+        // User chose YES: Persist in localStorage so future visits DO NOT ask for credentials
         localStorage.setItem('badri_admin_logged_in', 'true');
         sessionStorage.removeItem('badri_admin_logged_in');
-      }
-    } else {
-      // User chose NO: Persist only in sessionStorage so next visit WILL ask for credentials again
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('badri_admin_logged_in', 'true');
+      } else {
+        // User chose NO: Do NOT save credentials anywhere (remove from both localStorage and sessionStorage)
         localStorage.removeItem('badri_admin_logged_in');
+        sessionStorage.removeItem('badri_admin_logged_in');
       }
     }
-    onLoginSuccess();
+    onLoginSuccess(saveOnDevice);
   };
 
   return (

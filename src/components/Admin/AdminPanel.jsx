@@ -308,6 +308,29 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
     accentColor: '#6366F1'
   });
 
+  const [isDeviceSaved, setIsDeviceSaved] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('badri_admin_logged_in') === 'true';
+    }
+    return false;
+  });
+
+  const handleToggleDeviceSave = () => {
+    if (typeof window !== 'undefined') {
+      if (isDeviceSaved) {
+        localStorage.removeItem('badri_admin_logged_in');
+        sessionStorage.removeItem('badri_admin_logged_in');
+        setIsDeviceSaved(false);
+        showNotification('🔒 Device forgotten: Credentials will be required next time.');
+      } else {
+        localStorage.setItem('badri_admin_logged_in', 'true');
+        sessionStorage.removeItem('badri_admin_logged_in');
+        setIsDeviceSaved(true);
+        showNotification('✅ Credentials saved on this device for future visits.');
+      }
+    }
+  };
+
   const showNotification = (msg) => {
     setNotification(msg);
     setTimeout(() => setNotification(''), 3000);
@@ -520,31 +543,33 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
 
         {/* Top Actions */}
         <div className="flex items-center gap-1.5 sm:gap-3">
-          {/* Device Session Status Pill */}
-          <div 
-            className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono border"
+          {/* Device Session Status Toggle Pill */}
+          <button 
+            type="button"
+            onClick={handleToggleDeviceSave}
+            className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono border transition-all hover:scale-105 cursor-pointer"
             style={{
-              backgroundColor: typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') === 'true'
+              backgroundColor: isDeviceSaved
                 ? 'rgba(16, 185, 129, 0.1)'
                 : 'rgba(245, 158, 11, 0.1)',
-              borderColor: typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') === 'true'
+              borderColor: isDeviceSaved
                 ? 'rgba(16, 185, 129, 0.3)'
                 : 'rgba(245, 158, 11, 0.3)',
-              color: typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') === 'true'
+              color: isDeviceSaved
                 ? '#34D399'
                 : '#FBBF24'
             }}
-            title={typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') === 'true'
-              ? 'Credentials saved on this browser (Will not ask on return)'
-              : 'One-time session only (Will ask credentials on next visit)'}
+            title={isDeviceSaved
+              ? 'Credentials saved on this browser. Click to forget this device and require credentials next time.'
+              : 'One-time session only. Click to save credentials on this browser.'}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
             <span>
-              {typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') === 'true'
-                ? 'Device: Saved'
-                : 'Device: One-Time'}
+              {isDeviceSaved
+                ? 'Device: Saved (Click to Forget)'
+                : 'Device: One-Time (Click to Save)'}
             </span>
-          </div>
+          </button>
 
           {/* Firebase Live Cloud Sync Button */}
           <button

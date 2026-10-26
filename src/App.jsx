@@ -114,9 +114,8 @@ export default function App() {
 
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
     if (typeof window !== 'undefined') {
-      const isLocal = localStorage.getItem('badri_admin_logged_in') === 'true';
-      const isSession = sessionStorage.getItem('badri_admin_logged_in') === 'true';
-      return isLocal || isSession;
+      // ONLY auto-login if the user explicitly chose YES (saved in localStorage)
+      return localStorage.getItem('badri_admin_logged_in') === 'true';
     }
     return false;
   });
@@ -126,9 +125,17 @@ export default function App() {
     const handleLocationChange = () => {
       const path = window.location.pathname.toLowerCase();
       const hash = window.location.hash.toLowerCase();
-      if (path.includes('/admin') || hash === '#admin') {
+      const isAdmin = path.includes('/admin') || hash === '#admin';
+      if (isAdmin) {
+        // If not saved permanently, reset login state so it asks for credentials
+        if (typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') !== 'true') {
+          setIsAdminLoggedIn(false);
+        }
         setCurrentRoute('admin');
       } else {
+        if (typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') !== 'true') {
+          setIsAdminLoggedIn(false);
+        }
         setCurrentRoute('home');
       }
     };
@@ -139,11 +146,19 @@ export default function App() {
 
   const navigateToAdmin = () => {
     window.history.pushState({}, '', '/admin');
+    // If not saved permanently, navigating to admin must ask for credentials again
+    if (typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') !== 'true') {
+      setIsAdminLoggedIn(false);
+    }
     setCurrentRoute('admin');
   };
 
   const navigateToHome = () => {
     window.history.pushState({}, '', '/');
+    // If not saved permanently, leaving the admin panel terminates the session immediately
+    if (typeof window !== 'undefined' && localStorage.getItem('badri_admin_logged_in') !== 'true') {
+      setIsAdminLoggedIn(false);
+    }
     setCurrentRoute('home');
   };
 

@@ -50,9 +50,9 @@ export default function InteractiveCanvas() {
       nodes.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        size: Math.random() * 2 + 1.2,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        size: Math.random() * 0.8 + 0.8,
         color: i % 3 === 0 ? 'rgba(255, 122, 24, ' : i % 3 === 1 ? 'rgba(255, 200, 87, ' : 'rgba(250, 250, 250, '
       });
     }
@@ -138,8 +138,8 @@ export default function InteractiveCanvas() {
           ctx.stroke();
         }
 
-        // Node dot
-        ctx.fillStyle = `${n.color}0.7)`;
+        // Node dot - subtle ambient star vertex
+        ctx.fillStyle = `${n.color}0.22)`;
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2);
         ctx.fill();

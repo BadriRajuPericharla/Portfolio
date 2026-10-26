@@ -432,6 +432,8 @@ export function PortfolioProvider({ children }) {
       document.documentElement.style.setProperty('--color-text-main', activePalette.textMain || '#FAFAFA');
       document.documentElement.style.setProperty('--color-text-muted', activePalette.textMuted || '#A3A3A3');
       document.documentElement.style.setProperty('--color-border-accent', `${activePalette.primary}59`);
+      document.documentElement.style.setProperty('--color-glow', `${activePalette.primary}80`);
+      document.documentElement.style.setProperty('--color-glow-ambient', `${activePalette.secondary}4D`);
 
       // Inject comprehensive dynamic palette CSS overrides to transform site to chosen developer palette
       let dynamicStyleEl = document.getElementById('portfolio-dynamic-palette');
@@ -448,6 +450,8 @@ export function PortfolioProvider({ children }) {
           --color-accent: ${activePalette.accent};
           --color-bg: ${activePalette.bg};
           --color-surface: ${activePalette.surface || '#1C1C1C'};
+          --color-glow: ${activePalette.primary}80;
+          --color-glow-ambient: ${activePalette.secondary}4D;
         }
         
         body, html {
@@ -523,23 +527,6 @@ export function PortfolioProvider({ children }) {
         }
         .bg-\\[\\#FF7A18\\]\\/35 {
           background-color: ${activePalette.primary}59 !important;
-        }
-        .from-\\[\\#FF7A18\\] {
-          --tw-gradient-from: ${activePalette.primary} var(--tw-gradient-from-position, 0%) !important;
-          --tw-gradient-to: ${activePalette.primary}00 var(--tw-gradient-to-position, 100%) !important;
-          --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
-        }
-        .via-\\[\\#FF9233\\] {
-          --tw-gradient-stops: var(--tw-gradient-from), ${activePalette.secondary} var(--tw-gradient-via-position, 50%), var(--tw-gradient-to) !important;
-        }
-        .to-\\[\\#FFC857\\] {
-          --tw-gradient-to: ${activePalette.secondary} var(--tw-gradient-to-position, 100%) !important;
-        }
-        .to-\\[\\#FF7A18\\] {
-          --tw-gradient-to: ${activePalette.primary} var(--tw-gradient-to-position, 100%) !important;
-        }
-        .to-\\[\\#FF9233\\] {
-          --tw-gradient-to: ${activePalette.secondary} var(--tw-gradient-to-position, 100%) !important;
         }
       `;
     }

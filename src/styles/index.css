@@ -121,6 +121,35 @@
   box-shadow: 0 10px 30px -10px rgba(255, 122, 24, 0.35);
 }
 
+/* Hero Primary CTA - Perfect Studio Luminous Glow */
+.btn-hero-primary {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 
+    0 4px 18px -2px var(--color-glow, rgba(255, 122, 24, 0.48)),
+    0 0 12px 0 var(--color-glow-ambient, rgba(255, 122, 24, 0.28)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease !important;
+}
+
+.btn-hero-primary:hover {
+  filter: brightness(1.06) !important;
+  box-shadow: 
+    0 6px 26px -1px var(--color-glow, rgba(255, 122, 24, 0.72)),
+    0 0 20px 2px var(--color-glow-ambient, rgba(255, 122, 24, 0.42)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-hero-primary:active {
+  transform: translateY(0) !important;
+  filter: brightness(0.98) !important;
+}
+
 .card-glow-amber {
   box-shadow: 0 10px 30px -10px rgba(255, 200, 87, 0.3);
 }
