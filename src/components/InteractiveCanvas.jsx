@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react';
 
 /**
  * InteractiveCanvas:
- * Renders a subtle, high-performance 3D perspective coordinate grid & geometric nodes
+ * Renders a subtle, calm 3D perspective coordinate grid & geometric nodes
  * symbolizing game world architecture and spatial coordinate systems.
- * Pauses automatically when out of viewport or when prefers-reduced-motion is active.
+ * Calibrated with soft, non-intrusive intensity so it never overpowers text.
  */
 export default function InteractiveCanvas() {
   const canvasRef = useRef(null);
@@ -16,7 +16,6 @@ export default function InteractiveCanvas() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Check prefers-reduced-motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let animationFrameId;
@@ -61,17 +60,17 @@ export default function InteractiveCanvas() {
       return fallback;
     };
 
-    // Node particle system representing 3D vertices
-    const nodeCount = 38;
+    // Node particle system representing 3D vertices (calibrated for calm, subtle ambience)
+    const nodeCount = 20;
     const nodes = [];
 
     for (let i = 0; i < nodeCount; i++) {
       nodes.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        size: Math.random() * 0.8 + 0.8,
+        vx: (Math.random() - 0.5) * 0.2,
+        vy: (Math.random() - 0.5) * 0.2,
+        size: Math.random() * 0.6 + 0.6,
         type: i % 3
       });
     }
@@ -89,21 +88,21 @@ export default function InteractiveCanvas() {
       const secondaryRgb = hexToRgb(secondaryHex, '255, 200, 87');
 
       // Smooth mouse lerp
-      mouse.x += (mouse.targetX - mouse.x) * 0.05;
-      mouse.y += (mouse.targetY - mouse.y) * 0.05;
+      mouse.x += (mouse.targetX - mouse.x) * 0.04;
+      mouse.y += (mouse.targetY - mouse.y) * 0.04;
 
-      time += 0.008;
+      time += 0.005;
 
-      // Draw subtle horizon perspective grid
-      const gridHorizon = height * 0.65;
+      // Draw subtle horizon perspective grid (very low intensity)
+      const gridHorizon = height * 0.68;
       const fovCenter = mouse.x;
 
       ctx.save();
-      ctx.strokeStyle = `rgba(${primaryRgb}, 0.04)`;
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = `rgba(${primaryRgb}, 0.025)`;
+      ctx.lineWidth = 0.8;
 
       // Perspective lines converging toward horizon
-      for (let x = -width * 0.5; x <= width * 1.5; x += 70) {
+      for (let x = -width * 0.3; x <= width * 1.3; x += 90) {
         ctx.beginPath();
         ctx.moveTo(x, height);
         ctx.lineTo(fovCenter + (x - fovCenter) * 0.1, gridHorizon);
@@ -111,7 +110,7 @@ export default function InteractiveCanvas() {
       }
 
       // Horizontal perspective steps
-      for (let y = gridHorizon; y <= height; y += (y - gridHorizon) * 0.35 + 10) {
+      for (let y = gridHorizon; y <= height; y += (y - gridHorizon) * 0.4 + 14) {
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(width, y);
@@ -133,17 +132,17 @@ export default function InteractiveCanvas() {
           if (n.y > height) n.y = 0;
         }
 
-        // Draw connections between nearby nodes
+        // Draw connections between nearby nodes (subtle)
         for (let j = i + 1; j < nodeCount; j++) {
           const n2 = nodes[j];
           const dx = n.x - n2.x;
           const dy = n.y - n2.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 130) {
-            const alpha = (1 - dist / 130) * 0.12;
+          if (dist < 110) {
+            const alpha = (1 - dist / 110) * 0.08;
             ctx.strokeStyle = `rgba(${primaryRgb}, ${alpha})`;
-            ctx.lineWidth = 0.8;
+            ctx.lineWidth = 0.6;
             ctx.beginPath();
             ctx.moveTo(n.x, n.y);
             ctx.lineTo(n2.x, n2.y);
@@ -151,12 +150,12 @@ export default function InteractiveCanvas() {
           }
         }
 
-        // Mouse interaction attraction
+        // Mouse interaction attraction (subtle)
         const mdx = mouse.x - n.x;
         const mdy = mouse.y - n.y;
         const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
-        if (mDist < 160 && !prefersReducedMotion) {
-          const mAlpha = (1 - mDist / 160) * 0.25;
+        if (mDist < 130 && !prefersReducedMotion) {
+          const mAlpha = (1 - mDist / 130) * 0.15;
           ctx.strokeStyle = `rgba(${secondaryRgb}, ${mAlpha})`;
           ctx.beginPath();
           ctx.moveTo(n.x, n.y);
@@ -164,9 +163,9 @@ export default function InteractiveCanvas() {
           ctx.stroke();
         }
 
-        // Node dot - subtle ambient star vertex
+        // Node dot
         const nodeRgb = n.type === 0 ? primaryRgb : n.type === 1 ? secondaryRgb : '250, 250, 250';
-        ctx.fillStyle = `rgba(${nodeRgb}, 0.22)`;
+        ctx.fillStyle = `rgba(${nodeRgb}, 0.16)`;
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2);
         ctx.fill();
@@ -189,7 +188,7 @@ export default function InteractiveCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none opacity-85"
+      className="absolute inset-0 w-full h-full pointer-events-none opacity-30"
       aria-hidden="true"
     />
   );

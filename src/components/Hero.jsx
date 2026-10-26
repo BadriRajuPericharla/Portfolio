@@ -110,40 +110,37 @@ export default function Hero() {
       {/* Interactive 3D Coordinate Grid & Constellation Canvas */}
       <InteractiveCanvas />
 
-      {/* Atmospheric Studio Glows (Dynamically reactive to active palette with subtle floating parallax) */}
+      {/* Atmospheric Studio Glows (Calibrated for subtle, elegant ambience) */}
       <div 
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-[140px] pointer-events-none transition-all duration-500 opacity-20 animate-float-slow"
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full blur-[150px] pointer-events-none transition-all duration-500 opacity-[0.08] animate-float-slow"
         style={{
           background: 'radial-gradient(circle, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FFC857) 40%, transparent 70%)'
         }}
       />
       <div 
-        className="absolute bottom-16 left-1/3 w-[500px] h-[500px] rounded-full blur-[130px] pointer-events-none transition-all duration-500 opacity-15 animate-float-delayed"
+        className="absolute bottom-16 left-1/3 w-[450px] h-[450px] rounded-full blur-[140px] pointer-events-none transition-all duration-500 opacity-[0.06] animate-float-delayed"
         style={{
           background: 'radial-gradient(circle, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 50%, transparent 70%)'
         }}
       />
 
-      {/* Floating Decorative Game Dev Badges (Desktop/Large Screens) */}
+      {/* Floating Decorative Game Dev Badges (Desktop/Large Screens - Subtle & Non-Intrusive) */}
       <div 
-        className="hidden xl:flex absolute left-6 lg:left-12 top-1/3 -translate-y-1/2 items-center gap-3 p-3.5 pr-5 rounded-2xl bg-[#1C1C1C]/85 border border-white/10 backdrop-blur-md shadow-2xl animate-float-slow z-20 pointer-events-none select-none"
-        style={{
-          boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 20px -5px var(--color-glow-ambient, rgba(255, 122, 24, 0.2))'
-        }}
+        className="hidden xl:flex absolute left-6 lg:left-12 top-1/3 -translate-y-1/2 items-center gap-2.5 p-3 pr-4 rounded-xl bg-[#1C1C1C]/75 border border-white/5 backdrop-blur-md shadow-xl animate-float-slow z-20 pointer-events-none select-none opacity-80"
       >
         <div 
-          className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border"
+          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border"
           style={{
             background: 'rgba(255, 255, 255, 0.04)',
-            borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.4))',
+            borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.3))',
             color: 'var(--color-primary, #FF7A18)'
           }}
         >
-          <Gamepad2 className="w-5 h-5" />
+          <Gamepad2 className="w-4 h-4" />
         </div>
         <div className="text-left">
           <div className="text-xs font-bold text-white font-display">Unity 2D &amp; 3D</div>
-          <div className="text-[10px] font-mono text-emerald-400 flex items-center gap-1.5">
+          <div className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span>Gameplay Systems</span>
           </div>
@@ -151,20 +148,17 @@ export default function Hero() {
       </div>
 
       <div 
-        className="hidden xl:flex absolute right-6 lg:right-12 top-1/3 -translate-y-1/2 items-center gap-3 p-3.5 pr-5 rounded-2xl bg-[#1C1C1C]/85 border border-white/10 backdrop-blur-md shadow-2xl animate-float-delayed z-20 pointer-events-none select-none"
-        style={{
-          boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 20px -5px var(--color-glow-ambient, rgba(255, 122, 24, 0.2))'
-        }}
+        className="hidden xl:flex absolute right-6 lg:right-12 top-1/3 -translate-y-1/2 items-center gap-2.5 p-3 pr-4 rounded-xl bg-[#1C1C1C]/75 border border-white/5 backdrop-blur-md shadow-xl animate-float-delayed z-20 pointer-events-none select-none opacity-80"
       >
         <div 
-          className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border"
+          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border"
           style={{
             background: 'rgba(255, 255, 255, 0.04)',
-            borderColor: 'var(--color-border-accent, rgba(255, 200, 87, 0.4))',
+            borderColor: 'var(--color-border-accent, rgba(255, 200, 87, 0.3))',
             color: 'var(--color-secondary, #FFC857)'
           }}
         >
-          <Code className="w-5 h-5" />
+          <Code className="w-4 h-4" />
         </div>
         <div className="text-left">
           <div className="text-xs font-bold text-white font-display">C# Architecture</div>

@@ -5,7 +5,7 @@ import { useEffect } from 'react';
  * 
  * High-performance, lightweight IntersectionObserver that brings smooth,
  * professional entrance animations as sections and elements appear while scrolling.
- * Inspires motion quality from top portfolios (AOS-style cubic-bezier transitions).
+ * Re-triggers smoothly when scrolling back and forth across sections.
  */
 export function useScrollReveal(dependencies = []) {
   useEffect(() => {
@@ -32,18 +32,23 @@ export function useScrollReveal(dependencies = []) {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-revealed');
-            observer.unobserve(entry.target);
+          } else {
+            // Reset when element scrolls out of viewport so it re-animates smoothly when scrolled again
+            const isHero = entry.target.closest('#home');
+            if (!isHero || window.scrollY > 300) {
+              entry.target.classList.remove('is-revealed');
+            }
           }
         });
       },
       {
-        threshold: 0.12,
-        rootMargin: '0px 0px -40px 0px'
+        threshold: 0.08,
+        rootMargin: '0px 0px -30px 0px'
       }
     );
 
     const observeElements = () => {
-      const elements = document.querySelectorAll('[data-reveal]:not(.is-revealed)');
+      const elements = document.querySelectorAll('[data-reveal]');
       elements.forEach((el) => observer.observe(el));
     };
 

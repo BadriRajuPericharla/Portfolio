@@ -11,9 +11,9 @@
     --color-text-main: #FAFAFA;
     --color-text-muted: #A3A3A3;
     --color-border: rgba(255, 255, 255, 0.08);
-    --color-border-accent: rgba(255, 122, 24, 0.35);
-    --color-glow: rgba(255, 122, 24, 0.45);
-    --color-glow-ambient: rgba(255, 122, 24, 0.25);
+    --color-border-accent: rgba(255, 122, 24, 0.3);
+    --color-glow: rgba(255, 122, 24, 0.28);
+    --color-glow-ambient: rgba(255, 122, 24, 0.12);
   }
 
   html {
