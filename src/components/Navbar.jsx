@@ -143,7 +143,7 @@ export default function Navbar({ onNavigateAdmin }) {
             <a
               href={resumeData.url}
               download={resumeData.name}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#FF7A18] to-[#FF9233] hover:opacity-95 shadow-md shadow-[#FF7A18]/25 border border-[#FF7A18]/40 transition-all hover:-translate-y-0.5"
+              className="btn-palette-primary inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white shadow-md transition-all cursor-pointer"
               title="Download Resume (PDF)"
             >
               <FileDown className="w-4 h-4" />
@@ -154,7 +154,7 @@ export default function Navbar({ onNavigateAdmin }) {
             <a
               href={cvData?.url || resumeData.url}
               download={cvData?.name || "Badri_Raju_CV.pdf"}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#FAFAFA] bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] hover:border-[#FFC857]/50 hover:text-[#FFC857] shadow-sm transition-all hover:-translate-y-0.5"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#FAFAFA] bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] hover:border-[#FFC857]/50 hover:text-[#FFC857] shadow-sm transition-all hover:-translate-y-0.5 cursor-pointer"
               title="Download Curriculum Vitae (CV)"
             >
               <FileDown className="w-4 h-4 text-[#FFC857]" />
@@ -167,7 +167,11 @@ export default function Navbar({ onNavigateAdmin }) {
             <a
               href={resumeData.url}
               download={resumeData.name}
-              className="inline-flex sm:hidden items-center justify-center p-2 rounded-lg text-white bg-[#FF7A18] hover:bg-[#E86A0E] text-xs font-medium"
+              className="inline-flex sm:hidden items-center justify-center p-2 rounded-lg text-white text-xs font-medium transition-all"
+              style={{
+                background: 'var(--color-primary, #FF7A18)',
+                boxShadow: '0 2px 10px var(--color-glow, rgba(255, 122, 24, 0.35))'
+              }}
               title="Download Resume"
               aria-label="Download Resume"
             >
@@ -215,7 +219,7 @@ export default function Navbar({ onNavigateAdmin }) {
             <a
               href={resumeData.url}
               download={resumeData.name}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#FF7A18] to-[#FF9233] hover:opacity-95 transition-all shadow-md shadow-[#FF7A18]/25"
+              className="btn-palette-primary w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-white transition-all shadow-md cursor-pointer"
             >
               <FileDown className="w-4 h-4" />
               <span>Download Resume (PDF)</span>

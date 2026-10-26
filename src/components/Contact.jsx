@@ -249,7 +249,7 @@ export default function Contact() {
               <a
                 href={resumeData.url}
                 download={resumeData.name}
-                className="shrink-0 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#FFC857] bg-[#FF7A18]/15 border border-[#FF7A18]/30 hover:bg-[#FF7A18]/25 transition-colors"
+                className="btn-palette-primary shrink-0 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-white shadow-md transition-all cursor-pointer"
               >
                 <FileDown className="w-3.5 h-3.5" />
                 <span>Download</span>

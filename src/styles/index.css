@@ -150,6 +150,33 @@
   filter: brightness(0.98) !important;
 }
 
+/* Palette-reactive Primary Button (Resume & Action CTAs) */
+.btn-palette-primary {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  box-shadow: 
+    0 4px 14px -2px var(--color-glow, rgba(255, 122, 24, 0.45)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease !important;
+}
+
+.btn-palette-primary:hover {
+  filter: brightness(1.08) !important;
+  box-shadow: 
+    0 6px 20px -1px var(--color-glow, rgba(255, 122, 24, 0.65)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-palette-primary:active {
+  transform: translateY(0) !important;
+  filter: brightness(0.98) !important;
+}
+
 .card-glow-amber {
   box-shadow: 0 10px 30px -10px rgba(255, 200, 87, 0.3);
 }

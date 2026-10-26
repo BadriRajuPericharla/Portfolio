@@ -452,6 +452,7 @@ export function PortfolioProvider({ children }) {
           --color-surface: ${activePalette.surface || '#1C1C1C'};
           --color-glow: ${activePalette.primary}80;
           --color-glow-ambient: ${activePalette.secondary}4D;
+          --color-border-accent: ${activePalette.primary}59;
         }
         
         body, html {

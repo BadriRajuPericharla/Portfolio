@@ -123,10 +123,18 @@ export default function Hero() {
           <span>1 Game Published on Play Store</span>
         </div>
 
-        {/* PRIMARY FOCUS: Full Name with Selective Orange Highlighting */}
+        {/* PRIMARY FOCUS: Full Name with Selective Dynamic Palette Highlighting */}
         <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight font-display leading-[1.08] mb-3 sm:mb-4 select-none">
           <span className="text-[#FAFAFA]">{firstName} </span>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF7A18] via-[#FF9233] to-[#FFC857] drop-shadow-[0_4px_24px_rgba(255,122,24,0.35)]">
+          <span 
+            className="text-transparent bg-clip-text font-black transition-all duration-300 inline-block"
+            style={{
+              backgroundImage: `linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 50%, var(--color-accent, #FFC857) 100%)`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              filter: `drop-shadow(0 4px 24px var(--color-glow, rgba(255,122,24,0.35)))`
+            }}
+          >
             {remainingName}
           </span>
         </h1>

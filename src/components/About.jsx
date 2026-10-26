@@ -54,7 +54,13 @@ export default function About() {
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-7">
                 {/* Large Circular Profile Picture with Full Clarity */}
                 <div className="relative shrink-0 group">
-                  <div className="relative w-40 h-40 sm:w-56 sm:h-56 rounded-full p-1.5 bg-gradient-to-tr from-[#FF7A18] via-[#FF9233] to-[#FFC857] shadow-2xl shadow-[#FF7A18]/30 ring-4 ring-[#111111]">
+                  <div 
+                    className="relative w-40 h-40 sm:w-56 sm:h-56 rounded-full p-1.5 ring-4 ring-[#111111] transition-all duration-300"
+                    style={{
+                      background: `linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 50%, var(--color-accent, #FFC857) 100%)`,
+                      boxShadow: `0 20px 40px -10px var(--color-glow, rgba(255, 122, 24, 0.45))`
+                    }}
+                  >
                     <img
                       src={profile.avatarUrl || '/profile.jpg'}
                       alt={name || "Pericharla Badri Raju"}
@@ -65,7 +71,12 @@ export default function About() {
                     />
                   </div>
                   {/* Floating Availability Badge */}
-                  <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-[#111111] border border-[#FF7A18]/60 shadow-lg shadow-black/80 flex items-center gap-2 whitespace-nowrap z-10">
+                  <div 
+                    className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-[#111111] shadow-lg shadow-black/80 flex items-center gap-2 whitespace-nowrap z-10 border transition-colors duration-300"
+                    style={{
+                      borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.5))'
+                    }}
+                  >
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                     <span className="text-[11px] font-mono font-bold text-[#FAFAFA]">Open to Roles</span>
                   </div>
@@ -186,7 +197,7 @@ export default function About() {
                   <a
                     href={resumeData.url}
                     download={resumeData.name}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#FF7A18] to-[#FF9233] hover:opacity-95 shadow-md shadow-[#FF7A18]/25 border border-[#FF7A18]/40 transition-all hover:-translate-y-0.5 text-center"
+                    className="btn-palette-primary inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-white shadow-md transition-all text-center cursor-pointer"
                   >
                     <FileDown className="w-4 h-4 shrink-0" />
                     <span>Download Resume</span>
@@ -194,7 +205,7 @@ export default function About() {
                   <a
                     href={cvData?.url || resumeData.url}
                     download={cvData?.name || "Badri_Raju_CV.pdf"}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-[#FAFAFA] bg-[#141414] hover:bg-[#202020] border border-[#303030] hover:border-[#FFC857]/50 hover:text-[#FFC857] shadow-sm transition-all hover:-translate-y-0.5 text-center"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-[#FAFAFA] bg-[#141414] hover:bg-[#202020] border border-[#303030] hover:border-[#FFC857]/50 hover:text-[#FFC857] shadow-sm transition-all hover:-translate-y-0.5 text-center cursor-pointer"
                   >
                     <FileDown className="w-4 h-4 text-[#FFC857] shrink-0" />
                     <span>Download CV</span>
