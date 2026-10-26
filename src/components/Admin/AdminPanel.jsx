@@ -35,14 +35,12 @@ import {
 } from 'lucide-react';
 import { usePortfolio, availablePalettes, availableFonts } from '../../context/PortfolioContext';
 import { getSupabaseConfig, saveSupabaseConfig, getSupabaseClient } from '../../lib/supabase';
-import { GithubIcon } from '../SocialIcons';
 import {
-  getGitHubToken,
-  saveGitHubToken,
-  isGitHubTokenConfigured,
-  publishProjectsDataToGitHub,
-  uploadProjectImageToGitHub
-} from '../../lib/githubSync';
+  getFirebaseConfig,
+  saveFirebaseConfig,
+  isFirebaseConfigured,
+  uploadImageToFirebase
+} from '../../lib/firebase';
 
 export default function AdminPanel({ onReturnHome, onLogout }) {
   const {
@@ -83,38 +81,85 @@ export default function AdminPanel({ onReturnHome, onLogout }) {
   const [isSyncing, setIsSyncing] = useState(false);
   const [copiedSql, setCopiedSql] = useState(false);
 
-  // GitHub Auto-Publish State
-  const [githubToken, setGithubToken] = useState(() => getGitHubToken());
-  const [isGhConnected, setIsGhConnected] = useState(() => isGitHubTokenConfigured());
-  const [isPublishingGh, setIsPublishingGh] = useState(false);
+  // Firebase Cloud Sync State
+  const [firebaseForm, setFirebaseForm] = useState(() => {
+    const cfg = getFirebaseConfig();
+    return cfg || {
+      apiKey: '',
+      authDomain: '',
+      projectId: '',
+      storageBucket: '',
+      messagingSenderId: '',
+      appId: ''
+    };
+  });
+  const [firebaseRawSnippet, setFirebaseRawSnippet] = useState('');
+  const [isFirebaseConnected, setIsFirebaseConnected] = useState(() => isFirebaseConfigured());
+  const [isSyncingFirebase, setIsSyncingFirebase] = useState(false);
   const [uploadedImageFile, setUploadedImageFile] = useState(null);
 
-  const handleSaveGitHubToken = (e) => {
-    e.preventDefault();
-    saveGitHubToken(githubToken.trim());
-    const configured = isGitHubTokenConfigured();
-    setIsGhConnected(configured);
-    if (configured) {
-      showNotification('GitHub Access Token saved! Direct Auto-Publish is active.');
-    } else {
-      showNotification('GitHub Access Token removed.');
+  const handleSaveFirebase = (e) => {
+    if (e) e.preventDefault();
+    try {
+      let finalConfig = { ...firebaseForm };
+
+      // If user pasted a code snippet like "const firebaseConfig = { ... };" or raw JSON
+      if (firebaseRawSnippet.trim()) {
+        const text = firebaseRawSnippet.trim();
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try {
+            finalConfig = JSON.parse(jsonMatch[0]);
+          } catch {
+            const parseLoose = new Function(`return ${jsonMatch[0]};`);
+            finalConfig = parseLoose();
+          }
+        }
+      }
+
+      if (!finalConfig.apiKey || !finalConfig.projectId) {
+        alert('Please provide at least apiKey and projectId in your Firebase configuration.');
+        return;
+      }
+
+      saveFirebaseConfig(finalConfig);
+      setFirebaseForm(finalConfig);
+      setIsFirebaseConnected(true);
+      showNotification('🔥 Firebase connected! Real-time database & storage active.');
+    } catch (err) {
+      alert('Could not parse Firebase configuration: ' + err.message);
     }
   };
 
-  const handlePublishAllToGitHub = async () => {
-    if (!isGitHubTokenConfigured()) {
-      setActiveTab('github');
-      alert('Please enter your GitHub Personal Access Token first so the Admin Panel can commit to your repository.');
+  const handleDisconnectFirebase = () => {
+    saveFirebaseConfig(null);
+    setFirebaseForm({
+      apiKey: '',
+      authDomain: '',
+      projectId: '',
+      storageBucket: '',
+      messagingSenderId: '',
+      appId: ''
+    });
+    setFirebaseRawSnippet('');
+    setIsFirebaseConnected(false);
+    showNotification('Firebase disconnected.');
+  };
+
+  const handleSyncAllToFirebase = async () => {
+    if (!isFirebaseConfigured()) {
+      setActiveTab('firebase');
+      alert('Please connect Firebase first in the Firebase tab.');
       return;
     }
-    setIsPublishingGh(true);
+    setIsSyncingFirebase(true);
     try {
-      await publishProjectsDataToGitHub(projects);
-      showNotification('🚀 Success! Pushed to GitHub repository. Netlify is auto-deploying to all devices in ~30s.');
+      await syncAllToCloud();
+      showNotification('🔥 All portfolio projects, text matter, and settings synced to Firebase!');
     } catch (err) {
-      alert('Publish to GitHub failed: ' + err.message + '\n\nPlease ensure your GitHub token has "repo" permission.');
+      alert('Firebase sync error: ' + err.message);
     } finally {
-      setIsPublishingGh(false);
+      setIsSyncingFirebase(false);
     }
   };
 
@@ -375,42 +420,40 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
     }
     setIsProjectModalOpen(false);
 
-    // If GitHub Token is connected, commit directly to GitHub repository!
-    if (isGitHubTokenConfigured()) {
+    // If Firebase is connected, upload image to Firebase Cloud Storage and sync!
+    if (isFirebaseConfigured()) {
       (async () => {
         try {
-          setIsPublishingGh(true);
+          setIsSyncingFirebase(true);
           let finalImg = newProjData.customImage;
 
           if (uploadedImageFile) {
-            showNotification('Uploading game cover image to GitHub repository...');
-            await uploadProjectImageToGitHub(targetId, uploadedImageFile);
-            finalImg = `/projects/${targetId}.png`;
+            showNotification('Uploading game cover image to Firebase Cloud Storage...');
+            const downloadUrl = await uploadImageToFirebase(`projects/${targetId}.png`, uploadedImageFile);
+            finalImg = downloadUrl;
             newProjData.customImage = finalImg;
             newProjData.mediaPlaceholders.imagePath = finalImg;
           } else if (newProjData.customImage && (newProjData.customImage.startsWith('data:image/') || newProjData.customImage.startsWith('http://') || newProjData.customImage.startsWith('https://'))) {
-            showNotification('Syncing image to GitHub repository...');
-            try {
-              await uploadProjectImageToGitHub(targetId, newProjData.customImage);
-              finalImg = `/projects/${targetId}.png`;
-              newProjData.customImage = finalImg;
-              newProjData.mediaPlaceholders.imagePath = finalImg;
-            } catch (imgErr) {
-              console.warn('Could not upload image to GitHub directly, saving original URL:', imgErr);
+            if (!newProjData.customImage.includes('firebasestorage.googleapis.com')) {
+              showNotification('Syncing cover image to Firebase Cloud Storage...');
+              try {
+                const downloadUrl = await uploadImageToFirebase(`projects/${targetId}.png`, newProjData.customImage);
+                finalImg = downloadUrl;
+                newProjData.customImage = finalImg;
+                newProjData.mediaPlaceholders.imagePath = finalImg;
+              } catch (imgErr) {
+                console.warn('Could not upload image to Firebase Storage, keeping URL:', imgErr);
+              }
             }
           }
 
-          const nextProjects = editingProjectId
-            ? projects.map((p) => (p.id === editingProjectId ? { ...p, ...newProjData, customImage: finalImg } : p))
-            : [{ ...newProjData, id: targetId, customImage: finalImg }, ...projects];
-
-          await publishProjectsDataToGitHub(nextProjects);
+          updateProject(targetId, { customImage: finalImg, mediaPlaceholders: newProjData.mediaPlaceholders });
           setUploadedImageFile(null);
-          showNotification('🚀 Pushed to GitHub! Netlify is auto-deploying to all devices in ~30s.');
+          showNotification('🔥 Saved & Synced to Firebase! Visible across all devices immediately.');
         } catch (err) {
-          alert('Saved locally, but auto-commit to GitHub failed: ' + err.message + '\n\nCheck your GitHub Token in the GitHub Sync tab.');
+          alert('Saved locally, but Firebase sync failed: ' + err.message + '\n\nCheck your Firebase settings in the Firebase tab.');
         } finally {
-          setIsPublishingGh(false);
+          setIsSyncingFirebase(false);
         }
       })();
     }
@@ -498,15 +541,15 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
 
         {/* Top Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* GitHub Live Auto-Publish Button */}
+          {/* Firebase Live Cloud Sync Button */}
           <button
-            onClick={handlePublishAllToGitHub}
-            disabled={isPublishingGh}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-md shadow-emerald-600/30 transition-all hover:scale-105 disabled:opacity-50"
-            title="Push all your updates directly to GitHub so Netlify deploys them across all devices worldwide"
+            onClick={handleSyncAllToFirebase}
+            disabled={isSyncingFirebase}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-amber-600 via-orange-600 to-amber-600 hover:from-amber-500 hover:to-orange-500 shadow-md shadow-orange-600/30 transition-all hover:scale-105 disabled:opacity-50"
+            title="Sync all portfolio text, games, and media to Firebase real-time database"
           >
-            <GithubIcon className={`w-4 h-4 ${isPublishingGh ? 'animate-spin' : ''}`} />
-            <span>{isPublishingGh ? 'Deploying...' : 'Publish to GitHub'}</span>
+            <Database className={`w-4 h-4 ${isSyncingFirebase ? 'animate-spin' : ''}`} />
+            <span>{isSyncingFirebase ? 'Syncing...' : 'Sync to Firebase'}</span>
           </button>
 
           <button
@@ -557,7 +600,7 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
             { id: 'matter', label: 'Website Matter (Content)', icon: FileText },
             { id: 'resume', label: 'Resume & CV', icon: Upload },
             { id: 'theme', label: 'Typography & Colors', icon: Palette },
-            { id: 'github', label: 'GitHub Auto-Publish', icon: GithubIcon, count: isGhConnected ? '🟢 Live' : '⚪ Setup' },
+            { id: 'firebase', label: 'Firebase Cloud Database', icon: Database, count: isFirebaseConnected ? '🔥 Live' : '⚪ Setup' },
             { id: 'cloud', label: 'Cloud Database (Supabase)', icon: Cloud, count: isCloudConnected ? '🟢 Live' : '⚪ Setup' },
           ].map((tab) => {
             const Icon = tab.icon;
@@ -1699,161 +1742,243 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
           </div>
         )}
 
-        {/* TAB: GITHUB AUTO-PUBLISH DIRECT INTEGRATION */}
-        {activeTab === 'github' && (
+        {/* TAB: FIREBASE REAL-TIME CLOUD DATABASE & STORAGE */}
+        {activeTab === 'firebase' && (
           <div className="space-y-8 animate-in fade-in duration-200">
             {/* Top Overview Banner */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-zinc-900 via-indigo-950/30 to-zinc-900 border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl">
+            <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-zinc-900 via-amber-950/30 to-zinc-900 border border-amber-500/30 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl">
               <div className="space-y-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold bg-white/10 text-white border border-white/20">
-                  <GithubIcon className="w-3.5 h-3.5" />
-                  <span>Direct GitHub Integration (No Middleman)</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                  <Database className="w-3.5 h-3.5" />
+                  <span>Google Firebase Real-Time Cloud Studio</span>
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                  GitHub Auto-Publish Studio
+                  Firebase Cloud Database &amp; Image Storage
                 </h3>
                 <p className="text-sm text-zinc-300 max-w-2xl leading-relaxed">
-                  Connect your GitHub account so that any changes you make in this Admin Panel (cover images, new games, text, or links) are <strong className="text-white">committed and pushed directly into your GitHub repository</strong>. Netlify will automatically detect the commit and deploy it to <strong className="text-emerald-400">https://badriraju.netlify.app</strong> across all devices worldwide in 30 seconds!
+                  Connect your Google Firebase project to sync all portfolio text, games, skills, and cover images in <strong className="text-amber-400">real time</strong>. Whenever you edit text or upload game covers from any PC or phone, Firebase instantly broadcasts changes to every visitor across the globe!
                 </p>
               </div>
 
               {/* Status Badge */}
               <div className="shrink-0 p-4 rounded-xl bg-black/50 border border-white/10 flex flex-col items-center justify-center text-center">
                 <div className="flex items-center gap-2 text-sm font-bold font-mono">
-                  <span className={`w-3 h-3 rounded-full ${isGhConnected ? 'bg-emerald-400 animate-pulse' : 'bg-zinc-500'}`} />
-                  <span className={isGhConnected ? 'text-emerald-400' : 'text-zinc-400'}>
-                    {isGhConnected ? 'GITHUB CONNECTED' : 'TOKEN REQUIRED'}
+                  <span className={`w-3 h-3 rounded-full ${isFirebaseConnected ? 'bg-amber-400 animate-pulse' : 'bg-zinc-500'}`} />
+                  <span className={isFirebaseConnected ? 'text-amber-400' : 'text-zinc-400'}>
+                    {isFirebaseConnected ? 'FIREBASE CONNECTED' : 'CONFIG REQUIRED'}
                   </span>
                 </div>
                 <span className="text-[11px] text-zinc-500 mt-1">
-                  {isGhConnected ? 'Auto-commits directly to repository' : 'Enter token below to activate'}
+                  {isFirebaseConnected ? 'Real-time database & storage active' : 'Paste config snippet below'}
                 </span>
               </div>
             </div>
 
-            {/* Token Form */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-[#101422] border border-white/10 space-y-6">
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            {/* Quick 1-Click Sync Button if connected */}
+            {isFirebaseConnected && (
+              <div className="p-5 rounded-2xl bg-[#101422] border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Key className="w-5 h-5 text-indigo-400" />
-                    <span>GitHub Personal Access Token (PAT)</span>
+                  <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-amber-400" />
+                    <span>Sync All Current Portfolio Data to Firebase</span>
                   </h4>
                   <p className="text-xs text-zinc-400 mt-0.5">
-                    Target Repository: <strong className="text-white font-mono">BadriRajuPericharla/Portfolio</strong> (Branch: main)
+                    Click to upload all your current games, text matter, profile, and theme settings to Firebase now.
                   </p>
                 </div>
+                <button
+                  type="button"
+                  onClick={handleSyncAllToFirebase}
+                  disabled={isSyncingFirebase}
+                  className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 disabled:opacity-50 transition-all shadow-lg shadow-orange-600/30"
+                >
+                  <Database className={`w-4 h-4 ${isSyncingFirebase ? 'animate-spin' : ''}`} />
+                  <span>{isSyncingFirebase ? 'Syncing...' : '🚀 Push All Data to Firebase Now'}</span>
+                </button>
+              </div>
+            )}
 
-                {isGhConnected && (
-                  <button
-                    type="button"
-                    onClick={handlePublishAllToGitHub}
-                    disabled={isPublishingGh}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50 transition-all shadow-lg shadow-emerald-600/30"
-                  >
-                    <GithubIcon className={`w-4 h-4 ${isPublishingGh ? 'animate-spin' : ''}`} />
-                    <span>{isPublishingGh ? 'Publishing to GitHub...' : '🚀 Publish All Projects to GitHub Now'}</span>
-                  </button>
-                )}
+            {/* Firebase Config Form */}
+            <div className="p-6 sm:p-8 rounded-2xl bg-[#101422] border border-white/10 space-y-6">
+              <div className="border-b border-white/10 pb-4">
+                <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                  <Key className="w-5 h-5 text-amber-400" />
+                  <span>Firebase Project Configuration</span>
+                </h4>
+                <p className="text-xs text-zinc-400 mt-0.5">
+                  Paste your Firebase web app config snippet or fill in your project credentials:
+                </p>
               </div>
 
-              <form onSubmit={handleSaveGitHubToken} className="space-y-5">
+              <form onSubmit={handleSaveFirebase} className="space-y-6">
+                {/* Quick Paste Snippet Box */}
                 <div>
-                  <label className="block text-xs font-mono text-zinc-300 mb-1.5 font-semibold">
-                    GitHub Personal Access Token (with `repo` permission) *
+                  <label className="block text-xs font-mono text-amber-400 mb-1.5 font-semibold">
+                    Method 1: Paste Entire `firebaseConfig` Snippet (Fastest)
                   </label>
-                  <input
-                    type="password"
-                    required
-                    value={githubToken}
-                    onChange={(e) => setGithubToken(e.target.value)}
-                    placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#080B12] border border-white/10 text-white text-sm font-mono placeholder:text-zinc-600 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
+                  <textarea
+                    rows={4}
+                    value={firebaseRawSnippet}
+                    onChange={(e) => setFirebaseRawSnippet(e.target.value)}
+                    placeholder={`const firebaseConfig = {\n  apiKey: "AIzaSy...",\n  authDomain: "portfolio-xxx.firebaseapp.com",\n  projectId: "portfolio-xxx",\n  storageBucket: "portfolio-xxx.appspot.com",\n  messagingSenderId: "123456789",\n  appId: "1:123456789:web:abcdef"\n};`}
+                    className="w-full p-3 rounded-xl bg-[#080B12] border border-white/10 text-white text-xs font-mono placeholder:text-zinc-600 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none"
                   />
-                  <div className="flex flex-wrap items-center justify-between gap-2 mt-2">
-                    <span className="text-[11px] text-zinc-400">
-                      🔒 Your token is stored locally in your browser memory and only communicates directly with GitHub's official API.
-                    </span>
-                    <a
-                      href="https://github.com/settings/tokens/new?scopes=repo&description=Portfolio+Admin+Auto+Publish"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-[#FF7A18] hover:underline font-mono inline-flex items-center gap-1 font-semibold"
-                    >
-                      <span>1-Click Generate Token on GitHub</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
+                  <span className="text-[11px] text-zinc-500 block mt-1">
+                    💡 You can paste the whole config code directly from Firebase Console (Project Settings &gt; General &gt; Your apps).
+                  </span>
+                </div>
+
+                <div className="relative flex items-center py-2">
+                  <div className="flex-grow border-t border-white/10"></div>
+                  <span className="flex-shrink mx-4 text-xs font-mono text-zinc-500 uppercase tracking-widest">Or enter fields individually</span>
+                  <div className="flex-grow border-t border-white/10"></div>
+                </div>
+
+                {/* Individual Credentials Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-mono text-zinc-300 mb-1">
+                      API Key (apiKey) *
+                    </label>
+                    <input
+                      type="text"
+                      value={firebaseForm.apiKey || ''}
+                      onChange={(e) => setFirebaseForm({ ...firebaseForm, apiKey: e.target.value })}
+                      placeholder="AIzaSy..."
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#080B12] border border-white/10 text-white text-sm font-mono placeholder:text-zinc-600 focus:border-amber-500 outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono text-zinc-300 mb-1">
+                      Project ID (projectId) *
+                    </label>
+                    <input
+                      type="text"
+                      value={firebaseForm.projectId || ''}
+                      onChange={(e) => setFirebaseForm({ ...firebaseForm, projectId: e.target.value })}
+                      placeholder="badri-portfolio-123"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#080B12] border border-white/10 text-white text-sm font-mono placeholder:text-zinc-600 focus:border-amber-500 outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono text-zinc-300 mb-1">
+                      Auth Domain (authDomain)
+                    </label>
+                    <input
+                      type="text"
+                      value={firebaseForm.authDomain || ''}
+                      onChange={(e) => setFirebaseForm({ ...firebaseForm, authDomain: e.target.value })}
+                      placeholder="badri-portfolio-123.firebaseapp.com"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#080B12] border border-white/10 text-white text-sm font-mono placeholder:text-zinc-600 focus:border-amber-500 outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono text-zinc-300 mb-1">
+                      Storage Bucket (storageBucket)
+                    </label>
+                    <input
+                      type="text"
+                      value={firebaseForm.storageBucket || ''}
+                      onChange={(e) => setFirebaseForm({ ...firebaseForm, storageBucket: e.target.value })}
+                      placeholder="badri-portfolio-123.firebasestorage.app"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#080B12] border border-white/10 text-white text-sm font-mono placeholder:text-zinc-600 focus:border-amber-500 outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono text-zinc-300 mb-1">
+                      Messaging Sender ID
+                    </label>
+                    <input
+                      type="text"
+                      value={firebaseForm.messagingSenderId || ''}
+                      onChange={(e) => setFirebaseForm({ ...firebaseForm, messagingSenderId: e.target.value })}
+                      placeholder="123456789012"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#080B12] border border-white/10 text-white text-sm font-mono placeholder:text-zinc-600 focus:border-amber-500 outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono text-zinc-300 mb-1">
+                      App ID (appId)
+                    </label>
+                    <input
+                      type="text"
+                      value={firebaseForm.appId || ''}
+                      onChange={(e) => setFirebaseForm({ ...firebaseForm, appId: e.target.value })}
+                      placeholder="1:123456789:web:abc123"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#080B12] border border-white/10 text-white text-sm font-mono placeholder:text-zinc-600 focus:border-amber-500 outline-none"
+                    />
                   </div>
                 </div>
 
+                {/* Submit & Disconnect Buttons */}
                 <div className="flex flex-wrap items-center gap-3 pt-2">
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/30"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-amber-600 hover:bg-amber-500 transition-all shadow-lg shadow-amber-600/30"
                   >
                     <Check className="w-4 h-4" />
-                    <span>{isGhConnected ? 'Update Token' : 'Save & Connect GitHub'}</span>
+                    <span>{isFirebaseConnected ? 'Update Firebase Config' : 'Save & Connect Firebase'}</span>
                   </button>
 
-                  {isGhConnected && (
+                  {isFirebaseConnected && (
                     <button
                       type="button"
-                      onClick={() => {
-                        setGithubToken('');
-                        saveGitHubToken('');
-                        setIsGhConnected(false);
-                        showNotification('GitHub token removed.');
-                      }}
+                      onClick={handleDisconnectFirebase}
                       className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold text-red-400 bg-red-950/30 hover:bg-red-950/50 border border-red-500/20 transition-colors"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
-                      <span>Disconnect</span>
+                      <span>Disconnect Firebase</span>
                     </button>
                   )}
                 </div>
               </form>
             </div>
 
-            {/* Quick 1-Minute Guide */}
+            {/* Quick 2-Minute Firebase Setup Guide */}
             <div className="p-6 sm:p-8 rounded-2xl bg-[#0B0E18] border border-white/10 space-y-6">
               <div>
                 <h4 className="text-lg font-bold text-white flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-amber-400" />
-                  <span>How to Get Your GitHub Token (Takes 60 Seconds):</span>
+                  <span>How to Set Up Free Firebase in 2 Minutes:</span>
                 </h4>
                 <p className="text-xs text-zinc-400 mt-1">
-                  Generate a token once, paste it above, and you can update your website from any PC forever without writing code:
+                  Google Firebase is completely free and takes 2 minutes to create:
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="p-4 rounded-xl bg-[#101422] border border-white/5 space-y-2">
-                  <div className="w-7 h-7 rounded-lg bg-orange-500/20 text-[#FF7A18] font-mono font-bold text-xs flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold text-xs flex items-center justify-center">
                     1
                   </div>
-                  <h5 className="text-sm font-bold text-white">Open Token Page</h5>
+                  <h5 className="text-sm font-bold text-white">Create Firebase Project</h5>
                   <p className="text-xs text-zinc-400 leading-relaxed">
-                    Click <a href="https://github.com/settings/tokens/new?scopes=repo&description=Portfolio+Admin+Auto+Publish" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline inline-flex items-center gap-1 font-semibold">this direct link <ExternalLink className="w-3 h-3" /></a> to open the GitHub token creation page with permissions pre-selected.
+                    Go to <a href="https://console.firebase.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-400 underline inline-flex items-center gap-1 font-semibold">console.firebase.google.com <ExternalLink className="w-3 h-3" /></a>, sign in with your Google account, and click <strong>Add project</strong>.
                   </p>
                 </div>
 
                 <div className="p-4 rounded-xl bg-[#101422] border border-white/5 space-y-2">
-                  <div className="w-7 h-7 rounded-lg bg-orange-500/20 text-[#FF7A18] font-mono font-bold text-xs flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold text-xs flex items-center justify-center">
                     2
                   </div>
-                  <h5 className="text-sm font-bold text-white">Generate Token</h5>
+                  <h5 className="text-sm font-bold text-white">Enable Firestore &amp; Storage</h5>
                   <p className="text-xs text-zinc-400 leading-relaxed">
-                    Set Expiration to <strong>No expiration</strong> (or 90 days), make sure the <strong>repo</strong> checkbox is checked, and scroll down to click <strong>Generate token</strong>.
+                    Under <strong>Build</strong>, click <strong>Firestore Database</strong> &gt; Create Database (choose Test Mode). Then click <strong>Storage</strong> &gt; Get started (choose Test Mode).
                   </p>
                 </div>
 
                 <div className="p-4 rounded-xl bg-[#101422] border border-white/5 space-y-2">
-                  <div className="w-7 h-7 rounded-lg bg-orange-500/20 text-[#FF7A18] font-mono font-bold text-xs flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold text-xs flex items-center justify-center">
                     3
                   </div>
-                  <h5 className="text-sm font-bold text-white">Paste &amp; Auto-Deploy</h5>
+                  <h5 className="text-sm font-bold text-white">Register Web App &amp; Paste</h5>
                   <p className="text-xs text-zinc-400 leading-relaxed">
-                    Copy the green token code (starts with <code className="text-white bg-black/40 px-1 py-0.5 rounded">ghp_</code>) and paste it into the box above. That's it!
+                    Go to <strong>Project Settings</strong> (gear icon) &gt; <strong>General</strong> &gt; click the Web icon <code className="text-white bg-black/40 px-1 py-0.5 rounded">&lt;/&gt;</code>, copy the config snippet, and paste it into the box above!
                   </p>
                 </div>
               </div>

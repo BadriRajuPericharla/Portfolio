@@ -191,10 +191,9 @@ export default function Hero() {
         </div>
 
         {/* Quick Highlights / Stats Grid: Standardized Same Lane & Identical Height */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 w-full max-w-3xl mb-8 items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 w-full max-w-2xl mb-8 items-stretch">
           {[
             { value: "4+ Games", label: "Published on itch.io" },
-            { value: "2x SIH", label: "Hackathon Finalist" },
             { value: "Unity & C#", label: "Core Focus Stack" },
             { value: "1 Published", label: "Google Play Store" }
           ].map((item, idx) => (
@@ -241,12 +240,11 @@ export default function Hero() {
               href={links.itchio}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-1.5 rounded-xl bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] text-[#A3A3A3] hover:text-[#FF7A18] hover:border-[#FF7A18]/40 transition-all inline-flex items-center gap-1.5 text-xs font-mono font-medium"
+              className="p-2.5 rounded-xl bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] text-[#A3A3A3] hover:text-[#FF7A18] hover:border-[#FF7A18]/40 transition-all"
               aria-label="itch.io Page"
               title="itch.io: badri-raju-pericharla"
             >
-              <ItchIcon className="w-3.5 h-3.5 text-[#FF7A18]" />
-              <span>itch.io</span>
+              <ItchIcon className="w-4 h-4 text-[#FF7A18]" />
             </a>
           )}
 

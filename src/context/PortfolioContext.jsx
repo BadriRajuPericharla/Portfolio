@@ -5,6 +5,11 @@ import { skillsData as initialSkills } from '../data/skillsData';
 import { caseStudiesData as initialCaseStudies } from '../data/caseStudiesData';
 import { achievementsData as initialAchievements } from '../data/achievementsData';
 import { getSupabaseClient } from '../lib/supabase';
+import { 
+  isFirebaseConfigured, 
+  saveDocToFirestore, 
+  subscribeToFirestoreDoc 
+} from '../lib/firebase';
 
 const STORAGE_KEY = 'badri_raju_portfolio_state_v5';
 
@@ -383,40 +388,104 @@ export function PortfolioProvider({ children }) {
     }
   }, [cvData]);
 
-  // Cloud synchronization helper
+  // Cloud synchronization helper (Firebase first, Supabase fallback)
   const syncToCloud = async (id, data) => {
+    // 1. Firebase Cloud Sync
+    if (isFirebaseConfigured()) {
+      try {
+        await saveDocToFirestore('portfolio_data', id, { data });
+      } catch (err) {
+        console.warn('Firebase sync error for ' + id, err);
+      }
+    }
+
+    // 2. Supabase Cloud Sync
     const supabase = getSupabaseClient();
-    if (!supabase) return;
-    try {
-      await supabase.from('portfolio_data').upsert({
-        id,
-        data,
-        updated_at: new Date().toISOString()
-      });
-    } catch (err) {
-      console.warn('Cloud sync error for ' + id, err);
+    if (supabase) {
+      try {
+        await supabase.from('portfolio_data').upsert({
+          id,
+          data,
+          updated_at: new Date().toISOString()
+        });
+      } catch (err) {
+        console.warn('Supabase sync error for ' + id, err);
+      }
     }
   };
 
-  // Sync all data to Supabase
+  // Sync all data to Cloud (Firebase and/or Supabase)
   const syncAllToCloud = async () => {
+    let synced = false;
+
+    if (isFirebaseConfigured()) {
+      await saveDocToFirestore('portfolio_data', 'projects', { data: projects });
+      await saveDocToFirestore('portfolio_data', 'profile', { data: profile });
+      await saveDocToFirestore('portfolio_data', 'skills', { data: skills });
+      await saveDocToFirestore('portfolio_data', 'achievements', { data: achievements });
+      await saveDocToFirestore('portfolio_data', 'cases', { data: caseStudies });
+      await saveDocToFirestore('portfolio_data', 'sections', { data: sections });
+      await saveDocToFirestore('portfolio_data', 'custom_sections', { data: customSections });
+      await saveDocToFirestore('portfolio_data', 'theme', { data: themeSettings });
+      await saveDocToFirestore('portfolio_data', 'resume', { data: resumeData });
+      await saveDocToFirestore('portfolio_data', 'cv', { data: cvData });
+      synced = true;
+    }
+
     const supabase = getSupabaseClient();
-    if (!supabase) throw new Error('Supabase cloud database is not connected yet.');
-    const now = new Date().toISOString();
-    const { error } = await supabase.from('portfolio_data').upsert([
-      { id: 'projects', data: projects, updated_at: now },
-      { id: 'profile', data: profile, updated_at: now },
-      { id: 'skills', data: skills, updated_at: now },
-      { id: 'achievements', data: achievements, updated_at: now },
-      { id: 'cases', data: caseStudies, updated_at: now },
-      { id: 'sections', data: sections, updated_at: now },
-      { id: 'theme', data: themeSettings, updated_at: now },
-      { id: 'resume', data: resumeData, updated_at: now },
-      { id: 'cv', data: cvData, updated_at: now }
-    ]);
-    if (error) throw error;
+    if (supabase) {
+      const now = new Date().toISOString();
+      const { error } = await supabase.from('portfolio_data').upsert([
+        { id: 'projects', data: projects, updated_at: now },
+        { id: 'profile', data: profile, updated_at: now },
+        { id: 'skills', data: skills, updated_at: now },
+        { id: 'achievements', data: achievements, updated_at: now },
+        { id: 'cases', data: caseStudies, updated_at: now },
+        { id: 'sections', data: sections, updated_at: now },
+        { id: 'theme', data: themeSettings, updated_at: now },
+        { id: 'resume', data: resumeData, updated_at: now },
+        { id: 'cv', data: cvData, updated_at: now }
+      ]);
+      if (!error) synced = true;
+    }
+
+    if (!synced) {
+      throw new Error('Please configure Firebase in the Admin Panel to enable cloud synchronization.');
+    }
     return true;
   };
+
+  // Real-time Firebase listeners across all visitors and devices
+  useEffect(() => {
+    if (!isFirebaseConfigured()) return;
+
+    const unsubs = [];
+    const docKeys = [
+      { id: 'projects', setter: (val) => Array.isArray(val) && setProjects(val) },
+      { id: 'profile', setter: (val) => val && setProfile(val) },
+      { id: 'skills', setter: (val) => Array.isArray(val) && setSkills(val) },
+      { id: 'achievements', setter: (val) => Array.isArray(val) && setAchievements(val) },
+      { id: 'cases', setter: (val) => Array.isArray(val) && setCaseStudies(val) },
+      { id: 'sections', setter: (val) => Array.isArray(val) && setSections(val) },
+      { id: 'custom_sections', setter: (val) => Array.isArray(val) && setCustomSections(val) },
+      { id: 'theme', setter: (val) => val && setThemeSettings(val) },
+      { id: 'resume', setter: (val) => val && setResumeData(val) },
+      { id: 'cv', setter: (val) => val && setCvData(val) }
+    ];
+
+    docKeys.forEach(({ id, setter }) => {
+      const unsub = subscribeToFirestoreDoc('portfolio_data', id, (docData) => {
+        if (docData && docData.data !== undefined) {
+          setter(docData.data);
+        }
+      });
+      unsubs.push(unsub);
+    });
+
+    return () => {
+      unsubs.forEach((unsub) => typeof unsub === 'function' && unsub());
+    };
+  }, []);
 
   // Live cloud sync: Fetch from Supabase on mount & listen to real-time changes
   useEffect(() => {
