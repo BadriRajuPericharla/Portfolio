@@ -110,15 +110,15 @@ export default function Hero() {
       {/* Interactive 3D Coordinate Grid & Constellation Canvas */}
       <InteractiveCanvas />
 
-      {/* Atmospheric Studio Glows (Dynamically reactive to active palette) */}
+      {/* Atmospheric Studio Glows (Dynamically reactive to active palette with subtle floating parallax) */}
       <div 
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-[140px] pointer-events-none transition-all duration-500 opacity-20"
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-[140px] pointer-events-none transition-all duration-500 opacity-20 animate-float-slow"
         style={{
           background: 'radial-gradient(circle, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FFC857) 40%, transparent 70%)'
         }}
       />
       <div 
-        className="absolute bottom-16 left-1/3 w-[500px] h-[500px] rounded-full blur-[130px] pointer-events-none transition-all duration-500 opacity-15"
+        className="absolute bottom-16 left-1/3 w-[500px] h-[500px] rounded-full blur-[130px] pointer-events-none transition-all duration-500 opacity-15 animate-float-delayed"
         style={{
           background: 'radial-gradient(circle, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 50%, transparent 70%)'
         }}
@@ -129,6 +129,7 @@ export default function Hero() {
         
         {/* Play Store Publication Badge */}
         <div 
+          data-reveal="fade"
           className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#1C1C1C] text-[#FAFAFA] text-[11px] sm:text-xs font-mono font-medium mb-4 sm:mb-5 backdrop-blur-md shadow-sm border transition-colors duration-300"
           style={{
             borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.4))',
@@ -140,7 +141,10 @@ export default function Hero() {
         </div>
 
         {/* PRIMARY FOCUS: Full Name with Selective Dynamic Palette Highlighting */}
-        <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight font-display leading-[1.08] mb-3 sm:mb-4 select-none">
+        <h1 
+          data-reveal
+          className="delay-100 text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight font-display leading-[1.08] mb-3 sm:mb-4 select-none"
+        >
           <span className="text-[#FAFAFA]">{firstName} </span>
           <span 
             className="text-transparent bg-clip-text font-black transition-all duration-300 inline-block"
@@ -156,7 +160,10 @@ export default function Hero() {
         </h1>
 
         {/* Professional Title & Recruiter Typewriter Pill */}
-        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-3 text-sm sm:text-xl md:text-2xl font-bold font-display text-[#FAFAFA] mb-3 sm:mb-4">
+        <div 
+          data-reveal
+          className="delay-150 flex flex-wrap items-center justify-center gap-1.5 sm:gap-3 text-sm sm:text-xl md:text-2xl font-bold font-display text-[#FAFAFA] mb-3 sm:mb-4"
+        >
           <span>Unity Developer</span>
           <span className="text-[#FF7A18]">•</span>
           <span className="text-[#FFC857]">Gameplay Programmer</span>
@@ -169,22 +176,31 @@ export default function Hero() {
         </div>
 
         {/* Introduction Tagline Quote */}
-        <blockquote className="text-base sm:text-xl md:text-2xl text-[#FAFAFA] font-medium leading-relaxed max-w-3xl mb-2 sm:mb-3 px-2">
+        <blockquote 
+          data-reveal
+          className="delay-200 text-base sm:text-xl md:text-2xl text-[#FAFAFA] font-medium leading-relaxed max-w-3xl mb-2 sm:mb-3 px-2"
+        >
           &ldquo;{headlineQuote || 'I build interactive gameplay experiences using Unity and C#.'}&rdquo;
         </blockquote>
 
-        {/* Supporting Narrative */}
-        <p className="text-xs sm:text-base text-[#A3A3A3] leading-relaxed max-w-2xl mb-6 sm:mb-8 px-2">
-          {subHeadline || 'Exploring gameplay systems, solving technical challenges, and building responsive interactive worlds through game development.'}
+        {/* Supporting Narrative - Concise & Active */}
+        <p 
+          data-reveal
+          className="delay-250 text-xs sm:text-base text-[#A3A3A3] leading-relaxed max-w-2xl mb-6 sm:mb-8 px-2"
+        >
+          {subHeadline || 'Building responsive gameplay mechanics, modular C# architectures, and interactive 2D/3D games in Unity.'}
         </p>
 
         {/* Action Buttons: Explore Games, View GitHub, Contact */}
-        <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 mb-7 sm:mb-10 w-full max-w-lg sm:max-w-none">
+        <div 
+          data-reveal
+          className="delay-300 flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 mb-7 sm:mb-10 w-full max-w-lg sm:max-w-none"
+        >
           {/* Button 1: Explore My Games */}
           <a
             href="#projects"
             onClick={(e) => handleScrollTo(e, '#projects')}
-            className="btn-hero-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white cursor-pointer"
+            className="btn-hero-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg"
           >
             <Gamepad2 className="w-4 h-4" />
             <span>Explore My Games</span>
@@ -196,7 +212,7 @@ export default function Hero() {
             href={links.github || "https://github.com/BadriRajuPericharla"}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-[#FAFAFA] bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] hover:border-[#FF7A18]/50 hover:text-[#FF7A18] transition-all hover:-translate-y-0.5"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-[#FAFAFA] bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] hover:border-[#FF7A18]/50 hover:text-[#FF7A18] transition-all duration-300 hover:-translate-y-1 shadow-md shadow-black/30"
           >
             <GithubIcon className="w-4 h-4 text-[#A3A3A3]" />
             <span>View GitHub</span>
@@ -207,7 +223,7 @@ export default function Hero() {
           <a
             href="#contact"
             onClick={(e) => handleScrollTo(e, '#contact')}
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-[#FAFAFA] bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] hover:border-[#FF7A18]/50 hover:text-[#FF7A18] transition-all hover:-translate-y-0.5"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-[#FAFAFA] bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] hover:border-[#FF7A18]/50 hover:text-[#FF7A18] transition-all duration-300 hover:-translate-y-1 shadow-md shadow-black/30"
           >
             <Mail className="w-4 h-4" />
             <span>Contact Me</span>
@@ -215,7 +231,10 @@ export default function Hero() {
         </div>
 
         {/* Quick Highlights / Stats Grid: Standardized Same Lane & Identical Height on Mobile and Desktop */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-3.5 w-full max-w-2xl mb-6 sm:mb-8 items-stretch">
+        <div 
+          data-reveal
+          className="delay-350 grid grid-cols-3 gap-2 sm:gap-3.5 w-full max-w-2xl mb-6 sm:mb-8 items-stretch"
+        >
           {[
             { value: "4+ Games", label: "Published on itch.io" },
             { value: "Unity & C#", label: "Core Focus Stack" },
@@ -223,7 +242,7 @@ export default function Hero() {
           ].map((item, idx) => (
             <div
               key={idx}
-              className="h-full min-h-[76px] sm:min-h-[102px] p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-[#1C1C1C]/90 border border-[#303030] hover:border-[#FF7A18]/40 flex flex-col justify-center items-center text-center transition-all hover:-translate-y-0.5 shadow-md shadow-black/30"
+              className="h-full min-h-[76px] sm:min-h-[102px] p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-[#1C1C1C]/90 border border-[#303030] hover:border-[#FF7A18]/50 flex flex-col justify-center items-center text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg shadow-md shadow-black/30"
             >
               <div className="text-xs sm:text-lg md:text-xl font-extrabold text-[#FAFAFA] font-mono whitespace-nowrap leading-tight mb-0.5 sm:mb-1">
                 {item.value}
@@ -236,12 +255,15 @@ export default function Hero() {
         </div>
 
         {/* Social Links Strip */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-[#303030]/60 w-full max-w-xl">
+        <div 
+          data-reveal
+          className="delay-400 flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-[#303030]/60 w-full max-w-xl"
+        >
           <a
             href={links.github || "https://github.com/BadriRajuPericharla"}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2.5 rounded-xl bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] text-[#A3A3A3] hover:text-[#FAFAFA] hover:border-[#FF7A18]/40 transition-all"
+            className="p-2.5 rounded-xl bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] text-[#A3A3A3] hover:text-[#FAFAFA] hover:border-[#FF7A18]/50 transition-all duration-300 hover:-translate-y-0.5"
             aria-label="GitHub Profile"
             title="GitHub: BadriRajuPericharla"
           >

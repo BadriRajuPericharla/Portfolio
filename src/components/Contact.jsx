@@ -109,7 +109,7 @@ export default function Contact() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-3xl mb-14">
+        <div data-reveal className="max-w-3xl mb-14">
           <div className="inline-flex items-center gap-2 text-[#FF7A18] text-xs font-mono font-semibold uppercase tracking-wider mb-3">
             <Mail className="w-4 h-4" />
             <span>Direct Inquiries</span>
@@ -117,26 +117,26 @@ export default function Contact() {
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#FAFAFA] tracking-tight font-display">
             Let's Build Something Great.
           </h2>
-          <p className="text-[#A3A3A3] text-base mt-2">
-            I'm interested in Unity development opportunities, gameplay programming roles, and game development collaborations.
+          <p className="text-[#A3A3A3] text-sm sm:text-base mt-2">
+            Open to Unity development roles, gameplay programming opportunities, and technical collaborations.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Left Column: Direct Communication Channels & Social Cards (5 cols) */}
-          <div className="lg:col-span-5 space-y-6">
+          <div data-reveal="slide-left" className="lg:col-span-5 space-y-6">
             
             {/* Primary Email Card */}
-            <div className="p-5 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#303030] space-y-4 shadow-xl shadow-black/40">
+            <div className="p-5 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#303030] space-y-4 shadow-xl shadow-black/40 hover:border-zinc-500/50 transition-all duration-300">
               <span className="text-xs font-mono font-semibold text-[#FF7A18] uppercase tracking-wider block">
                 Primary Contact
               </span>
               <h3 className="text-xl font-bold text-[#FAFAFA]">
                 Direct Email
               </h3>
-              <p className="text-[#A3A3A3] text-sm">
-                Feel free to message me regarding open positions, code reviews, or gameplay programming discussions.
+              <p className="text-[#A3A3A3] text-xs sm:text-sm">
+                Direct inquiry for job opportunities, code discussions, or game projects.
               </p>
 
               <div className="p-3 sm:p-3.5 rounded-xl bg-[#141414] border border-[#303030] flex items-center justify-between gap-2">
@@ -146,7 +146,7 @@ export default function Contact() {
                 <button
                   type="button"
                   onClick={handleCopyEmail}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono text-[#FFC857] hover:text-white bg-[#FF7A18]/20 hover:bg-[#FF7A18]/35 border border-[#FF7A18]/30 transition-all shrink-0"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono text-[#FFC857] hover:text-white bg-[#FF7A18]/20 hover:bg-[#FF7A18]/35 border border-[#FF7A18]/30 transition-all duration-200 shrink-0 cursor-pointer"
                   title="Copy email to clipboard"
                   aria-label="Copy email address"
                 >
@@ -175,32 +175,32 @@ export default function Contact() {
                 href={links.github || "https://github.com/BadriRajuPericharla"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between p-3 rounded-xl bg-[#242424] hover:bg-[#2A2A2A] border border-white/5 hover:border-[#FF7A18]/30 transition-colors group"
+                className="flex items-center justify-between p-3 rounded-xl bg-[#242424] hover:bg-[#2A2A2A] border border-white/5 hover:border-[#FF7A18]/40 transition-all duration-200 hover:-translate-y-0.5 group"
               >
                 <div className="flex items-center gap-3">
                   <GithubIcon className="w-5 h-5 text-[#FAFAFA]" />
                   <div>
-                    <div className="text-sm font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18]">GitHub</div>
+                    <div className="text-sm font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18] transition-colors">GitHub</div>
                     <div className="text-[11px] text-[#A3A3A3] font-mono">BadriRajuPericharla</div>
                   </div>
                 </div>
-                <ExternalLink className="w-4 h-4 text-[#A3A3A3] group-hover:text-[#FAFAFA]" />
+                <ExternalLink className="w-4 h-4 text-[#A3A3A3] group-hover:text-[#FAFAFA] transition-colors" />
               </a>
 
               <a
                 href={links.linkedin || "https://www.linkedin.com/in/pericharla-badri-raju-6924942a5"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between p-3 rounded-xl bg-[#242424] hover:bg-[#2A2A2A] border border-white/5 hover:border-[#FF7A18]/30 transition-colors group"
+                className="flex items-center justify-between p-3 rounded-xl bg-[#242424] hover:bg-[#2A2A2A] border border-white/5 hover:border-[#FF7A18]/40 transition-all duration-200 hover:-translate-y-0.5 group"
               >
                 <div className="flex items-center gap-3">
                   <LinkedinIcon className="w-5 h-5 text-[#FFC857]" />
                   <div>
-                    <div className="text-sm font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18]">LinkedIn</div>
+                    <div className="text-sm font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18] transition-colors">LinkedIn</div>
                     <div className="text-[11px] text-[#A3A3A3] font-mono">pericharla-badri-raju</div>
                   </div>
                 </div>
-                <ExternalLink className="w-4 h-4 text-[#A3A3A3] group-hover:text-[#FAFAFA]" />
+                <ExternalLink className="w-4 h-4 text-[#A3A3A3] group-hover:text-[#FAFAFA] transition-colors" />
               </a>
 
               {links.youtube && (
@@ -208,16 +208,16 @@ export default function Contact() {
                   href={links.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3 rounded-xl bg-[#242424] hover:bg-[#2A2A2A] border border-white/5 hover:border-[#FF7A18]/30 transition-colors group"
+                  className="flex items-center justify-between p-3 rounded-xl bg-[#242424] hover:bg-[#2A2A2A] border border-white/5 hover:border-[#FF7A18]/40 transition-all duration-200 hover:-translate-y-0.5 group"
                 >
                   <div className="flex items-center gap-3">
                     <YoutubeIcon className="w-5 h-5 text-red-500" />
                     <div>
-                      <div className="text-sm font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18]">YouTube</div>
+                      <div className="text-sm font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18] transition-colors">YouTube</div>
                       <div className="text-[11px] text-[#A3A3A3] font-mono">@PBR_GameDev</div>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-[#A3A3A3] group-hover:text-[#FAFAFA]" />
+                  <ExternalLink className="w-4 h-4 text-[#A3A3A3] group-hover:text-[#FAFAFA] transition-colors" />
                 </a>
               )}
 
@@ -226,22 +226,22 @@ export default function Contact() {
                   href={links.itchio}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3 rounded-xl bg-[#242424] hover:bg-[#2A2A2A] border border-white/5 hover:border-[#FF7A18]/30 transition-colors group"
+                  className="flex items-center justify-between p-3 rounded-xl bg-[#242424] hover:bg-[#2A2A2A] border border-white/5 hover:border-[#FF7A18]/40 transition-all duration-200 hover:-translate-y-0.5 group"
                 >
                   <div className="flex items-center gap-3">
                     <ItchIcon className="w-5 h-5 text-[#FF7A18]" />
                     <div>
-                      <div className="text-sm font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18]">itch.io</div>
+                      <div className="text-sm font-semibold text-[#FAFAFA] group-hover:text-[#FF7A18] transition-colors">itch.io</div>
                       <div className="text-[11px] text-[#A3A3A3] font-mono">badri-raju-pericharla.itch.io</div>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-[#A3A3A3] group-hover:text-[#FAFAFA]" />
+                  <ExternalLink className="w-4 h-4 text-[#A3A3A3] group-hover:text-[#FAFAFA] transition-colors" />
                 </a>
               )}
             </div>
 
             {/* Resume Callout in Contact Section */}
-            <div className="p-5 rounded-2xl bg-[#1C1C1C] border border-[#303030] flex items-center justify-between gap-4">
+            <div className="p-5 rounded-2xl bg-[#1C1C1C] border border-[#303030] flex items-center justify-between gap-4 hover:border-zinc-500/50 transition-all duration-300">
               <div>
                 <h5 className="text-sm font-bold text-[#FAFAFA]">Need a PDF Resume?</h5>
                 <p className="text-xs text-[#A3A3A3]">Download formatted CV for recruiter records</p>
@@ -249,7 +249,7 @@ export default function Contact() {
               <a
                 href={resumeData.url}
                 download={resumeData.name}
-                className="btn-palette-primary shrink-0 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-white shadow-md transition-all cursor-pointer"
+                className="btn-palette-primary shrink-0 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-white shadow-md transition-all duration-200 hover:-translate-y-0.5 cursor-pointer"
               >
                 <FileDown className="w-3.5 h-3.5" />
                 <span>Download</span>
@@ -259,7 +259,7 @@ export default function Contact() {
           </div>
 
           {/* Right Column: Direct Seamless Email Sender (7 cols) */}
-          <div className="lg:col-span-7">
+          <div data-reveal="slide-right" className="lg:col-span-7">
             <div className="p-5 sm:p-9 rounded-2xl bg-[#1C1C1C] border border-[#303030] shadow-xl shadow-black/40 relative">
               <div className="flex items-center gap-2 text-[#FF7A18] font-mono text-xs font-bold uppercase tracking-wider mb-2">
                 <MessageSquare className="w-4 h-4" />
@@ -268,8 +268,8 @@ export default function Contact() {
               <h3 className="text-2xl font-bold text-[#FAFAFA] mb-2 font-display">
                 Send a Message Directly
               </h3>
-              <p className="text-[#A3A3A3] text-sm mb-6">
-                Fill out the details below. Your message is sent directly to my personal inbox without opening Gmail or any external apps.
+              <p className="text-[#A3A3A3] text-xs sm:text-sm mb-6">
+                Fill out the details below. Messages are delivered directly to my inbox with instant notification.
               </p>
 
               {/* Error Message */}

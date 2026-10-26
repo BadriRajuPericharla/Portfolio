@@ -12,8 +12,8 @@ export const profileData = {
   ],
   title: "Unity Developer | Gameplay Programmer",
   headlineQuote: "I build interactive gameplay experiences using Unity and C#.",
-  subHeadline: "Exploring gameplay systems, solving technical challenges, and building interactive worlds through game development.",
-  bio: "I'm a Unity Developer focused on building interactive gameplay experiences using Unity and C#. I enjoy exploring game mechanics, solving technical challenges, and improving my ability to create engaging 2D and 3D games. I'm continuously learning and working towards becoming a stronger gameplay programmer.",
+  subHeadline: "Building responsive gameplay mechanics, modular C# architectures, and interactive 2D/3D games in Unity.",
+  bio: "Unity Developer specializing in responsive player controls, combat loops, and modular C# systems. I bridge gameplay design with clean architecture to build tactile 2D and 3D experiences.",
   location: "West Godavari, Andhra Pradesh, India",
   email: "bhagavanpericharla@gmail.com",
   education: {
@@ -21,7 +21,7 @@ export const profileData = {
     institution: "Sasi Institute of Technology and Engineering",
     period: "2023–2027",
     location: "West Godavari, Andhra Pradesh, India",
-    focus: "Real-time systems, algorithmic thinking, and software architecture fundamentals applied to game development."
+    focus: "Real-time systems, algorithms, and software architecture applied to game engines."
   },
   links: {
     github: "https://github.com/BadriRajuPericharla",

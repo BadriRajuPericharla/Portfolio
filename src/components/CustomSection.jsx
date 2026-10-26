@@ -7,7 +7,7 @@ export default function CustomSection({ section }) {
   return (
     <section className="py-20 relative border-t border-white/5 bg-[#0D101A]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mb-8">
+        <div data-reveal className="max-w-3xl mb-8">
           <div className="inline-flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-wider mb-2 px-3 py-1 rounded-full bg-purple-950/60 border border-purple-500/30 text-purple-300">
             <Sparkles className="w-3.5 h-3.5" />
             <span>{section.categoryBadge || 'Custom Section'}</span>
@@ -22,7 +22,7 @@ export default function CustomSection({ section }) {
           )}
         </div>
 
-        <div className="p-8 rounded-2xl bg-[#121624] border border-white/10 shadow-xl text-zinc-300 text-sm sm:text-base leading-relaxed whitespace-pre-line">
+        <div data-reveal="scale" className="delay-100 p-8 rounded-2xl bg-[#121624] border border-white/10 shadow-xl text-zinc-300 text-sm sm:text-base leading-relaxed whitespace-pre-line">
           {section.content}
         </div>
       </div>

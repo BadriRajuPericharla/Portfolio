@@ -159,7 +159,7 @@ export default function Skills() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12">
+        <div data-reveal className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12">
           <div className="max-w-2xl">
             <div 
               className="inline-flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-wider mb-3 px-3 py-1 rounded-full border transition-colors duration-300"
@@ -176,7 +176,7 @@ export default function Skills() {
               Skills &amp; Architecture Flow Chart
             </h2>
             <p className="text-[#A3A3A3] text-sm sm:text-base mt-2.5 leading-relaxed">
-              Every gameplay subsystem, C# design pattern, and production toolchain mapped into structured, interconnected flow charts with clean directional pipelines.
+              Core gameplay pipelines, C# architectures, and production toolchains mapped in sequential flowcharts.
             </p>
           </div>
 
@@ -240,7 +240,7 @@ export default function Skills() {
         </div>
 
         {/* TOP FLOW CHART ARCHITECTURE HUB */}
-        <div className="mb-10 sm:mb-12 text-center flex flex-col items-center">
+        <div data-reveal="scale" className="mb-10 sm:mb-12 text-center flex flex-col items-center">
           {/* Master Central Node */}
           <div 
             className="inline-flex items-center gap-3.5 px-5 sm:px-8 py-3.5 rounded-2xl bg-[#1C1C1C] border shadow-xl transition-all max-w-full"
@@ -329,14 +329,17 @@ export default function Skills() {
           {filteredCategories.map((category, index) => {
             const meta = categoryMeta[category.category] || { domain: "Subsystem Pipeline", branchCode: `SYS-${String(index+1).padStart(2, '0')}` };
             const skills = category.skills || [];
+            const delayMs = (index % 6) * 90;
 
             return (
               <div
                 key={category.category}
-                className="p-5 sm:p-6 rounded-2xl bg-[#1C1C1C] border border-[#2F2F2F] hover:border-zinc-500/60 transition-all duration-300 shadow-xl shadow-black/50 flex flex-col justify-between group/card relative"
-                style={{
+                data-reveal="scale"
+                style={{ 
+                  transitionDelay: `${delayMs}ms`,
                   boxShadow: '0 6px 20px -6px rgba(0,0,0,0.6)'
                 }}
+                className="p-5 sm:p-6 rounded-2xl bg-[#1C1C1C] border border-[#2F2F2F] hover:border-zinc-400/60 transition-all duration-300 hover:-translate-y-1.5 shadow-xl shadow-black/50 flex flex-col justify-between group/card relative"
               >
                 <div>
                   {/* Category Card Header */}
@@ -489,6 +492,7 @@ export default function Skills() {
 
         {/* Bottom Callout */}
         <div 
+          data-reveal
           className="mt-12 p-5 rounded-2xl bg-[#1C1C1C] border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-[#A3A3A3] shadow-lg shadow-black/40"
           style={{ borderColor: 'var(--color-border-accent, rgba(255, 122, 24, 0.3))' }}
         >
@@ -498,7 +502,7 @@ export default function Skills() {
               style={{ color: 'var(--color-primary, #FF7A18)' }}
             />
             <span>
-              <strong className="text-[#FAFAFA]">Full Spectrum Technical Flow Chart:</strong> All {totalSkillsCount} nodes illustrated in these pipelines represent hands-on, practical implementation verified across Unity 2D/3D development.
+              <strong className="text-[#FAFAFA]">Production Architecture:</strong> All {totalSkillsCount} nodes represent practical, hands-on implementation verified in published Unity 2D/3D builds.
             </span>
           </div>
           <span className="font-mono text-zinc-500 shrink-0">Updated 2026 // Production Flowchart</span>

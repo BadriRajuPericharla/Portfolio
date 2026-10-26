@@ -33,7 +33,7 @@ export default function About() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-3xl mb-14">
+        <div data-reveal className="max-w-3xl mb-14">
           <div className="inline-flex items-center gap-2 text-[#FF7A18] text-xs font-mono font-semibold uppercase tracking-wider mb-3">
             <User className="w-4 h-4" />
             <span>Developer Background</span>
@@ -41,21 +41,21 @@ export default function About() {
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#FAFAFA] tracking-tight font-display">
             About Me
           </h2>
-          <p className="text-[#A3A3A3] text-base mt-2">
-            Game systems enthusiast combining foundational electronics &amp; communication engineering with hands-on Unity &amp; C# development.
+          <p className="text-[#A3A3A3] text-sm sm:text-base mt-2">
+            Gameplay programmer combining engineering fundamentals with hands-on Unity and C# development.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Left Column: Core Narrative & Philosophy (7 cols) */}
-          <div className="lg:col-span-7 space-y-6">
+          <div data-reveal="slide-left" className="lg:col-span-7 space-y-6">
             <div className="p-5 sm:p-8 rounded-2xl bg-[#1C1C1C] border border-[#303030] space-y-6 shadow-xl shadow-black/40">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-7">
                 {/* Large Circular Profile Picture with Full Clarity */}
                 <div className="relative shrink-0 group">
                   <div 
-                    className="relative w-40 h-40 sm:w-56 sm:h-56 rounded-full p-1.5 ring-4 ring-[#111111] transition-all duration-300"
+                    className="relative w-40 h-40 sm:w-56 sm:h-56 rounded-full p-1.5 ring-4 ring-[#111111] transition-all duration-300 group-hover:shadow-[0_25px_50px_-10px_var(--color-glow,rgba(255,122,24,0.5))]"
                     style={{
                       background: `linear-gradient(135deg, var(--color-primary, #FF7A18) 0%, var(--color-secondary, #FF9233) 50%, var(--color-accent, #FFC857) 100%)`,
                       boxShadow: `0 20px 40px -10px var(--color-glow, rgba(255, 122, 24, 0.45))`
@@ -108,59 +108,47 @@ export default function About() {
                 </div>
               </div>
 
-              {/* Bio & Philosophy */}
-              <div className="pt-6 border-t border-[#303030] space-y-4">
-                <h4 className="text-xl font-bold text-[#FAFAFA] font-display">
+              {/* Bio & Philosophy - Streamlined & Impactful */}
+              <div className="pt-6 border-t border-[#303030] space-y-3.5">
+                <h4 className="text-lg sm:text-xl font-bold text-[#FAFAFA] font-display">
                   Building Interactive Worlds &amp; Tight Gameplay Feel
                 </h4>
-                <p className="text-[#FAFAFA] text-base leading-relaxed opacity-95">
+                <p className="text-[#FAFAFA] text-sm sm:text-base leading-relaxed opacity-95">
                   {bio}
                 </p>
-                <p className="text-[#A3A3A3] text-sm leading-relaxed">
-                  My approach to game development is driven by a deep curiosity about what happens under the hood. 
-                  Whether it is tuning coyote time and jump arcs in a 2D platformer, constructing field-of-view stealth cones with raycasts in 3D space, or programming decoupled health damage events, I prioritize responsive player feel and maintainable C# code structure.
+                <p className="text-[#A3A3A3] text-xs sm:text-sm leading-relaxed">
+                  Focused on responsive player feel and clean code: tuning jump arcs and coyote time, crafting raycast stealth cones, and decoupling event pipelines for maintainable game logic.
                 </p>
-              </div>
-
-              <div className="pt-4 border-t border-[#303030] grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex items-center gap-3 text-sm text-[#FAFAFA]">
-                  <MapPin className="w-4 h-4 text-[#FF7A18] shrink-0" />
-                  <span>{displayLocation}</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-[#FAFAFA]">
-                  <Gamepad2 className="w-4 h-4 text-[#FFC857] shrink-0" />
-                  <span>Independent itch.io Developer</span>
-                </div>
               </div>
             </div>
 
             {/* Quick Principles / Work Ethic */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-5 rounded-2xl bg-[#1C1C1C] border border-[#303030] hover:border-[#FF7A18]/50 transition-colors">
+              <div data-reveal="scale" className="delay-100 p-5 rounded-2xl bg-[#1C1C1C] border border-[#303030] hover:border-[#FF7A18]/50 transition-all duration-300 hover:-translate-y-1 shadow-md shadow-black/30">
                 <div className="text-[#FF7A18] font-mono text-xs font-bold uppercase mb-1">01 // Focus</div>
                 <h4 className="text-[#FAFAFA] font-semibold text-sm mb-1">Mechanics First</h4>
-                <p className="text-[#A3A3A3] text-xs">Prioritizing responsive controls and predictable gameplay loops before decorative dressing.</p>
+                <p className="text-[#A3A3A3] text-xs">Responsive controls and tactile gameplay loops before cosmetic polish.</p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-[#1C1C1C] border border-[#303030] hover:border-[#FFC857]/50 transition-colors">
+              <div data-reveal="scale" className="delay-200 p-5 rounded-2xl bg-[#1C1C1C] border border-[#303030] hover:border-[#FFC857]/50 transition-all duration-300 hover:-translate-y-1 shadow-md shadow-black/30">
                 <div className="text-[#FFC857] font-mono text-xs font-bold uppercase mb-1">02 // Code</div>
                 <h4 className="text-[#FAFAFA] font-semibold text-sm mb-1">Clean C# Systems</h4>
-                <p className="text-[#A3A3A3] text-xs">Utilizing events, state patterns, and decoupled components for maintainable game logic.</p>
+                <p className="text-[#A3A3A3] text-xs">Decoupled events, state patterns, and modular architecture.</p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-[#1C1C1C] border border-[#303030] hover:border-[#FFA043]/50 transition-colors">
+              <div data-reveal="scale" className="delay-300 p-5 rounded-2xl bg-[#1C1C1C] border border-[#303030] hover:border-[#FFA043]/50 transition-all duration-300 hover:-translate-y-1 shadow-md shadow-black/30">
                 <div className="text-[#FFA043] font-mono text-xs font-bold uppercase mb-1">03 // Growth</div>
                 <h4 className="text-[#FAFAFA] font-semibold text-sm mb-1">Iterative Learning</h4>
-                <p className="text-[#A3A3A3] text-xs">Rapid prototyping, real game publishing, and continuous testing with actual players.</p>
+                <p className="text-[#A3A3A3] text-xs">Rapid prototyping, public game publishing, and player feedback.</p>
               </div>
             </div>
           </div>
 
           {/* Right Column: Education & Credentials (5 cols) */}
-          <div className="lg:col-span-5 space-y-6">
+          <div data-reveal="slide-right" className="lg:col-span-5 space-y-6">
             
             {/* Education Card */}
-            <div className="p-5 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#303030] relative overflow-hidden shadow-xl shadow-black/40">
+            <div className="p-5 sm:p-7 rounded-2xl bg-[#1C1C1C] border border-[#303030] relative overflow-hidden shadow-xl shadow-black/40 hover:border-zinc-500/50 transition-all duration-300">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF7A18]/10 rounded-full blur-2xl pointer-events-none" />
 
               <div className="flex items-center gap-3 text-[#FF7A18] font-mono text-xs font-bold uppercase tracking-wider mb-4">
@@ -197,7 +185,7 @@ export default function About() {
                   <a
                     href={resumeData.url}
                     download={resumeData.name}
-                    className="btn-palette-primary inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-white shadow-md transition-all text-center cursor-pointer"
+                    className="btn-palette-primary inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-white shadow-md transition-all text-center cursor-pointer hover:-translate-y-0.5"
                   >
                     <FileDown className="w-4 h-4 shrink-0" />
                     <span>Download Resume</span>
@@ -212,20 +200,20 @@ export default function About() {
                   </a>
                 </div>
                 <span className="block text-center text-[11px] text-[#A3A3A3] font-mono">
-                  Industry Resume &amp; Comprehensive Academic CV available
+                  Industry Resume &amp; Comprehensive Academic CV
                 </span>
               </div>
             </div>
 
             {/* Direct Contact Teaser */}
-            <div className="p-4 sm:p-6 rounded-2xl bg-[#1C1C1C] border border-[#303030] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5 shadow-xl shadow-black/40">
+            <div className="p-4 sm:p-6 rounded-2xl bg-[#1C1C1C] border border-[#303030] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5 shadow-xl shadow-black/40 hover:border-[#FF7A18]/40 transition-all duration-300">
               <div>
                 <h5 className="text-sm font-bold text-[#FAFAFA] mb-0.5 sm:mb-1">Open to Opportunities</h5>
                 <p className="text-xs text-[#A3A3A3]">Unity Developer &amp; Gameplay Programming roles</p>
               </div>
               <a
                 href="#contact"
-                className="w-full sm:w-auto text-center px-4 py-2.5 sm:py-2 rounded-xl text-xs font-bold text-white bg-[#FF7A18] hover:bg-[#FF9233] shadow-md shadow-[#FF7A18]/25 transition-all"
+                className="w-full sm:w-auto text-center px-4 py-2.5 sm:py-2 rounded-xl text-xs font-bold text-white bg-[#FF7A18] hover:bg-[#FF9233] shadow-md shadow-[#FF7A18]/25 transition-all duration-300 hover:-translate-y-0.5"
               >
                 Get In Touch
               </a>

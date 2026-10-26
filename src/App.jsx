@@ -12,6 +12,7 @@ import ProjectModal from './components/ProjectModal';
 import CustomSection from './components/CustomSection';
 import AdminLogin from './components/Admin/AdminLogin';
 import AdminPanel from './components/Admin/AdminPanel';
+import { useScrollReveal } from './hooks/useScrollReveal';
 
 class SectionErrorBoundary extends React.Component {
   constructor(props) {
@@ -33,6 +34,9 @@ class SectionErrorBoundary extends React.Component {
 function PortfolioMainContent({ onNavigateAdmin }) {
   const { sections = [], customSections = [] } = usePortfolio() || {};
   const [activeModalProject, setActiveModalProject] = useState(null);
+
+  // Initialize smooth scroll reveal across all portfolio elements
+  useScrollReveal([sections, customSections]);
 
   const isEnabled = (secId) => {
     const found = sections.find((s) => s.id === secId);

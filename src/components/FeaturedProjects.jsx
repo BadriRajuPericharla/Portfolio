@@ -23,7 +23,7 @@ export default function FeaturedProjects({ onOpenDetails }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div data-reveal className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <div className="inline-flex items-center gap-2 text-[#FF7A18] text-xs font-mono font-semibold uppercase tracking-wider mb-3">
               <Gamepad2 className="w-4 h-4" />
@@ -32,8 +32,8 @@ export default function FeaturedProjects({ onOpenDetails }) {
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#FAFAFA] tracking-tight font-display">
               Featured Game Projects
             </h2>
-            <p className="text-[#A3A3A3] text-base max-w-2xl mt-2">
-              Independently developed Unity games showcasing custom C# gameplay mechanics, player combat, stealth AI, and physics systems.
+            <p className="text-[#A3A3A3] text-sm sm:text-base max-w-2xl mt-2">
+              Independently developed Unity games featuring custom C# combat loops, stealth AI, and tuned physics systems.
             </p>
           </div>
 
@@ -43,7 +43,7 @@ export default function FeaturedProjects({ onOpenDetails }) {
               href="https://badri-raju-pericharla.itch.io"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1C1C1C] hover:bg-[#262626] border border-white/10 hover:border-[#FF7A18]/30 text-xs font-mono text-[#A3A3A3] hover:text-[#FAFAFA] transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1C1C1C] hover:bg-[#262626] border border-white/10 hover:border-[#FF7A18]/50 text-xs font-mono text-[#A3A3A3] hover:text-[#FAFAFA] transition-all duration-300 hover:-translate-y-0.5 shadow-sm"
             >
               <ShieldCheck className="w-4 h-4 text-[#FFC857]" />
               <span>Verified itch.io Creator</span>
@@ -53,7 +53,7 @@ export default function FeaturedProjects({ onOpenDetails }) {
         </div>
 
         {/* Category Filter Tabs (Swipeable on mobile) */}
-        <div className="flex flex-nowrap sm:flex-wrap items-center gap-2 mb-8 sm:mb-10 pb-3 border-b border-white/5 overflow-x-auto no-scrollbar">
+        <div data-reveal="fade" className="delay-100 flex flex-nowrap sm:flex-wrap items-center gap-2 mb-8 sm:mb-10 pb-3 border-b border-white/5 overflow-x-auto no-scrollbar">
           {uniqueCategories.map((cat) => {
             const count = cat === 'All' 
               ? projects.length 
@@ -64,9 +64,9 @@ export default function FeaturedProjects({ onOpenDetails }) {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium shrink-0 transition-all ${
+                className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium shrink-0 transition-all duration-200 cursor-pointer ${
                   isActive
-                    ? 'bg-[#FF7A18] text-white shadow-md shadow-[#FF7A18]/25'
+                    ? 'bg-[#FF7A18] text-white shadow-md shadow-[#FF7A18]/25 scale-100'
                     : 'bg-[#1C1C1C] text-[#A3A3A3] hover:text-[#FAFAFA] hover:bg-[#262626] border border-white/5'
                 }`}
               >
@@ -76,12 +76,13 @@ export default function FeaturedProjects({ onOpenDetails }) {
           })}
         </div>
 
-        {/* Projects Grid */}
+        {/* Projects Grid with Staggered Entrance */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project) => (
+          {filteredProjects.map((project, idx) => (
             <ProjectCard
               key={project.id}
               project={project}
+              index={idx}
               onOpenDetails={onOpenDetails}
             />
           ))}

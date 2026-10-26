@@ -2,7 +2,7 @@ import React from 'react';
 import { Play, Eye, ExternalLink, MonitorPlay } from 'lucide-react';
 import GameArtwork from './GameArtwork';
 
-export default function ProjectCard({ project, onOpenDetails }) {
+export default function ProjectCard({ project, onOpenDetails, index = 0 }) {
   const {
     id,
     title,
@@ -17,10 +17,13 @@ export default function ProjectCard({ project, onOpenDetails }) {
   } = project;
 
   const effectiveLabel = actionLabel || 'Play Game';
+  const delayMs = (index % 6) * 110;
 
   return (
     <div 
-      className="project-card flex flex-col justify-between rounded-2xl bg-[#1C1C1C] border border-white/10 hover:border-[#FF7A18]/50 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_16px_36px_rgba(0,0,0,0.7)] overflow-hidden group"
+      data-reveal="scale"
+      style={{ transitionDelay: `${delayMs}ms` }}
+      className="project-card flex flex-col justify-between rounded-2xl bg-[#1C1C1C] border border-white/10 hover:border-[#FF7A18]/60 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(0,0,0,0.8)] overflow-hidden group shadow-lg shadow-black/40"
     >
       <div>
         {/* Visual Game Artwork / Screenshot Preview */}

@@ -26,7 +26,7 @@ export default function Achievements() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-3xl mb-10 sm:mb-14">
+        <div data-reveal className="max-w-3xl mb-10 sm:mb-14">
           <div className="inline-flex items-center gap-2 text-[#FF7A18] text-xs font-mono font-semibold uppercase tracking-wider mb-3">
             <Trophy className="w-4 h-4" />
             <span>Milestones &amp; Recognition</span>
@@ -35,21 +35,23 @@ export default function Achievements() {
             Key Achievements
           </h2>
           <p className="text-[#A3A3A3] text-sm sm:text-base mt-2">
-            Verified competitive milestones, hackathon selections, and game releases reflecting consistency, technical execution, and problem-solving drive.
+            Competitive hackathon qualifications and verified game releases demonstrating technical execution and consistency.
           </p>
         </div>
 
         {/* Achievements Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {achievementsData.map((item) => (
+          {achievementsData.map((item, idx) => (
             <div
               key={item.id}
-              className="rounded-2xl bg-[#1C1C1C] border border-white/10 p-5 sm:p-7 flex flex-col justify-between hover:border-[#FF7A18]/40 transition-all hover:-translate-y-1 hover:shadow-xl shadow-black/40 group"
+              data-reveal="scale"
+              style={{ transitionDelay: `${idx * 130}ms` }}
+              className="rounded-2xl bg-[#1C1C1C] border border-white/10 p-5 sm:p-7 flex flex-col justify-between hover:border-[#FF7A18]/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl shadow-black/40 group"
             >
               <div>
                 {/* Icon & Status Badge */}
                 <div className="flex items-center justify-between mb-5">
-                  <div className="p-3 rounded-xl bg-[#242424] border border-white/10 group-hover:scale-105 transition-transform">
+                  <div className="p-3 rounded-xl bg-[#242424] border border-white/10 group-hover:scale-110 group-hover:border-[#FF7A18]/40 transition-all duration-300">
                     {getIcon(item.iconName)}
                   </div>
                   <span className="text-[11px] font-mono px-3 py-1 rounded-full bg-[#FF7A18]/15 border border-[#FF7A18]/30 text-[#FFC857] font-semibold">
@@ -69,8 +71,8 @@ export default function Achievements() {
 
                 {/* Key Points Bulleted List */}
                 <div className="space-y-2.5 pt-4 border-t border-white/5">
-                  {item.keyPoints.map((point, idx) => (
-                    <div key={idx} className="flex items-start gap-2.5 text-xs text-[#FAFAFA]">
+                  {item.keyPoints.map((point, pIdx) => (
+                    <div key={pIdx} className="flex items-start gap-2.5 text-xs text-[#FAFAFA]">
                       <CheckCircle2 className="w-3.5 h-3.5 text-[#FFC857] mt-0.5 shrink-0" />
                       <span>{point}</span>
                     </div>

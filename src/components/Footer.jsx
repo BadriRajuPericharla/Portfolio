@@ -12,7 +12,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#0D0D0D] border-t border-white/10 py-12 text-[#A3A3A3] text-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div data-reveal="fade" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-white/5">
           
           {/* Logo & Identity */}
@@ -51,7 +51,7 @@ export default function Footer() {
               href={profileData.links.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-lg bg-[#1C1C1C] hover:bg-[#262626] text-[#A3A3A3] hover:text-[#FAFAFA] hover:border-[#FF7A18]/40 border border-white/5 transition-colors"
+              className="p-2.5 rounded-lg bg-[#1C1C1C] hover:bg-[#262626] text-[#A3A3A3] hover:text-[#FAFAFA] hover:border-[#FF7A18]/50 border border-white/5 transition-all duration-200 hover:-translate-y-0.5"
               aria-label="GitHub Profile"
             >
               <GithubIcon className="w-4 h-4" />
@@ -61,7 +61,7 @@ export default function Footer() {
               href={profileData.links.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-lg bg-[#1C1C1C] hover:bg-[#262626] text-[#A3A3A3] hover:text-[#FFC857] hover:border-[#FF7A18]/40 border border-white/5 transition-colors"
+              className="p-2.5 rounded-lg bg-[#1C1C1C] hover:bg-[#262626] text-[#A3A3A3] hover:text-[#FFC857] hover:border-[#FF7A18]/50 border border-white/5 transition-all duration-200 hover:-translate-y-0.5"
               aria-label="LinkedIn Profile"
             >
               <LinkedinIcon className="w-4 h-4" />
@@ -71,7 +71,7 @@ export default function Footer() {
               href={profileData.links.youtube}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-lg bg-[#1C1C1C] hover:bg-[#262626] text-[#A3A3A3] hover:text-red-400 hover:border-[#FF7A18]/40 border border-white/5 transition-colors"
+              className="p-2.5 rounded-lg bg-[#1C1C1C] hover:bg-[#262626] text-[#A3A3A3] hover:text-red-400 hover:border-[#FF7A18]/50 border border-white/5 transition-all duration-200 hover:-translate-y-0.5"
               aria-label="YouTube Channel"
             >
               <YoutubeIcon className="w-4 h-4" />
@@ -81,7 +81,7 @@ export default function Footer() {
               href={profileData.links.itchio}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-lg bg-[#1C1C1C] hover:bg-[#262626] text-[#A3A3A3] hover:text-[#FF7A18] hover:border-[#FF7A18]/40 border border-white/5 transition-colors"
+              className="p-2.5 rounded-lg bg-[#1C1C1C] hover:bg-[#262626] text-[#A3A3A3] hover:text-[#FF7A18] hover:border-[#FF7A18]/50 border border-white/5 transition-all duration-200 hover:-translate-y-0.5"
               aria-label="itch.io Page"
             >
               <ItchIcon className="w-4 h-4" />
@@ -89,7 +89,7 @@ export default function Footer() {
 
             <a
               href={`mailto:${profileData.email}`}
-              className="p-2.5 rounded-lg bg-[#1C1C1C] hover:bg-[#262626] text-[#A3A3A3] hover:text-[#FF7A18] hover:border-[#FF7A18]/40 border border-white/5 transition-colors"
+              className="p-2.5 rounded-lg bg-[#1C1C1C] hover:bg-[#262626] text-[#A3A3A3] hover:text-[#FF7A18] hover:border-[#FF7A18]/50 border border-white/5 transition-all duration-200 hover:-translate-y-0.5"
               aria-label="Email Badri Raju"
             >
               <Mail className="w-4 h-4" />
@@ -99,7 +99,7 @@ export default function Footer() {
           {/* Back to top button */}
           <button
             onClick={scrollToTop}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#1C1C1C] hover:bg-[#262626] text-xs font-mono text-[#A3A3A3] hover:text-[#FAFAFA] border border-white/10 hover:border-[#FF7A18]/40 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#1C1C1C] hover:bg-[#262626] text-xs font-mono text-[#A3A3A3] hover:text-[#FAFAFA] border border-white/10 hover:border-[#FF7A18]/50 transition-all duration-200 hover:-translate-y-0.5 shadow-sm cursor-pointer"
             aria-label="Back to top of page"
           >
             <span>Back to Top</span>

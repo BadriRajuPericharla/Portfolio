@@ -3,7 +3,7 @@ export const achievementsData = [
     id: "sih-qualification",
     title: "Smart India Hackathon (SIH)",
     status: "2-Time First Round Qualifier",
-    summary: "Participated twice in India's premier nationwide hackathon competition and successfully cleared the competitive first round evaluations on both occasions.",
+    summary: "Cleared competitive first-round evaluations across two consecutive editions of India's premier national hackathon.",
     iconName: "Trophy",
     accentColor: "#6366F1",
     keyPoints: [
@@ -16,7 +16,7 @@ export const achievementsData = [
     id: "nextwave-buildathon",
     title: "NextWave State-Level Buildathon",
     status: "State-Level Selection",
-    summary: "Selected to participate in the prestigious NextWave State-Level Buildathon based on foundational engineering skills and project execution.",
+    summary: "Selected for the state-level buildathon, tackling real-time software challenges and rapid prototyping.",
     iconName: "Award",
     accentColor: "#06B6D4",
     keyPoints: [
@@ -29,7 +29,7 @@ export const achievementsData = [
     id: "itchio-publishing",
     title: "Independent Game Publishing on itch.io",
     status: "4 Published Unity Games",
-    summary: "Independently designed, developed, polished, and successfully published four interactive Unity games directly to the itch.io platform.",
+    summary: "Designed, developed, and published 4 distinct Unity games on itch.io spanning 2D combat, 3D stealth, puzzles, and platformers.",
     iconName: "Rocket",
     accentColor: "#10B981",
     keyPoints: [
