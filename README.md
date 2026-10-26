@@ -7,7 +7,7 @@ A high-performance, responsive personal portfolio website designed and developed
 ## 🎮 Live Project Overview
 
 - **Developer**: Pericharla Badri Raju
-- **Role**: Unity Developer | Gameplay Programmer
+- **Live Portfolio**: [https://badriraju.vercel.app](https://badriraju.vercel.app)
 - **Itch.io Catalog**: [https://badri-raju-pericharla.itch.io](https://badri-raju-pericharla.itch.io)
 - **GitHub**: [https://github.com/BadriRajuPericharla](https://github.com/BadriRajuPericharla)
 - **LinkedIn**: [https://www.linkedin.com/in/pericharla-badri-raju-6924942a5](https://www.linkedin.com/in/pericharla-badri-raju-6924942a5)
