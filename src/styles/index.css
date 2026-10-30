@@ -437,3 +437,17 @@
   }
 }
 
+/* Suppress Netlify badge & drawer overlay if injected */
+#nl-badge-frame,
+iframe#nl-badge-frame,
+iframe[id*="nl-badge"],
+iframe[src*="netlify"],
+[data-netlify-drawer],
+netlify-drawer {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
