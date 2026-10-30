@@ -1056,6 +1056,78 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
               </button>
             </div>
 
+            {/* Resume & CV Document Action Panels Visibility */}
+            <div className="rounded-2xl bg-[#111422] border border-white/5 p-6 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-indigo-400">
+                    Resume &amp; CV Action Panels
+                  </h3>
+                  <p className="text-xs text-zinc-400 mt-0.5">
+                    Independently toggle or remove the Resume and CV download buttons across your website.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {/* Resume Toggle Card */}
+                <div className="p-4 rounded-xl bg-[#090C14] border border-white/5 flex items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className={`w-2.5 h-2.5 rounded-full ${resumeData?.enabled !== false ? 'bg-emerald-400 shadow-[0_0_8px_#34d399]' : 'bg-zinc-600'}`} />
+                      <h4 className="text-sm font-bold text-white">Industry Resume Button</h4>
+                    </div>
+                    <p className="text-[11px] text-zinc-400 mt-1 ml-4.5">
+                      Navbar, Hero, About Me &amp; Contact
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const nextState = !(resumeData?.enabled !== false);
+                      updateResume({ enabled: nextState });
+                      showNotification(nextState ? '✅ Resume button is now VISIBLE on website' : '🚫 Resume button is now HIDDEN from website');
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      resumeData?.enabled !== false
+                        ? 'bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-600/30'
+                        : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                    }`}
+                  >
+                    {resumeData?.enabled !== false ? 'Visible on Website' : 'Hidden from Website'}
+                  </button>
+                </div>
+
+                {/* CV Toggle Card */}
+                <div className="p-4 rounded-xl bg-[#090C14] border border-white/5 flex items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className={`w-2.5 h-2.5 rounded-full ${cvData?.enabled !== false ? 'bg-amber-400 shadow-[0_0_8px_#fbbf24]' : 'bg-zinc-600'}`} />
+                      <h4 className="text-sm font-bold text-white">Curriculum Vitae (CV) Button</h4>
+                    </div>
+                    <p className="text-[11px] text-zinc-400 mt-1 ml-4.5">
+                      Navbar, About Me &amp; Contact
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const nextState = !(cvData?.enabled !== false);
+                      updateCv({ enabled: nextState });
+                      showNotification(nextState ? '✅ CV button is now VISIBLE on website' : '🚫 CV button is now HIDDEN from website');
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      cvData?.enabled !== false
+                        ? 'bg-amber-600/20 text-amber-300 border border-amber-500/30 hover:bg-amber-600/30'
+                        : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                    }`}
+                  >
+                    {cvData?.enabled !== false ? 'Visible on Website' : 'Hidden from Website'}
+                  </button>
+                </div>
+              </div>
+            </div>
+
             {/* Standard Sections List */}
             <div className="rounded-2xl bg-[#111422] border border-white/5 p-6 space-y-4">
               <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-indigo-400 mb-3">
@@ -1317,16 +1389,45 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
             <div className="p-6 rounded-2xl bg-[#101422] border border-white/5">
               <h2 className="text-xl font-bold text-white font-display">Resume &amp; CV Management</h2>
               <p className="text-xs sm:text-sm text-zinc-400 mt-1">
-                Upload your latest Resume and Curriculum Vitae (CV) PDF files or link external Drive documents to immediately update all download buttons across the website.
+                Upload your latest Resume and Curriculum Vitae (CV) PDF files, or toggle their visibility on/off independently across the website (Navbar, Hero, About Me, Contact).
               </p>
             </div>
 
             {/* 1. RESUME MANAGEMENT CARD */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-[#111422] border border-white/5 space-y-6">
-              <div className="flex items-center gap-2 text-indigo-400 text-xs font-mono font-bold uppercase tracking-wider">
-                <FileText className="w-4 h-4" />
-                <span>Primary Industry Resume</span>
+            <div className={`p-6 sm:p-8 rounded-2xl bg-[#111422] border transition-all space-y-6 ${resumeData?.enabled !== false ? 'border-white/10' : 'border-rose-500/30 bg-[#140f1c]'}`}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-2 text-indigo-400 text-xs font-mono font-bold uppercase tracking-wider">
+                  <FileText className="w-4 h-4" />
+                  <span>Primary Industry Resume</span>
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${resumeData?.enabled !== false ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-rose-500/10 text-rose-400 border-rose-500/30'}`}>
+                    {resumeData?.enabled !== false ? '● Visible on Website' : '○ Hidden from Website'}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const nextState = !(resumeData?.enabled !== false);
+                      updateResume({ enabled: nextState });
+                      showNotification(nextState ? '✅ Resume button is now VISIBLE on website' : '🚫 Resume button is now HIDDEN from website');
+                    }}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      resumeData?.enabled !== false
+                        ? 'bg-rose-600/20 text-rose-300 hover:bg-rose-600/30 border border-rose-500/30'
+                        : 'bg-emerald-600/20 text-emerald-300 hover:bg-emerald-600/30 border border-emerald-500/30'
+                    }`}
+                  >
+                    {resumeData?.enabled !== false ? 'Hide Resume' : 'Show Resume'}
+                  </button>
+                </div>
               </div>
+
+              {resumeData?.enabled === false && (
+                <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2">
+                  <span>⚠️ <strong>Resume is currently hidden:</strong> Download Resume buttons are removed from Hero, Navbar, About Me, and Contact. Click <strong>"Show Resume"</strong> above anytime to restore it.</span>
+                </div>
+              )}
 
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-xl bg-[#090C14] border border-white/5">
                 <div>
@@ -1392,11 +1493,40 @@ create policy "Allow Public Update" on portfolio_data for update using (true);
             </div>
 
             {/* 2. CV (CURRICULUM VITAE) MANAGEMENT CARD */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-[#111422] border border-amber-500/20 space-y-6">
-              <div className="flex items-center gap-2 text-amber-400 text-xs font-mono font-bold uppercase tracking-wider">
-                <FileText className="w-4 h-4" />
-                <span>Curriculum Vitae (CV)</span>
+            <div className={`p-6 sm:p-8 rounded-2xl bg-[#111422] border transition-all space-y-6 ${cvData?.enabled !== false ? 'border-amber-500/20' : 'border-rose-500/30 bg-[#140f1c]'}`}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-2 text-amber-400 text-xs font-mono font-bold uppercase tracking-wider">
+                  <FileText className="w-4 h-4" />
+                  <span>Curriculum Vitae (CV)</span>
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${cvData?.enabled !== false ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-rose-500/10 text-rose-400 border-rose-500/30'}`}>
+                    {cvData?.enabled !== false ? '● Visible on Website' : '○ Hidden from Website'}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const nextState = !(cvData?.enabled !== false);
+                      updateCv({ enabled: nextState });
+                      showNotification(nextState ? '✅ CV button is now VISIBLE on website' : '🚫 CV button is now HIDDEN from website');
+                    }}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      cvData?.enabled !== false
+                        ? 'bg-rose-600/20 text-rose-300 hover:bg-rose-600/30 border border-rose-500/30'
+                        : 'bg-emerald-600/20 text-emerald-300 hover:bg-emerald-600/30 border border-emerald-500/30'
+                    }`}
+                  >
+                    {cvData?.enabled !== false ? 'Hide CV' : 'Show CV'}
+                  </button>
+                </div>
               </div>
+
+              {cvData?.enabled === false && (
+                <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2">
+                  <span>⚠️ <strong>CV is currently hidden:</strong> Download CV buttons are removed from Navbar, About Me, and Contact. Click <strong>"Show CV"</strong> above anytime to restore it.</span>
+                </div>
+              )}
 
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-xl bg-[#090C14] border border-white/5">
                 <div>

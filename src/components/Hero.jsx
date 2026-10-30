@@ -40,7 +40,8 @@ export default function Hero() {
     roles: profileRoles,
     stats = []
   } = profile;
-  const resumeData = (context && context.resumeData) || { url: '/resume.pdf', name: 'Badri_Raju_Resume.pdf' };
+  const resumeData = (context && context.resumeData) || { url: '/resume.pdf', name: 'Badri_Raju_Resume.pdf', enabled: true };
+  const cvData = (context && context.cvData) || { url: '/resume.pdf', name: 'Badri_Raju_CV.pdf', enabled: true };
 
   // Recruiter-attracting rotating typewriter role texts
   const defaultRoles = [
@@ -254,15 +255,28 @@ export default function Hero() {
             <ArrowRight className="w-4 h-4" />
           </a>
 
-          {/* Button 2: Download Resume */}
-          <a
-            href={resumeData.url}
-            download={resumeData.name}
-            className="btn-palette-primary flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] cursor-pointer"
-          >
-            <FileDown className="w-4 h-4" />
-            <span>Download Resume</span>
-          </a>
+          {/* Button 2: Download Resume or CV */}
+          {resumeData?.enabled !== false && (
+            <a
+              href={resumeData.url}
+              download={resumeData.name}
+              className="btn-palette-primary flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+            >
+              <FileDown className="w-4 h-4" />
+              <span>Download Resume</span>
+            </a>
+          )}
+
+          {resumeData?.enabled === false && cvData?.enabled !== false && (
+            <a
+              href={cvData?.url || resumeData.url}
+              download={cvData?.name || 'Badri_Raju_CV.pdf'}
+              className="btn-palette-primary flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+            >
+              <FileDown className="w-4 h-4" />
+              <span>Download CV</span>
+            </a>
+          )}
 
           {/* Button 3: Contact Me */}
           <a

@@ -378,7 +378,18 @@ export function PortfolioProvider({ children }) {
   const [resumeData, setResumeData] = useState(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_resume`);
-      return saved ? JSON.parse(saved) : {
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return {
+          enabled: parsed.enabled !== undefined ? parsed.enabled : true,
+          url: parsed.url || '/resume.pdf',
+          name: parsed.name || 'Badri_Raju_Unity_Developer_Resume.pdf',
+          customFile: parsed.customFile || null,
+          title: parsed.title || 'Official Resume'
+        };
+      }
+      return {
+        enabled: true,
         url: '/resume.pdf',
         name: 'Badri_Raju_Unity_Developer_Resume.pdf',
         customFile: null,
@@ -386,6 +397,7 @@ export function PortfolioProvider({ children }) {
       };
     } catch {
       return {
+        enabled: true,
         url: '/resume.pdf',
         name: 'Badri_Raju_Unity_Developer_Resume.pdf',
         customFile: null,
@@ -397,7 +409,18 @@ export function PortfolioProvider({ children }) {
   const [cvData, setCvData] = useState(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_cv`);
-      return saved ? JSON.parse(saved) : {
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return {
+          enabled: parsed.enabled !== undefined ? parsed.enabled : true,
+          url: parsed.url || '/resume.pdf',
+          name: parsed.name || 'Badri_Raju_Curriculum_Vitae.pdf',
+          customFile: parsed.customFile || null,
+          title: parsed.title || 'Curriculum Vitae (CV)'
+        };
+      }
+      return {
+        enabled: true,
         url: '/resume.pdf',
         name: 'Badri_Raju_Curriculum_Vitae.pdf',
         customFile: null,
@@ -405,6 +428,7 @@ export function PortfolioProvider({ children }) {
       };
     } catch {
       return {
+        enabled: true,
         url: '/resume.pdf',
         name: 'Badri_Raju_Curriculum_Vitae.pdf',
         customFile: null,
@@ -873,12 +897,14 @@ export function PortfolioProvider({ children }) {
         colorPalette: 'charcoal-orange'
       });
       setResumeData({
+        enabled: true,
         url: '/resume.pdf',
         name: 'Badri_Raju_Unity_Developer_Resume.pdf',
         customFile: null,
         title: 'Official Resume'
       });
       setCvData({
+        enabled: true,
         url: '/resume.pdf',
         name: 'Badri_Raju_Curriculum_Vitae.pdf',
         customFile: null,

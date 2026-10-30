@@ -23,7 +23,7 @@ import { usePortfolio } from '../context/PortfolioContext';
  */
 
 export default function Contact() {
-  const { profile, resumeData } = usePortfolio();
+  const { profile, resumeData, cvData } = usePortfolio();
   const { email, links } = profile;
 
   const [copied, setCopied] = useState(false);
@@ -229,21 +229,41 @@ export default function Contact() {
               )}
             </div>
 
-            {/* Resume Callout */}
-            <div className="cool-card card-shine p-4 sm:p-5 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] flex items-center justify-between gap-4">
-              <div>
-                <h5 className="text-xs sm:text-sm font-bold text-[#FAFAFA]">PDF Resume</h5>
-                <p className="text-[11px] text-[#A3A3A3]">Quick download for records</p>
+            {/* Resume / CV Callout (Independently Configured) */}
+            {(resumeData?.enabled !== false || cvData?.enabled !== false) && (
+              <div className="cool-card card-shine p-4 sm:p-5 rounded-2xl bg-[#1C1C1C] border border-[#2D2D2D] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h5 className="text-xs sm:text-sm font-bold text-[#FAFAFA]">
+                    {resumeData?.enabled !== false && cvData?.enabled !== false 
+                      ? 'PDF Resume & CV' 
+                      : (resumeData?.enabled !== false ? 'PDF Resume' : 'Curriculum Vitae (CV)')}
+                  </h5>
+                  <p className="text-[11px] text-[#A3A3A3]">Quick download for records</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  {resumeData?.enabled !== false && (
+                    <a
+                      href={resumeData.url}
+                      download={resumeData.name}
+                      className="btn-palette-primary shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white shadow-md transition-all hover:scale-[1.02] cursor-pointer"
+                    >
+                      <FileDown className="w-3.5 h-3.5" />
+                      <span>Resume</span>
+                    </a>
+                  )}
+                  {cvData?.enabled !== false && (
+                    <a
+                      href={cvData?.url || resumeData.url}
+                      download={cvData?.name || "Badri_Raju_CV.pdf"}
+                      className="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#FAFAFA] bg-[#141414] hover:bg-[#202020] border border-white/10 hover:border-[#FFC857]/50 hover:text-[#FFC857] shadow-sm transition-all hover:scale-[1.02] cursor-pointer"
+                    >
+                      <FileDown className="w-3.5 h-3.5 text-[#FFC857]" />
+                      <span>CV</span>
+                    </a>
+                  )}
+                </div>
               </div>
-              <a
-                href={resumeData.url}
-                download={resumeData.name}
-                className="btn-palette-primary shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white shadow-md transition-all hover:scale-[1.02] cursor-pointer"
-              >
-                <FileDown className="w-3.5 h-3.5" />
-                <span>Download</span>
-              </a>
-            </div>
+            )}
 
           </div>
 

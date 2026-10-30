@@ -136,25 +136,31 @@ export default function About() {
                 </div>
               </div>
 
-              {/* Direct Resume & CV Downloads */}
-              <div className="w-full pt-4 border-t border-white/5 grid grid-cols-2 gap-2.5">
-                <a
-                  href={resumeData.url}
-                  download={resumeData.name}
-                  className="btn-palette-primary inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold text-white shadow-md transition-all text-center cursor-pointer hover:scale-[1.02]"
-                >
-                  <FileDown className="w-3.5 h-3.5 shrink-0" />
-                  <span>Resume</span>
-                </a>
-                <a
-                  href={cvData?.url || resumeData.url}
-                  download={cvData?.name || "Badri_Raju_CV.pdf"}
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold text-[#FAFAFA] bg-[#141414] hover:bg-[#202020] border border-white/10 hover:border-[#FFC857]/50 hover:text-[#FFC857] shadow-sm transition-all text-center cursor-pointer hover:scale-[1.02]"
-                >
-                  <FileDown className="w-3.5 h-3.5 text-[#FFC857] shrink-0" />
-                  <span>CV</span>
-                </a>
-              </div>
+              {/* Direct Resume & CV Downloads (Independently Configured) */}
+              {(resumeData?.enabled !== false || cvData?.enabled !== false) && (
+                <div className={`w-full pt-4 border-t border-white/5 ${resumeData?.enabled !== false && cvData?.enabled !== false ? 'grid grid-cols-2 gap-2.5' : 'flex'}`}>
+                  {resumeData?.enabled !== false && (
+                    <a
+                      href={resumeData.url}
+                      download={resumeData.name}
+                      className="btn-palette-primary flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold text-white shadow-md transition-all text-center cursor-pointer hover:scale-[1.02]"
+                    >
+                      <FileDown className="w-3.5 h-3.5 shrink-0" />
+                      <span>Resume</span>
+                    </a>
+                  )}
+                  {cvData?.enabled !== false && (
+                    <a
+                      href={cvData?.url || resumeData.url}
+                      download={cvData?.name || "Badri_Raju_CV.pdf"}
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold text-[#FAFAFA] bg-[#141414] hover:bg-[#202020] border border-white/10 hover:border-[#FFC857]/50 hover:text-[#FFC857] shadow-sm transition-all text-center cursor-pointer hover:scale-[1.02]"
+                    >
+                      <FileDown className="w-3.5 h-3.5 text-[#FFC857] shrink-0" />
+                      <span>CV</span>
+                    </a>
+                  )}
+                </div>
+              )}
 
             </div>
           </div>

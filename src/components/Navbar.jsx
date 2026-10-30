@@ -137,46 +137,66 @@ export default function Navbar({ onNavigateAdmin }) {
             })}
           </nav>
 
-          {/* Right Action Buttons: Resume & Download CV */}
+          {/* Right Action Buttons: Resume & Download CV (Independently Configured) */}
           <div className="hidden sm:flex items-center gap-2.5">
             {/* Download Resume Action */}
-            <a
-              href={resumeData.url}
-              download={resumeData.name}
-              className="btn-palette-primary inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white shadow-md transition-all cursor-pointer"
-              title="Download Resume (PDF)"
-            >
-              <FileDown className="w-4 h-4" />
-              <span>Resume</span>
-            </a>
+            {resumeData?.enabled !== false && (
+              <a
+                href={resumeData.url}
+                download={resumeData.name}
+                className="btn-palette-primary inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white shadow-md transition-all cursor-pointer"
+                title="Download Resume (PDF)"
+              >
+                <FileDown className="w-4 h-4" />
+                <span>Resume</span>
+              </a>
+            )}
 
             {/* Download CV Action */}
-            <a
-              href={cvData?.url || resumeData.url}
-              download={cvData?.name || "Badri_Raju_CV.pdf"}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#FAFAFA] bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] hover:border-[#FFC857]/50 hover:text-[#FFC857] shadow-sm transition-all hover:-translate-y-0.5 cursor-pointer"
-              title="Download Curriculum Vitae (CV)"
-            >
-              <FileDown className="w-4 h-4 text-[#FFC857]" />
-              <span>Download CV</span>
-            </a>
+            {cvData?.enabled !== false && (
+              <a
+                href={cvData?.url || resumeData.url}
+                download={cvData?.name || "Badri_Raju_CV.pdf"}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#FAFAFA] bg-[#1C1C1C] hover:bg-[#252525] border border-[#303030] hover:border-[#FFC857]/50 hover:text-[#FFC857] shadow-sm transition-all hover:-translate-y-0.5 cursor-pointer"
+                title="Download Curriculum Vitae (CV)"
+              >
+                <FileDown className="w-4 h-4 text-[#FFC857]" />
+                <span>Download CV</span>
+              </a>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
           <div className="flex items-center gap-2 lg:hidden">
-            <a
-              href={resumeData.url}
-              download={resumeData.name}
-              className="inline-flex sm:hidden items-center justify-center p-2 rounded-lg text-white text-xs font-medium transition-all"
-              style={{
-                background: 'var(--color-primary, #FF7A18)',
-                boxShadow: '0 2px 10px var(--color-glow, rgba(255, 122, 24, 0.35))'
-              }}
-              title="Download Resume"
-              aria-label="Download Resume"
-            >
-              <FileDown className="w-4 h-4" />
-            </a>
+            {resumeData?.enabled !== false ? (
+              <a
+                href={resumeData.url}
+                download={resumeData.name}
+                className="inline-flex sm:hidden items-center justify-center p-2 rounded-lg text-white text-xs font-medium transition-all"
+                style={{
+                  background: 'var(--color-primary, #FF7A18)',
+                  boxShadow: '0 2px 10px var(--color-glow, rgba(255, 122, 24, 0.35))'
+                }}
+                title="Download Resume"
+                aria-label="Download Resume"
+              >
+                <FileDown className="w-4 h-4" />
+              </a>
+            ) : cvData?.enabled !== false ? (
+              <a
+                href={cvData?.url || resumeData.url}
+                download={cvData?.name || "Badri_Raju_CV.pdf"}
+                className="inline-flex sm:hidden items-center justify-center p-2 rounded-lg text-white text-xs font-medium transition-all"
+                style={{
+                  background: 'var(--color-primary, #FF7A18)',
+                  boxShadow: '0 2px 10px var(--color-glow, rgba(255, 122, 24, 0.35))'
+                }}
+                title="Download CV"
+                aria-label="Download CV"
+              >
+                <FileDown className="w-4 h-4" />
+              </a>
+            ) : null}
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -215,24 +235,30 @@ export default function Navbar({ onNavigateAdmin }) {
             })}
           </div>
 
-          <div className="pt-3 border-t border-[#303030] flex flex-col gap-2">
-            <a
-              href={resumeData.url}
-              download={resumeData.name}
-              className="btn-palette-primary w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-white transition-all shadow-md cursor-pointer"
-            >
-              <FileDown className="w-4 h-4" />
-              <span>Download Resume (PDF)</span>
-            </a>
-            <a
-              href={cvData?.url || resumeData.url}
-              download={cvData?.name || "Badri_Raju_CV.pdf"}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-[#FAFAFA] bg-[#1C1C1C] border border-[#303030] hover:border-[#FFC857]/50 hover:text-[#FFC857] transition-all"
-            >
-              <FileDown className="w-4 h-4 text-[#FFC857]" />
-              <span>Download CV (PDF)</span>
-            </a>
-          </div>
+          {(resumeData?.enabled !== false || cvData?.enabled !== false) && (
+            <div className="pt-3 border-t border-[#303030] flex flex-col gap-2">
+              {resumeData?.enabled !== false && (
+                <a
+                  href={resumeData.url}
+                  download={resumeData.name}
+                  className="btn-palette-primary w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-white transition-all shadow-md cursor-pointer"
+                >
+                  <FileDown className="w-4 h-4" />
+                  <span>Download Resume (PDF)</span>
+                </a>
+              )}
+              {cvData?.enabled !== false && (
+                <a
+                  href={cvData?.url || resumeData.url}
+                  download={cvData?.name || "Badri_Raju_CV.pdf"}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-[#FAFAFA] bg-[#1C1C1C] border border-[#303030] hover:border-[#FFC857]/50 hover:text-[#FFC857] transition-all"
+                >
+                  <FileDown className="w-4 h-4 text-[#FFC857]" />
+                  <span>Download CV (PDF)</span>
+                </a>
+              )}
+            </div>
+          )}
         </div>
       )}
     </header>
